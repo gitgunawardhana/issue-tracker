@@ -1,5 +1,7 @@
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
+import { ConfigProvider, theme as antdTheme } from 'antd';
 import { useAuthStore } from './store/authStore';
+import { useThemeStore } from './store/themeStore';
 import Login from './pages/Login';
 import Register from './pages/Register';
 import Dashboard from './pages/Dashboard';
@@ -13,23 +15,31 @@ function ProtectedRoute({ children }: { children: React.ReactNode }) {
 
 export default function App() {
   const { token } = useAuthStore();
+  const { theme } = useThemeStore();
 
   return (
-    <Router>
-      <ToastContainer />
-      <Routes>
-        <Route path="/login" element={<Login />} />
-        <Route path="/register" element={<Register />} />
-        <Route
-          path="/"
-          element={
-            <ProtectedRoute>
-              <Dashboard />
-            </ProtectedRoute>
-          }
-        />
-        <Route path="*" element={<Navigate to={token ? '/' : '/login'} />} />
-      </Routes>
-    </Router>
+    <ConfigProvider
+      theme={{
+        algorithm:
+          theme === 'dark' ? antdTheme.darkAlgorithm : antdTheme.defaultAlgorithm,
+      }}
+    >
+      <Router>
+        <ToastContainer />
+        <Routes>
+          <Route path="/login" element={<Login />} />
+          <Route path="/register" element={<Register />} />
+          <Route
+            path="/"
+            element={
+              <ProtectedRoute>
+                <Dashboard />
+              </ProtectedRoute>
+            }
+          />
+          <Route path="*" element={<Navigate to={token ? '/' : '/login'} />} />
+        </Routes>
+      </Router>
+    </ConfigProvider>
   );
 }

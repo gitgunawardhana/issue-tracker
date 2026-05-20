@@ -23,22 +23,22 @@ interface IssueListProps {
 }
 
 const priorityStyles = {
-  Low: 'bg-emerald-50 text-emerald-700 ring-1 ring-emerald-200',
-  Medium: 'bg-amber-50 text-amber-700 ring-1 ring-amber-200',
-  High: 'bg-rose-50 text-rose-700 ring-1 ring-rose-200',
+  Low: 'bg-emerald-50 text-emerald-700 ring-1 ring-emerald-200 dark:bg-emerald-900/30 dark:text-emerald-300 dark:ring-emerald-800',
+  Medium: 'bg-amber-50 text-amber-700 ring-1 ring-amber-200 dark:bg-amber-900/30 dark:text-amber-300 dark:ring-amber-800',
+  High: 'bg-rose-50 text-rose-700 ring-1 ring-rose-200 dark:bg-rose-900/30 dark:text-rose-300 dark:ring-rose-800',
 };
 
 const severityStyles = {
-  Low: 'bg-sky-50 text-sky-700 ring-1 ring-sky-200',
-  Medium: 'bg-orange-50 text-orange-700 ring-1 ring-orange-200',
-  High: 'bg-rose-50 text-rose-700 ring-1 ring-rose-200',
-  Critical: 'bg-red-100 text-red-800 ring-1 ring-red-300 font-semibold',
+  Low: 'bg-sky-50 text-sky-700 ring-1 ring-sky-200 dark:bg-sky-900/30 dark:text-sky-300 dark:ring-sky-800',
+  Medium: 'bg-orange-50 text-orange-700 ring-1 ring-orange-200 dark:bg-orange-900/30 dark:text-orange-300 dark:ring-orange-800',
+  High: 'bg-rose-50 text-rose-700 ring-1 ring-rose-200 dark:bg-rose-900/30 dark:text-rose-300 dark:ring-rose-800',
+  Critical: 'bg-red-100 text-red-800 ring-1 ring-red-300 font-semibold dark:bg-red-900/40 dark:text-red-300 dark:ring-red-700',
 };
 
 const statusStyles = {
-  Open: 'bg-slate-100 text-slate-700 ring-1 ring-slate-300',
-  'In Progress': 'bg-blue-50 text-blue-700 ring-1 ring-blue-200',
-  Resolved: 'bg-emerald-50 text-emerald-700 ring-1 ring-emerald-200',
+  Open: 'bg-slate-100 text-slate-700 ring-1 ring-slate-300 dark:bg-neutral-800 dark:text-neutral-200 dark:ring-neutral-700',
+  'In Progress': 'bg-blue-50 text-blue-700 ring-1 ring-blue-200 dark:bg-blue-900/30 dark:text-blue-300 dark:ring-blue-800',
+  Resolved: 'bg-emerald-50 text-emerald-700 ring-1 ring-emerald-200 dark:bg-emerald-900/30 dark:text-emerald-300 dark:ring-emerald-800',
 };
 
 const statusDot = {
@@ -95,13 +95,13 @@ export default function IssueList({
 }: IssueListProps) {
   if (isLoading) {
     return (
-      <div className="space-y-3 py-4">
+      <div className="space-y-3 py-4 px-4">
         {[1, 2, 3].map((i) => (
           <div key={i} className="flex items-center gap-4 animate-pulse">
-            <div className="h-4 bg-gray-200 rounded w-1/4" />
-            <div className="h-4 bg-gray-200 rounded w-1/6" />
-            <div className="h-4 bg-gray-200 rounded w-1/6" />
-            <div className="h-4 bg-gray-200 rounded flex-1" />
+            <div className="h-4 bg-gray-200 dark:bg-neutral-800 rounded w-1/4" />
+            <div className="h-4 bg-gray-200 dark:bg-neutral-800 rounded w-1/6" />
+            <div className="h-4 bg-gray-200 dark:bg-neutral-800 rounded w-1/6" />
+            <div className="h-4 bg-gray-200 dark:bg-neutral-800 rounded flex-1" />
           </div>
         ))}
       </div>
@@ -111,18 +111,18 @@ export default function IssueList({
   if (issues.length === 0) {
     return (
       <div className="text-center py-16">
-        <div className="inline-flex items-center justify-center w-16 h-16 bg-gray-100 rounded-full mb-4">
-          <InboxIcon className="w-8 h-8 text-gray-400" />
+        <div className="inline-flex items-center justify-center w-16 h-16 bg-gray-100 dark:bg-neutral-800 rounded-full mb-4">
+          <InboxIcon className="w-8 h-8 text-gray-400 dark:text-gray-500" />
         </div>
-        <p className="text-gray-700 font-medium">No issues yet</p>
-        <p className="text-sm text-gray-500 mt-1">Create a new issue to get started</p>
+        <p className="text-gray-700 dark:text-gray-200 font-medium">No issues yet</p>
+        <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">Create a new issue to get started</p>
       </div>
     );
   }
 
   return (
     <>
-      <div className="md:hidden divide-y divide-gray-100">
+      <div className="md:hidden divide-y divide-gray-100 dark:divide-neutral-800">
         {issues.map((issue) => {
           const assigneeId = getUserId(issue.assignedTo);
           const assigneeName = getUserName(issue.assignedTo);
@@ -135,12 +135,12 @@ export default function IssueList({
             <div
               key={issue._id}
               onClick={() => onSelect(issue)}
-              className="px-4 py-4 active:bg-slate-50 transition-colors cursor-pointer"
+              className="px-4 py-4 active:bg-slate-50 dark:active:bg-neutral-800 transition-colors cursor-pointer"
             >
               <div className="flex items-start justify-between gap-3 mb-2">
                 <div className="flex-1 min-w-0">
-                  <p className="font-medium text-gray-900 break-words">{issue.title}</p>
-                  <p className="text-sm text-gray-500 mt-0.5 line-clamp-2">
+                  <p className="font-medium text-gray-900 dark:text-gray-50 break-words">{issue.title}</p>
+                  <p className="text-sm text-gray-500 dark:text-gray-400 mt-0.5 line-clamp-2">
                     {issue.description}
                   </p>
                 </div>
@@ -148,7 +148,7 @@ export default function IssueList({
                   <select
                     value={issue.status}
                     onChange={(e) => onStatusChange(issue._id, e.target.value)}
-                    className={`pl-5 pr-6 py-1 rounded-full text-xs font-medium border-0 cursor-pointer focus:outline-none focus:ring-2 focus:ring-blue-500 appearance-none ${statusStyles[issue.status]}`}
+                    className={`pl-5 pr-7 py-1 rounded-full text-xs font-medium border-0 cursor-pointer focus:outline-none focus:ring-2 focus:ring-blue-500 appearance-none hover:opacity-80 ${statusStyles[issue.status]}`}
                     aria-label="Change status"
                   >
                     <option>Open</option>
@@ -158,6 +158,16 @@ export default function IssueList({
                   <span
                     className={`absolute left-1.5 top-1/2 -translate-y-1/2 w-1.5 h-1.5 rounded-full ${statusDot[issue.status]}`}
                   />
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    strokeWidth={2.5}
+                    stroke="currentColor"
+                    className="absolute right-1.5 top-1/2 -translate-y-1/2 w-3 h-3 pointer-events-none opacity-70"
+                  >
+                    <path strokeLinecap="round" strokeLinejoin="round" d="m19.5 8.25-7.5 7.5-7.5-7.5" />
+                  </svg>
                 </div>
               </div>
 
@@ -179,25 +189,25 @@ export default function IssueList({
                   {reporterName && (
                     <div className="flex items-center gap-1.5 min-w-0">
                       <Avatar name={reporterName} size="xs" />
-                      <span className="text-xs text-gray-600 truncate max-w-[80px]">
+                      <span className="text-xs text-gray-600 dark:text-gray-300 truncate max-w-[80px]">
                         {reporterName}
                       </span>
                     </div>
                   )}
-                  <span className="text-gray-300">→</span>
+                  <span className="text-gray-300 dark:text-gray-600">→</span>
                   {assigneeName ? (
                     <div className="flex items-center gap-1.5 min-w-0">
                       <Avatar name={assigneeName} size="xs" />
                       <span
                         className={`text-xs truncate max-w-[80px] ${
-                          isAssignedToMe ? 'text-blue-700 font-semibold' : 'text-gray-600'
+                          isAssignedToMe ? 'text-blue-700 dark:text-blue-400 font-semibold' : 'text-gray-600 dark:text-gray-300'
                         }`}
                       >
                         {assigneeName}
                       </span>
                     </div>
                   ) : (
-                    <span className="text-xs text-gray-400 italic">Unassigned</span>
+                    <span className="text-xs text-gray-400 dark:text-gray-500 italic">Unassigned</span>
                   )}
                 </div>
 
@@ -260,17 +270,17 @@ export default function IssueList({
       <div className="hidden md:block overflow-x-auto">
         <table className="w-full">
         <thead>
-          <tr className="border-b border-gray-200">
-            <th className="px-4 py-3 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">Issue</th>
-            <th className="px-4 py-3 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">Reporter</th>
-            <th className="px-4 py-3 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">Assignee</th>
-            <th className="px-4 py-3 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">Priority</th>
-            <th className="px-4 py-3 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">Severity</th>
-            <th className="px-4 py-3 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">Status</th>
-            <th className="px-4 py-3 text-right text-xs font-semibold text-gray-500 uppercase tracking-wider">Actions</th>
+          <tr className="border-b border-gray-200 dark:border-neutral-800">
+            <th className="px-4 py-3 text-left text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider">Issue</th>
+            <th className="px-4 py-3 text-left text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider">Reporter</th>
+            <th className="px-4 py-3 text-left text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider">Assignee</th>
+            <th className="px-4 py-3 text-left text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider">Priority</th>
+            <th className="px-4 py-3 text-left text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider">Severity</th>
+            <th className="px-4 py-3 text-left text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider">Status</th>
+            <th className="px-4 py-3 text-right text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider">Actions</th>
           </tr>
         </thead>
-        <tbody className="divide-y divide-gray-100">
+        <tbody className="divide-y divide-gray-100 dark:divide-neutral-800">
           {issues.map((issue) => {
             const assigneeId = getUserId(issue.assignedTo);
             const assigneeName = getUserName(issue.assignedTo);
@@ -283,17 +293,17 @@ export default function IssueList({
               <tr
                 key={issue._id}
                 onClick={() => onSelect(issue)}
-                className="hover:bg-slate-50/70 transition-colors group cursor-pointer"
+                className="hover:bg-slate-50/70 dark:hover:bg-neutral-800/40 transition-colors group cursor-pointer"
               >
                 <td className="px-4 py-3 max-w-xs">
-                  <p className="font-medium text-gray-900 truncate">{issue.title}</p>
-                  <p className="text-sm text-gray-500 truncate mt-0.5">{issue.description}</p>
+                  <p className="font-medium text-gray-900 dark:text-gray-50 truncate">{issue.title}</p>
+                  <p className="text-sm text-gray-500 dark:text-gray-400 truncate mt-0.5">{issue.description}</p>
                 </td>
                 <td className="px-4 py-3">
                   {reporterName && (
                     <div className="flex items-center gap-2">
                       <Avatar name={reporterName} size="sm" />
-                      <span className="text-sm text-gray-700 truncate max-w-[120px]">{reporterName}</span>
+                      <span className="text-sm text-gray-700 dark:text-gray-200 truncate max-w-[120px]">{reporterName}</span>
                     </div>
                   )}
                 </td>
@@ -301,13 +311,13 @@ export default function IssueList({
                   {assigneeName ? (
                     <div className="flex items-center gap-2">
                       <Avatar name={assigneeName} size="sm" />
-                      <span className={`text-sm truncate max-w-[120px] ${isAssignedToMe ? 'text-blue-700 font-semibold' : 'text-gray-700'}`}>
+                      <span className={`text-sm truncate max-w-[120px] ${isAssignedToMe ? 'text-blue-700 dark:text-blue-400 font-semibold' : 'text-gray-700 dark:text-gray-200'}`}>
                         {assigneeName}
-                        {isAssignedToMe && <span className="text-xs text-blue-500 ml-1">(you)</span>}
+                        {isAssignedToMe && <span className="text-xs text-blue-500 dark:text-blue-400 ml-1">(you)</span>}
                       </span>
                     </div>
                   ) : (
-                    <span className="text-sm text-gray-400 italic">Unassigned</span>
+                    <span className="text-sm text-gray-400 dark:text-gray-500 italic">Unassigned</span>
                   )}
                 </td>
                 <td className="px-4 py-3">
@@ -321,11 +331,11 @@ export default function IssueList({
                   </span>
                 </td>
                 <td className="px-4 py-3" onClick={(e) => e.stopPropagation()}>
-                  <div className="relative">
+                  <div className="relative inline-block">
                     <select
                       value={issue.status}
                       onChange={(e) => onStatusChange(issue._id, e.target.value)}
-                      className={`pl-6 pr-7 py-1 rounded-full text-xs font-medium border-0 cursor-pointer focus:outline-none focus:ring-2 focus:ring-blue-500 appearance-none ${statusStyles[issue.status]}`}
+                      className={`pl-6 pr-8 py-1 rounded-full text-xs font-medium border-0 cursor-pointer focus:outline-none focus:ring-2 focus:ring-blue-500 appearance-none hover:opacity-80 ${statusStyles[issue.status]}`}
                       aria-label="Change status"
                     >
                       <option>Open</option>
@@ -333,6 +343,16 @@ export default function IssueList({
                       <option>Resolved</option>
                     </select>
                     <span className={`absolute left-2 top-1/2 -translate-y-1/2 w-2 h-2 rounded-full ${statusDot[issue.status]}`} />
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      strokeWidth={2.5}
+                      stroke="currentColor"
+                      className="absolute right-2 top-1/2 -translate-y-1/2 w-3 h-3 pointer-events-none opacity-70"
+                    >
+                      <path strokeLinecap="round" strokeLinejoin="round" d="m19.5 8.25-7.5 7.5-7.5-7.5" />
+                    </svg>
                   </div>
                 </td>
                 <td className="px-4 py-3" onClick={(e) => e.stopPropagation()}>

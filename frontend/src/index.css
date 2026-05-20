@@ -1,6 +1,20 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import "tailwindcss";
+@custom-variant dark (&:where(.dark, .dark *));
+
+@theme {
+  --animate-slide-in: slideIn 0.25s ease-out;
+
+  @keyframes slideIn {
+    0% {
+      transform: translateX(100%);
+      opacity: 0;
+    }
+    100% {
+      transform: translateX(0);
+      opacity: 1;
+    }
+  }
+}
 
 * {
   box-sizing: border-box;
@@ -10,9 +24,24 @@ html,
 body {
   margin: 0;
   padding: 0;
-  background: #f9fafb;
-  color: #111827;
   font-family: ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  background: #f9fafb;
+  color: #111827;
+}
+
+html.dark,
+html.dark body {
+  background: #0a0a0a;
+  color: #e5e5e5;
+}
+
+html.dark {
+  color-scheme: dark;
+}
+
+html.dark option {
+  background: #171717;
+  color: #e5e5e5;
 }

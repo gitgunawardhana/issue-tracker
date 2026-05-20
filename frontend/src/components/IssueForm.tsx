@@ -78,7 +78,7 @@ export default function IssueForm({ issue, users, onSubmit }: IssueFormProps) {
     });
   };
 
-  const labelClass = 'block text-sm font-medium text-gray-700 mb-1.5';
+  const labelClass = 'block text-sm font-medium text-gray-700 dark:text-gray-200 mb-1.5';
 
   return (
     <form id="issue-form" onSubmit={handleSubmit} className="space-y-5">

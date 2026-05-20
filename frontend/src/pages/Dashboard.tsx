@@ -20,7 +20,10 @@ import {
   SearchIcon,
   PlusIcon,
   LogoutIcon,
+  SunIcon,
+  MoonIcon,
 } from '../components/Icons';
+import { useThemeStore } from '../store/themeStore';
 import type { Issue, UserSummary } from '../types';
 import { useNavigate } from 'react-router-dom';
 
@@ -46,6 +49,7 @@ export default function Dashboard() {
   const navigate = useNavigate();
   const { user, logout } = useAuthStore();
   const { showToast } = useToastStore();
+  const { theme, toggleTheme } = useThemeStore();
   const {
     issues,
     statusCounts,
@@ -315,7 +319,7 @@ export default function Dashboard() {
       label: 'Open',
       count: statusCounts.open,
       icon: CircleOpenIcon,
-      iconBg: 'bg-slate-100 text-slate-600',
+      iconBg: 'bg-slate-100 text-slate-600 dark:bg-neutral-800 dark:text-neutral-300',
       onClick: () => onStatusChange(toggleArrayValue(statusFilter, 'Open')),
       active: statusFilter.includes('Open'),
       ringColor: 'ring-slate-400',
@@ -324,7 +328,7 @@ export default function Dashboard() {
       label: 'In Progress',
       count: statusCounts.inProgress,
       icon: ClockIcon,
-      iconBg: 'bg-blue-100 text-blue-600',
+      iconBg: 'bg-blue-100 text-blue-600 dark:bg-blue-900/40 dark:text-blue-300',
       onClick: () => onStatusChange(toggleArrayValue(statusFilter, 'In Progress')),
       active: statusFilter.includes('In Progress'),
       ringColor: 'ring-blue-400',
@@ -333,7 +337,7 @@ export default function Dashboard() {
       label: 'Resolved',
       count: statusCounts.resolved,
       icon: CheckCircleIcon,
-      iconBg: 'bg-emerald-100 text-emerald-600',
+      iconBg: 'bg-emerald-100 text-emerald-600 dark:bg-emerald-900/40 dark:text-emerald-300',
       onClick: () => onStatusChange(toggleArrayValue(statusFilter, 'Resolved')),
       active: statusFilter.includes('Resolved'),
       ringColor: 'ring-emerald-400',
@@ -342,7 +346,7 @@ export default function Dashboard() {
       label: 'Assigned to Me',
       count: statusCounts.assignedToMe,
       icon: UserPlusIcon,
-      iconBg: 'bg-purple-100 text-purple-600',
+      iconBg: 'bg-purple-100 text-purple-600 dark:bg-purple-900/40 dark:text-purple-300',
       onClick: () => onAssigneeChange(toggleArrayValue(assigneeFilter, 'me')),
       active: assigneeFilter.includes('me'),
       ringColor: 'ring-purple-400',
@@ -350,24 +354,31 @@ export default function Dashboard() {
   ];
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      <nav className="bg-white border-b border-gray-200 sticky top-0 z-30">
+    <div className="min-h-screen bg-gray-50 dark:bg-neutral-950">
+      <nav className="bg-white dark:bg-neutral-900 border-b border-gray-200 dark:border-neutral-800 sticky top-0 z-30">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3 flex justify-between items-center">
           <div className="flex items-center gap-3">
-            <img src="/logo.png" alt="Issue Tracker" className="w-10 h-10 object-contain" />
+            <img src="/logo.png" alt="Issue Tracker" className="w-10 h-10 object-contain dark:invert dark:hue-rotate-180" />
             <div>
-              <h1 className="text-lg font-semibold text-gray-900 leading-tight">Issue Tracker</h1>
-              <p className="text-xs text-gray-500 leading-tight">Manage your team's work</p>
+              <h1 className="text-lg font-semibold text-gray-900 dark:text-gray-50 leading-tight">Issue Tracker</h1>
+              <p className="text-xs text-gray-500 dark:text-gray-400 leading-tight">Manage your team's work</p>
             </div>
           </div>
-          <div className="flex items-center gap-3">
-            <div className="hidden sm:flex items-center gap-2 px-3 py-1.5 rounded-full bg-gray-50">
+          <div className="flex items-center gap-2 sm:gap-3">
+            <button
+              onClick={toggleTheme}
+              title={theme === 'dark' ? 'Switch to light mode' : 'Switch to dark mode'}
+              className="inline-flex items-center justify-center w-9 h-9 bg-white dark:bg-neutral-800 text-gray-700 dark:text-gray-200 border border-gray-200 dark:border-neutral-700 rounded-lg hover:bg-gray-50 dark:hover:bg-neutral-700 transition-colors"
+            >
+              {theme === 'dark' ? <SunIcon className="w-4 h-4" /> : <MoonIcon className="w-4 h-4" />}
+            </button>
+            <div className="hidden sm:flex items-center gap-2 px-3 py-1.5 rounded-full bg-gray-50 dark:bg-neutral-800">
               {user && <Avatar name={user.name} size="xs" />}
-              <span className="text-sm font-medium text-gray-700">{user?.name}</span>
+              <span className="text-sm font-medium text-gray-700 dark:text-gray-200">{user?.name}</span>
             </div>
             <button
               onClick={handleLogout}
-              className="inline-flex items-center gap-1.5 bg-white text-gray-700 border border-gray-200 px-3 py-1.5 rounded-lg hover:bg-gray-50 text-sm font-medium transition-colors"
+              className="inline-flex items-center gap-1.5 bg-white dark:bg-neutral-800 text-gray-700 dark:text-gray-200 border border-gray-200 dark:border-neutral-700 px-3 py-1.5 rounded-lg hover:bg-gray-50 dark:hover:bg-neutral-700 text-sm font-medium transition-colors"
             >
               <LogoutIcon className="w-4 h-4" />
               Logout
@@ -384,14 +395,14 @@ export default function Dashboard() {
               <button
                 key={card.label}
                 onClick={card.onClick}
-                className={`text-left bg-white rounded-lg border border-gray-200 p-4 sm:p-5 hover:border-gray-300 transition-colors ${
+                className={`text-left bg-white dark:bg-neutral-900 rounded-lg border border-gray-200 dark:border-neutral-800 p-4 sm:p-5 hover:border-gray-300 dark:hover:border-neutral-700 transition-colors ${
                   card.active ? `ring-2 ${card.ringColor} border-transparent` : ''
                 }`}
               >
                 <div className="flex items-start justify-between">
                   <div>
-                    <p className="text-xs sm:text-sm text-gray-500 font-medium">{card.label}</p>
-                    <p className="text-2xl sm:text-3xl font-bold text-gray-900 mt-1">{card.count}</p>
+                    <p className="text-xs sm:text-sm text-gray-500 dark:text-gray-400 font-medium">{card.label}</p>
+                    <p className="text-2xl sm:text-3xl font-bold text-gray-900 dark:text-gray-50 mt-1">{card.count}</p>
                   </div>
                   <div className={`p-2 rounded-lg ${card.iconBg}`}>
                     <Icon className="w-5 h-5" />
@@ -402,11 +413,11 @@ export default function Dashboard() {
           })}
         </div>
 
-        <div className="bg-white rounded-lg border border-gray-200 overflow-hidden">
-          <div className="px-4 sm:px-6 py-4 border-b border-gray-100 flex flex-col sm:flex-row sm:justify-between sm:items-center gap-3">
+        <div className="bg-white dark:bg-neutral-900 rounded-lg border border-gray-200 dark:border-neutral-800 overflow-hidden">
+          <div className="px-4 sm:px-6 py-4 border-b border-gray-100 dark:border-neutral-800 flex flex-col sm:flex-row sm:justify-between sm:items-center gap-3">
             <div>
-              <h2 className="text-lg font-bold text-gray-900">Issues</h2>
-              <p className="text-sm text-gray-500">{pagination.total} total</p>
+              <h2 className="text-lg font-bold text-gray-900 dark:text-gray-50">Issues</h2>
+              <p className="text-sm text-gray-500 dark:text-gray-400">{pagination.total} total</p>
             </div>
             <div className="flex items-center gap-2">
               <ExportMenu onExport={handleExport} disabled={issues.length === 0} />
@@ -423,14 +434,14 @@ export default function Dashboard() {
             </div>
           </div>
 
-          <div className="px-4 sm:px-6 py-4 border-b border-gray-100 space-y-3">
+          <div className="px-4 sm:px-6 py-4 border-b border-gray-100 dark:border-neutral-800 space-y-3">
             <div className="flex items-center justify-between gap-3">
-              <p className="text-xs font-medium text-gray-500 uppercase tracking-wider">Filters</p>
+              <p className="text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">Filters</p>
               {hasActiveFilters && (
                 <button
                   type="button"
                   onClick={clearAllFilters}
-                  className="inline-flex items-center gap-1 text-xs font-medium text-blue-600 hover:text-blue-700"
+                  className="inline-flex items-center gap-1 text-xs font-medium text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300"
                 >
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
@@ -454,7 +465,7 @@ export default function Dashboard() {
                 placeholder="Search..."
                 value={search}
                 onChange={(e) => onSearchChange(e.target.value)}
-                className="w-full pl-9 pr-3 py-2 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-shadow shadow-sm"
+                className="w-full pl-9 pr-3 py-2 border border-gray-200 dark:border-neutral-700 bg-white dark:bg-neutral-800 text-gray-900 dark:text-gray-100 placeholder-gray-400 dark:placeholder-gray-500 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
               />
             </div>
             <Select
@@ -552,8 +563,8 @@ export default function Dashboard() {
           />
 
           {pagination.pages > 1 && (
-            <div className="px-4 sm:px-6 py-4 border-t border-gray-100 flex items-center justify-between">
-              <p className="text-sm text-gray-500">
+            <div className="px-4 sm:px-6 py-4 border-t border-gray-100 dark:border-neutral-800 flex items-center justify-between">
+              <p className="text-sm text-gray-500 dark:text-gray-400">
                 Page {pagination.page} of {pagination.pages}
               </p>
               <div className="flex gap-1">
@@ -563,8 +574,8 @@ export default function Dashboard() {
                     onClick={() => setCurrentPage(page)}
                     className={`w-8 h-8 rounded-lg text-sm font-medium transition-colors ${
                       currentPage === page
-                        ? 'bg-blue-600 text-white shadow-sm'
-                        : 'bg-white text-gray-700 border border-gray-200 hover:bg-gray-50'
+                        ? 'bg-blue-600 text-white'
+                        : 'bg-white dark:bg-neutral-800 text-gray-700 dark:text-gray-200 border border-gray-200 dark:border-neutral-700 hover:bg-gray-50 dark:hover:bg-neutral-700'
                     }`}
                   >
                     {page}
