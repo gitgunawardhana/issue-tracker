@@ -11,6 +11,7 @@ import ConfirmDialog from '../components/ConfirmDialog';
 import Modal from '../components/Modal';
 import Avatar from '../components/Avatar';
 import ExportMenu from '../components/ExportMenu';
+import ScrollToTopButton from '../components/ScrollToTopButton';
 import { Select } from 'antd';
 import {
   CircleOpenIcon,
@@ -654,6 +655,8 @@ export default function Dashboard() {
         onConfirm={confirm.onConfirm}
         onCancel={closeConfirm}
       />
+
+      <ScrollToTopButton />
     </div>
   );
 }
