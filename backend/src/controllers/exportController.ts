@@ -73,30 +73,53 @@ function userLabel(field: unknown): string {
   return 'User';
 }
 
+const splitCsv = (value: unknown): string[] => {
+  if (!value || typeof value !== 'string') return [];
+  return value
+    .split(',')
+    .map((s) => s.trim())
+    .filter(Boolean);
+};
+
 function buildFilter(req: Request): Record<string, unknown> {
   const { search = '', status = '', priority = '', severity = '', assignedTo = '' } = req.query;
-  const filter: Record<string, unknown> = {};
+  const conditions: Record<string, unknown>[] = [];
 
   if (search) {
-    filter.$or = [
-      { title: { $regex: search, $options: 'i' } },
-      { description: { $regex: search, $options: 'i' } },
-    ];
+    conditions.push({
+      $or: [
+        { title: { $regex: search, $options: 'i' } },
+        { description: { $regex: search, $options: 'i' } },
+      ],
+    });
   }
 
-  if (status) filter.status = status;
-  if (priority) filter.priority = priority;
-  if (severity) filter.severity = severity;
+  const statuses = splitCsv(status);
+  if (statuses.length > 0) conditions.push({ status: { $in: statuses } });
 
-  if (assignedTo === 'me') {
-    filter.assignedTo = req.user?.userId;
-  } else if (assignedTo === 'unassigned') {
-    filter.assignedTo = null;
-  } else if (assignedTo) {
-    filter.assignedTo = assignedTo;
+  const priorities = splitCsv(priority);
+  if (priorities.length > 0) conditions.push({ priority: { $in: priorities } });
+
+  const severities = splitCsv(severity);
+  if (severities.length > 0) conditions.push({ severity: { $in: severities } });
+
+  const assignees = splitCsv(assignedTo);
+  if (assignees.length > 0) {
+    const assigneeOr: Record<string, unknown>[] = [];
+    const ids: string[] = [];
+    for (const v of assignees) {
+      if (v === 'me' && req.user?.userId) ids.push(req.user.userId);
+      else if (v === 'unassigned') assigneeOr.push({ assignedTo: null });
+      else ids.push(v);
+    }
+    if (ids.length > 0) assigneeOr.push({ assignedTo: { $in: ids } });
+    if (assigneeOr.length === 1) conditions.push(assigneeOr[0]);
+    else if (assigneeOr.length > 1) conditions.push({ $or: assigneeOr });
   }
 
-  return filter;
+  if (conditions.length === 0) return {};
+  if (conditions.length === 1) return conditions[0];
+  return { $and: conditions };
 }
 
 export const exportIssues = async (req: Request, res: Response) => {

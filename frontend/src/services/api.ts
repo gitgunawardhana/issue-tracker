@@ -48,11 +48,16 @@ interface IssueFilters {
   page?: number;
   limit?: number;
   search?: string;
-  status?: string;
-  priority?: string;
-  severity?: string;
-  assignedTo?: string;
+  status?: string | string[];
+  priority?: string | string[];
+  severity?: string | string[];
+  assignedTo?: string | string[];
 }
+
+const joinCsv = (v: string | string[] | undefined): string => {
+  if (!v) return '';
+  return Array.isArray(v) ? v.join(',') : v;
+};
 
 export const issueService = {
   createIssue: async (
@@ -68,10 +73,14 @@ export const issueService = {
       limit: filters.limit ?? 10,
     };
     if (filters.search) params.search = filters.search;
-    if (filters.status) params.status = filters.status;
-    if (filters.priority) params.priority = filters.priority;
-    if (filters.severity) params.severity = filters.severity;
-    if (filters.assignedTo) params.assignedTo = filters.assignedTo;
+    const status = joinCsv(filters.status);
+    if (status) params.status = status;
+    const priority = joinCsv(filters.priority);
+    if (priority) params.priority = priority;
+    const severity = joinCsv(filters.severity);
+    if (severity) params.severity = severity;
+    const assignedTo = joinCsv(filters.assignedTo);
+    if (assignedTo) params.assignedTo = assignedTo;
 
     const response = await apiClient.get<
       ApiResponse<{
@@ -120,10 +129,14 @@ export const issueService = {
   exportIssues: async (format: 'pdf' | 'json', filters: IssueFilters = {}) => {
     const params: Record<string, string> = { format };
     if (filters.search) params.search = filters.search;
-    if (filters.status) params.status = filters.status;
-    if (filters.priority) params.priority = filters.priority;
-    if (filters.severity) params.severity = filters.severity;
-    if (filters.assignedTo) params.assignedTo = filters.assignedTo;
+    const status = joinCsv(filters.status);
+    if (status) params.status = status;
+    const priority = joinCsv(filters.priority);
+    if (priority) params.priority = priority;
+    const severity = joinCsv(filters.severity);
+    if (severity) params.severity = severity;
+    const assignedTo = joinCsv(filters.assignedTo);
+    if (assignedTo) params.assignedTo = assignedTo;
 
     const response = await apiClient.get('/issues/export', {
       params,

@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { Input, Select, Button } from 'antd';
 import type { Issue, UserSummary } from '../types';
 
 interface IssueFormData {
@@ -29,39 +30,29 @@ export function IssueFormActions({
 }) {
   return (
     <div className="flex gap-3">
-      <button
-        type="button"
-        onClick={onCancel}
-        disabled={isLoading}
-        className="flex-1 bg-gray-100 text-gray-700 py-2 px-4 rounded-md hover:bg-gray-200 font-medium transition-colors disabled:opacity-50"
-      >
+      <Button onClick={onCancel} disabled={isLoading} size="large" className="flex-1">
         Cancel
-      </button>
-      <button
-        type="submit"
+      </Button>
+      <Button
+        type="primary"
+        htmlType="submit"
         form={formId}
-        disabled={isLoading}
-        className="flex-1 bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700 font-medium transition-colors disabled:opacity-50"
+        loading={isLoading}
+        size="large"
+        className="flex-1"
       >
-        {isLoading ? 'Saving...' : isEdit ? 'Update Issue' : 'Create Issue'}
-      </button>
+        {isEdit ? 'Update Issue' : 'Create Issue'}
+      </Button>
     </div>
   );
 }
-
-const inputClass =
-  'mt-1 w-full px-3 py-2 border border-gray-300 rounded-md text-gray-900 placeholder-gray-400 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500';
 
 function getAssignedId(assignedTo: Issue['assignedTo']): string {
   if (!assignedTo) return '';
   return typeof assignedTo === 'string' ? assignedTo : assignedTo._id;
 }
 
-export default function IssueForm({
-  issue,
-  users,
-  onSubmit,
-}: IssueFormProps) {
+export default function IssueForm({ issue, users, onSubmit }: IssueFormProps) {
   const [title, setTitle] = useState(issue?.title ?? '');
   const [description, setDescription] = useState(issue?.description ?? '');
   const [priority, setPriority] = useState<'Low' | 'Medium' | 'High'>(
@@ -87,114 +78,117 @@ export default function IssueForm({
     });
   };
 
+  const labelClass = 'block text-sm font-medium text-gray-700 mb-1.5';
+
   return (
     <form id="issue-form" onSubmit={handleSubmit} className="space-y-5">
       <div>
-        <label htmlFor="title" className="block text-sm font-medium text-gray-700">
+        <label htmlFor="title" className={labelClass}>
           Title <span className="text-red-500">*</span>
         </label>
-        <input
+        <Input
           id="title"
-          type="text"
+          size="large"
           value={title}
           onChange={(e) => setTitle(e.target.value)}
           required
           placeholder="Brief summary of the issue"
-          className={inputClass}
         />
       </div>
 
       <div>
-        <label htmlFor="description" className="block text-sm font-medium text-gray-700">
+        <label htmlFor="description" className={labelClass}>
           Description <span className="text-red-500">*</span>
         </label>
-        <textarea
+        <Input.TextArea
           id="description"
           value={description}
           onChange={(e) => setDescription(e.target.value)}
           required
           placeholder="Provide detailed information about the issue"
           rows={4}
-          className={`${inputClass} resize-none`}
+          autoSize={{ minRows: 4, maxRows: 8 }}
         />
       </div>
 
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
         <div>
-          <label htmlFor="priority" className="block text-sm font-medium text-gray-700">
+          <label htmlFor="priority" className={labelClass}>
             Priority
           </label>
-          <select
+          <Select
             id="priority"
+            size="large"
             value={priority}
-            onChange={(e) => setPriority(e.target.value as 'Low' | 'Medium' | 'High')}
-            className={inputClass}
-          >
-            <option value="Low">Low</option>
-            <option value="Medium">Medium</option>
-            <option value="High">High</option>
-          </select>
+            onChange={(v) => setPriority(v)}
+            className="w-full"
+            options={[
+              { value: 'Low', label: 'Low' },
+              { value: 'Medium', label: 'Medium' },
+              { value: 'High', label: 'High' },
+            ]}
+          />
         </div>
 
         <div>
-          <label htmlFor="severity" className="block text-sm font-medium text-gray-700">
+          <label htmlFor="severity" className={labelClass}>
             Severity
           </label>
-          <select
+          <Select
             id="severity"
+            size="large"
             value={severity}
-            onChange={(e) =>
-              setSeverity(e.target.value as 'Low' | 'Medium' | 'High' | 'Critical')
-            }
-            className={inputClass}
-          >
-            <option value="Low">Low</option>
-            <option value="Medium">Medium</option>
-            <option value="High">High</option>
-            <option value="Critical">Critical</option>
-          </select>
+            onChange={(v) => setSeverity(v)}
+            className="w-full"
+            options={[
+              { value: 'Low', label: 'Low' },
+              { value: 'Medium', label: 'Medium' },
+              { value: 'High', label: 'High' },
+              { value: 'Critical', label: 'Critical' },
+            ]}
+          />
         </div>
       </div>
 
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
         <div>
-          <label htmlFor="status" className="block text-sm font-medium text-gray-700">
+          <label htmlFor="status" className={labelClass}>
             Status
           </label>
-          <select
+          <Select
             id="status"
+            size="large"
             value={status}
-            onChange={(e) =>
-              setStatus(e.target.value as 'Open' | 'In Progress' | 'Resolved')
-            }
-            className={inputClass}
-          >
-            <option value="Open">Open</option>
-            <option value="In Progress">In Progress</option>
-            <option value="Resolved">Resolved</option>
-          </select>
+            onChange={(v) => setStatus(v)}
+            className="w-full"
+            options={[
+              { value: 'Open', label: 'Open' },
+              { value: 'In Progress', label: 'In Progress' },
+              { value: 'Resolved', label: 'Resolved' },
+            ]}
+          />
         </div>
 
         <div>
-          <label htmlFor="assignedTo" className="block text-sm font-medium text-gray-700">
+          <label htmlFor="assignedTo" className={labelClass}>
             Assign To
           </label>
-          <select
+          <Select
             id="assignedTo"
+            size="large"
             value={assignedTo}
-            onChange={(e) => setAssignedTo(e.target.value)}
-            className={inputClass}
-          >
-            <option value="">Unassigned</option>
-            {users.map((u) => (
-              <option key={u._id} value={u._id}>
-                {u.name}
-              </option>
-            ))}
-          </select>
+            onChange={(v) => setAssignedTo(v)}
+            showSearch
+            allowClear
+            placeholder="Unassigned"
+            className="w-full"
+            filterOption={(input, option) =>
+              String(option?.label ?? '').toLowerCase().includes(input.toLowerCase())
+            }
+            options={users.map((u) => ({ value: u._id, label: u.name }))}
+          />
         </div>
       </div>
-
     </form>
   );
 }

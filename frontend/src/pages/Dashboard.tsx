@@ -11,6 +11,7 @@ import ConfirmDialog from '../components/ConfirmDialog';
 import Modal from '../components/Modal';
 import Avatar from '../components/Avatar';
 import ExportMenu from '../components/ExportMenu';
+import { Select } from 'antd';
 import {
   CircleOpenIcon,
   ClockIcon,
@@ -67,10 +68,10 @@ export default function Dashboard() {
     : undefined;
   const [search, setSearch] = useState('');
   const debouncedSearch = useDebounce(search, 400);
-  const [statusFilter, setStatusFilter] = useState('');
-  const [priorityFilter, setPriorityFilter] = useState('');
-  const [severityFilter, setSeverityFilter] = useState('');
-  const [assigneeFilter, setAssigneeFilter] = useState('');
+  const [statusFilter, setStatusFilter] = useState<string[]>([]);
+  const [priorityFilter, setPriorityFilter] = useState<string[]>([]);
+  const [severityFilter, setSeverityFilter] = useState<string[]>([]);
+  const [assigneeFilter, setAssigneeFilter] = useState<string[]>([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [confirm, setConfirm] = useState<ConfirmState>(initialConfirmState);
 
@@ -137,20 +138,39 @@ export default function Dashboard() {
     setSearch(v);
     setCurrentPage(1);
   };
-  const onStatusChange = (v: string) => {
+  const onStatusChange = (v: string[]) => {
     setStatusFilter(v);
     setCurrentPage(1);
   };
-  const onPriorityChange = (v: string) => {
+  const onPriorityChange = (v: string[]) => {
     setPriorityFilter(v);
     setCurrentPage(1);
   };
-  const onSeverityChange = (v: string) => {
+  const onSeverityChange = (v: string[]) => {
     setSeverityFilter(v);
     setCurrentPage(1);
   };
-  const onAssigneeChange = (v: string) => {
+  const onAssigneeChange = (v: string[]) => {
     setAssigneeFilter(v);
+    setCurrentPage(1);
+  };
+
+  const toggleArrayValue = (arr: string[], value: string): string[] =>
+    arr.includes(value) ? arr.filter((v) => v !== value) : [...arr, value];
+
+  const hasActiveFilters =
+    !!search ||
+    statusFilter.length > 0 ||
+    priorityFilter.length > 0 ||
+    severityFilter.length > 0 ||
+    assigneeFilter.length > 0;
+
+  const clearAllFilters = () => {
+    setSearch('');
+    setStatusFilter([]);
+    setPriorityFilter([]);
+    setSeverityFilter([]);
+    setAssigneeFilter([]);
     setCurrentPage(1);
   };
 
@@ -296,8 +316,8 @@ export default function Dashboard() {
       count: statusCounts.open,
       icon: CircleOpenIcon,
       iconBg: 'bg-slate-100 text-slate-600',
-      onClick: () => onStatusChange(statusFilter === 'Open' ? '' : 'Open'),
-      active: statusFilter === 'Open',
+      onClick: () => onStatusChange(toggleArrayValue(statusFilter, 'Open')),
+      active: statusFilter.includes('Open'),
       ringColor: 'ring-slate-400',
     },
     {
@@ -305,8 +325,8 @@ export default function Dashboard() {
       count: statusCounts.inProgress,
       icon: ClockIcon,
       iconBg: 'bg-blue-100 text-blue-600',
-      onClick: () => onStatusChange(statusFilter === 'In Progress' ? '' : 'In Progress'),
-      active: statusFilter === 'In Progress',
+      onClick: () => onStatusChange(toggleArrayValue(statusFilter, 'In Progress')),
+      active: statusFilter.includes('In Progress'),
       ringColor: 'ring-blue-400',
     },
     {
@@ -314,8 +334,8 @@ export default function Dashboard() {
       count: statusCounts.resolved,
       icon: CheckCircleIcon,
       iconBg: 'bg-emerald-100 text-emerald-600',
-      onClick: () => onStatusChange(statusFilter === 'Resolved' ? '' : 'Resolved'),
-      active: statusFilter === 'Resolved',
+      onClick: () => onStatusChange(toggleArrayValue(statusFilter, 'Resolved')),
+      active: statusFilter.includes('Resolved'),
       ringColor: 'ring-emerald-400',
     },
     {
@@ -323,14 +343,11 @@ export default function Dashboard() {
       count: statusCounts.assignedToMe,
       icon: UserPlusIcon,
       iconBg: 'bg-purple-100 text-purple-600',
-      onClick: () => onAssigneeChange(assigneeFilter === 'me' ? '' : 'me'),
-      active: assigneeFilter === 'me',
+      onClick: () => onAssigneeChange(toggleArrayValue(assigneeFilter, 'me')),
+      active: assigneeFilter.includes('me'),
       ringColor: 'ring-purple-400',
     },
   ];
-
-  const filterSelectClass =
-    'px-3 py-2 border border-gray-200 rounded-lg bg-white text-sm text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-shadow shadow-sm';
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -406,7 +423,30 @@ export default function Dashboard() {
             </div>
           </div>
 
-          <div className="px-4 sm:px-6 py-4 border-b border-gray-100 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-3">
+          <div className="px-4 sm:px-6 py-4 border-b border-gray-100 space-y-3">
+            <div className="flex items-center justify-between gap-3">
+              <p className="text-xs font-medium text-gray-500 uppercase tracking-wider">Filters</p>
+              {hasActiveFilters && (
+                <button
+                  type="button"
+                  onClick={clearAllFilters}
+                  className="inline-flex items-center gap-1 text-xs font-medium text-blue-600 hover:text-blue-700"
+                >
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    strokeWidth={2}
+                    stroke="currentColor"
+                    className="w-3.5 h-3.5"
+                  >
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M6 18 18 6M6 6l12 12" />
+                  </svg>
+                  Clear all filters
+                </button>
+              )}
+            </div>
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-3">
             <div className="relative">
               <SearchIcon className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
               <input
@@ -417,53 +457,82 @@ export default function Dashboard() {
                 className="w-full pl-9 pr-3 py-2 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-shadow shadow-sm"
               />
             </div>
-            <select
+            <Select
+              mode="multiple"
+              allowClear
+              size="large"
+              placeholder="Status"
               value={statusFilter}
-              onChange={(e) => onStatusChange(e.target.value)}
-              className={filterSelectClass}
-            >
-              <option value="">All Status</option>
-              <option value="Open">Open</option>
-              <option value="In Progress">In Progress</option>
-              <option value="Resolved">Resolved</option>
-            </select>
-            <select
+              onChange={onStatusChange}
+              maxTagCount="responsive"
+              filterOption={(input, option) =>
+                String(option?.label ?? '').toLowerCase().includes(input.toLowerCase())
+              }
+              options={[
+                { value: 'Open', label: 'Open' },
+                { value: 'In Progress', label: 'In Progress' },
+                { value: 'Resolved', label: 'Resolved' },
+              ]}
+              className="w-full"
+            />
+            <Select
+              mode="multiple"
+              allowClear
+              size="large"
+              placeholder="Priority"
               value={priorityFilter}
-              onChange={(e) => onPriorityChange(e.target.value)}
-              className={filterSelectClass}
-            >
-              <option value="">All Priority</option>
-              <option value="Low">Low</option>
-              <option value="Medium">Medium</option>
-              <option value="High">High</option>
-            </select>
-            <select
+              onChange={onPriorityChange}
+              maxTagCount="responsive"
+              filterOption={(input, option) =>
+                String(option?.label ?? '').toLowerCase().includes(input.toLowerCase())
+              }
+              options={[
+                { value: 'Low', label: 'Low' },
+                { value: 'Medium', label: 'Medium' },
+                { value: 'High', label: 'High' },
+              ]}
+              className="w-full"
+            />
+            <Select
+              mode="multiple"
+              allowClear
+              size="large"
+              placeholder="Severity"
               value={severityFilter}
-              onChange={(e) => onSeverityChange(e.target.value)}
-              className={filterSelectClass}
-            >
-              <option value="">All Severity</option>
-              <option value="Low">Low</option>
-              <option value="Medium">Medium</option>
-              <option value="High">High</option>
-              <option value="Critical">Critical</option>
-            </select>
-            <select
+              onChange={onSeverityChange}
+              maxTagCount="responsive"
+              filterOption={(input, option) =>
+                String(option?.label ?? '').toLowerCase().includes(input.toLowerCase())
+              }
+              options={[
+                { value: 'Low', label: 'Low' },
+                { value: 'Medium', label: 'Medium' },
+                { value: 'High', label: 'High' },
+                { value: 'Critical', label: 'Critical' },
+              ]}
+              className="w-full"
+            />
+            <Select
+              mode="multiple"
+              allowClear
+              size="large"
+              placeholder="Assignees"
               value={assigneeFilter}
-              onChange={(e) => onAssigneeChange(e.target.value)}
-              className={filterSelectClass}
-            >
-              <option value="">All Assignees</option>
-              <option value="me">My Issues</option>
-              <option value="unassigned">Unassigned</option>
-              {users
-                .filter((u) => u._id !== user?.id)
-                .map((u) => (
-                  <option key={u._id} value={u._id}>
-                    {u.name}
-                  </option>
-                ))}
-            </select>
+              onChange={onAssigneeChange}
+              maxTagCount="responsive"
+              filterOption={(input, option) =>
+                String(option?.label ?? '').toLowerCase().includes(input.toLowerCase())
+              }
+              options={[
+                { value: 'me', label: 'My Issues' },
+                { value: 'unassigned', label: 'Unassigned' },
+                ...users
+                  .filter((u) => u._id !== user?.id)
+                  .map((u) => ({ value: u._id, label: u.name })),
+              ]}
+              className="w-full"
+            />
+            </div>
           </div>
 
           <IssueList
