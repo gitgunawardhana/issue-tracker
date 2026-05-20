@@ -27,8 +27,9 @@ export default function Login() {
         showToast(`Welcome back, ${result.data.user.name}!`, 'success');
         navigate('/');
       }
-    } catch (err: any) {
-      const msg = err.response?.data?.message || 'Login failed';
+    } catch (err: unknown) {
+      const e = err as { response?: { data?: { message?: string } } };
+      const msg = e?.response?.data?.message || 'Login failed';
       setError(msg);
       showToast(msg, 'error');
     } finally {

@@ -5,13 +5,14 @@ interface ModalProps {
   title: string;
   onClose: () => void;
   children: React.ReactNode;
+  footer?: React.ReactNode;
   size?: 'sm' | 'md' | 'lg';
 }
 
 const sizeClasses = {
-  sm: 'max-w-md',
-  md: 'max-w-lg',
-  lg: 'max-w-2xl',
+  sm: 'sm:max-w-md',
+  md: 'sm:max-w-lg',
+  lg: 'sm:max-w-2xl',
 };
 
 export default function Modal({
@@ -19,6 +20,7 @@ export default function Modal({
   title,
   onClose,
   children,
+  footer,
   size = 'md',
 }: ModalProps) {
   useEffect(() => {
@@ -41,19 +43,19 @@ export default function Modal({
 
   return (
     <div
-      className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50 p-4"
+      className="fixed inset-0 z-50 flex items-stretch sm:items-center justify-center bg-black bg-opacity-50 sm:p-4"
       onClick={onClose}
     >
       <div
-        className={`bg-white rounded-lg shadow-xl w-full ${sizeClasses[size]} max-h-[90vh] flex flex-col`}
+        className={`bg-white w-full h-full sm:h-auto sm:rounded-lg sm:shadow-xl sm:max-h-[90vh] ${sizeClasses[size]} flex flex-col`}
         onClick={(e) => e.stopPropagation()}
       >
-        <div className="flex items-center justify-between px-6 py-4 border-b border-gray-200">
+        <div className="flex items-center justify-between px-4 sm:px-6 py-4 border-b border-gray-200 flex-shrink-0">
           <h2 className="text-lg font-semibold text-gray-900">{title}</h2>
           <button
             type="button"
             onClick={onClose}
-            className="text-gray-400 hover:text-gray-600 transition-colors"
+            className="text-gray-400 hover:text-gray-600 transition-colors p-1 -m-1"
             aria-label="Close"
           >
             <svg
@@ -68,7 +70,12 @@ export default function Modal({
             </svg>
           </button>
         </div>
-        <div className="px-6 py-5 overflow-y-auto">{children}</div>
+        <div className="px-4 sm:px-6 py-5 overflow-y-auto flex-1">{children}</div>
+        {footer && (
+          <div className="px-4 sm:px-6 py-5 border-t border-gray-100 bg-white flex-shrink-0">
+            {footer}
+          </div>
+        )}
       </div>
     </div>
   );

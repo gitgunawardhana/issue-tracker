@@ -11,12 +11,89 @@ import {
 interface IssueDetailProps {
   issue: Issue;
   currentUserId?: string;
+}
+
+interface IssueDetailActionsProps {
+  issue: Issue;
+  currentUserId?: string;
   onEdit: (issue: Issue) => void;
   onDelete: (id: string) => void;
   onResolve: (id: string) => void;
   onAssignToMe: (id: string) => void;
   onUnassign: (id: string) => void;
   onClose: () => void;
+}
+
+export function IssueDetailActions({
+  issue,
+  currentUserId,
+  onEdit,
+  onDelete,
+  onResolve,
+  onAssignToMe,
+  onUnassign,
+  onClose,
+}: IssueDetailActionsProps) {
+  const reporterId = getUserId(issue.createdBy);
+  const assigneeId = getUserId(issue.assignedTo);
+  const isReporter = currentUserId && reporterId === currentUserId;
+  const isAssignedToMe = currentUserId && assigneeId === currentUserId;
+
+  return (
+    <div className="flex flex-wrap gap-2">
+      {!assigneeId && (
+        <button
+          onClick={() => onAssignToMe(issue._id)}
+          className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-md text-sm font-medium text-purple-700 bg-purple-50 hover:bg-purple-100 transition-colors"
+        >
+          <UserPlusIcon className="w-4 h-4" />
+          Take
+        </button>
+      )}
+      {isAssignedToMe && (
+        <button
+          onClick={() => onUnassign(issue._id)}
+          className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-md text-sm font-medium text-orange-700 bg-orange-50 hover:bg-orange-100 transition-colors"
+        >
+          <UserMinusIcon className="w-4 h-4" />
+          Untake
+        </button>
+      )}
+      {issue.status !== 'Resolved' && (
+        <button
+          onClick={() => onResolve(issue._id)}
+          className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-md text-sm font-medium text-emerald-700 bg-emerald-50 hover:bg-emerald-100 transition-colors"
+        >
+          <CheckCircleIcon className="w-4 h-4" />
+          Resolve
+        </button>
+      )}
+      {isReporter && (
+        <>
+          <button
+            onClick={() => onEdit(issue)}
+            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-md text-sm font-medium text-blue-700 bg-blue-50 hover:bg-blue-100 transition-colors"
+          >
+            <EditIcon className="w-4 h-4" />
+            Edit
+          </button>
+          <button
+            onClick={() => onDelete(issue._id)}
+            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-md text-sm font-medium text-rose-700 bg-rose-50 hover:bg-rose-100 transition-colors"
+          >
+            <TrashIcon className="w-4 h-4" />
+            Delete
+          </button>
+        </>
+      )}
+      <button
+        onClick={onClose}
+        className="ml-auto inline-flex items-center gap-1.5 px-3 py-1.5 rounded-md text-sm font-medium text-gray-700 bg-gray-100 hover:bg-gray-200 transition-colors"
+      >
+        Close
+      </button>
+    </div>
+  );
 }
 
 const priorityStyles = {
@@ -59,21 +136,10 @@ function formatDate(iso: string): string {
   });
 }
 
-export default function IssueDetail({
-  issue,
-  currentUserId,
-  onEdit,
-  onDelete,
-  onResolve,
-  onAssignToMe,
-  onUnassign,
-  onClose,
-}: IssueDetailProps) {
+export default function IssueDetail({ issue, currentUserId }: IssueDetailProps) {
   const reporterName = getUserName(issue.createdBy);
-  const reporterId = getUserId(issue.createdBy);
   const assigneeName = getUserName(issue.assignedTo);
   const assigneeId = getUserId(issue.assignedTo);
-  const isReporter = currentUserId && reporterId === currentUserId;
   const isAssignedToMe = currentUserId && assigneeId === currentUserId;
 
   return (
@@ -149,59 +215,6 @@ export default function IssueDetail({
         </div>
       </div>
 
-      <div className="border-t border-gray-100 pt-4 flex flex-wrap gap-2">
-        {!assigneeId && (
-          <button
-            onClick={() => onAssignToMe(issue._id)}
-            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-md text-sm font-medium text-purple-700 bg-purple-50 hover:bg-purple-100 transition-colors"
-          >
-            <UserPlusIcon className="w-4 h-4" />
-            Take
-          </button>
-        )}
-        {isAssignedToMe && (
-          <button
-            onClick={() => onUnassign(issue._id)}
-            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-md text-sm font-medium text-orange-700 bg-orange-50 hover:bg-orange-100 transition-colors"
-          >
-            <UserMinusIcon className="w-4 h-4" />
-            Untake
-          </button>
-        )}
-        {issue.status !== 'Resolved' && (
-          <button
-            onClick={() => onResolve(issue._id)}
-            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-md text-sm font-medium text-emerald-700 bg-emerald-50 hover:bg-emerald-100 transition-colors"
-          >
-            <CheckCircleIcon className="w-4 h-4" />
-            Resolve
-          </button>
-        )}
-        {isReporter && (
-          <>
-            <button
-              onClick={() => onEdit(issue)}
-              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-md text-sm font-medium text-blue-700 bg-blue-50 hover:bg-blue-100 transition-colors"
-            >
-              <EditIcon className="w-4 h-4" />
-              Edit
-            </button>
-            <button
-              onClick={() => onDelete(issue._id)}
-              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-md text-sm font-medium text-rose-700 bg-rose-50 hover:bg-rose-100 transition-colors"
-            >
-              <TrashIcon className="w-4 h-4" />
-              Delete
-            </button>
-          </>
-        )}
-        <button
-          onClick={onClose}
-          className="ml-auto inline-flex items-center gap-1.5 px-3 py-1.5 rounded-md text-sm font-medium text-gray-700 bg-gray-100 hover:bg-gray-200 transition-colors"
-        >
-          Close
-        </button>
-      </div>
     </div>
   );
 }

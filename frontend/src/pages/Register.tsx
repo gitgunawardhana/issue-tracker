@@ -32,8 +32,9 @@ export default function Register() {
         showToast('Account created! Please sign in.', 'success');
         navigate('/login');
       }
-    } catch (err: any) {
-      const msg = err.response?.data?.message || 'Registration failed';
+    } catch (err: unknown) {
+      const e = err as { response?: { data?: { message?: string } } };
+      const msg = e?.response?.data?.message || 'Registration failed';
       setError(msg);
       showToast(msg, 'error');
     } finally {

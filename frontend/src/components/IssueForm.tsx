@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import type { Issue, UserSummary } from '../types';
 
 interface IssueFormData {
@@ -14,8 +14,39 @@ interface IssueFormProps {
   issue?: Issue;
   users: UserSummary[];
   onSubmit: (data: IssueFormData) => void;
+}
+
+export function IssueFormActions({
+  isLoading,
+  isEdit,
+  onCancel,
+  formId = 'issue-form',
+}: {
   isLoading?: boolean;
+  isEdit: boolean;
   onCancel: () => void;
+  formId?: string;
+}) {
+  return (
+    <div className="flex gap-3">
+      <button
+        type="button"
+        onClick={onCancel}
+        disabled={isLoading}
+        className="flex-1 bg-gray-100 text-gray-700 py-2 px-4 rounded-md hover:bg-gray-200 font-medium transition-colors disabled:opacity-50"
+      >
+        Cancel
+      </button>
+      <button
+        type="submit"
+        form={formId}
+        disabled={isLoading}
+        className="flex-1 bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700 font-medium transition-colors disabled:opacity-50"
+      >
+        {isLoading ? 'Saving...' : isEdit ? 'Update Issue' : 'Create Issue'}
+      </button>
+    </div>
+  );
 }
 
 const inputClass =
@@ -30,26 +61,19 @@ export default function IssueForm({
   issue,
   users,
   onSubmit,
-  isLoading = false,
-  onCancel,
 }: IssueFormProps) {
-  const [title, setTitle] = useState('');
-  const [description, setDescription] = useState('');
-  const [priority, setPriority] = useState<'Low' | 'Medium' | 'High'>('Medium');
-  const [severity, setSeverity] = useState<'Low' | 'Medium' | 'High' | 'Critical'>('Low');
-  const [status, setStatus] = useState<'Open' | 'In Progress' | 'Resolved'>('Open');
-  const [assignedTo, setAssignedTo] = useState<string>('');
-
-  useEffect(() => {
-    if (issue) {
-      setTitle(issue.title);
-      setDescription(issue.description);
-      setPriority(issue.priority);
-      setSeverity(issue.severity);
-      setStatus(issue.status);
-      setAssignedTo(getAssignedId(issue.assignedTo));
-    }
-  }, [issue]);
+  const [title, setTitle] = useState(issue?.title ?? '');
+  const [description, setDescription] = useState(issue?.description ?? '');
+  const [priority, setPriority] = useState<'Low' | 'Medium' | 'High'>(
+    issue?.priority ?? 'Medium'
+  );
+  const [severity, setSeverity] = useState<'Low' | 'Medium' | 'High' | 'Critical'>(
+    issue?.severity ?? 'Low'
+  );
+  const [status, setStatus] = useState<'Open' | 'In Progress' | 'Resolved'>(
+    issue?.status ?? 'Open'
+  );
+  const [assignedTo, setAssignedTo] = useState<string>(getAssignedId(issue?.assignedTo));
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -64,7 +88,7 @@ export default function IssueForm({
   };
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-5">
+    <form id="issue-form" onSubmit={handleSubmit} className="space-y-5">
       <div>
         <label htmlFor="title" className="block text-sm font-medium text-gray-700">
           Title <span className="text-red-500">*</span>
@@ -171,23 +195,6 @@ export default function IssueForm({
         </div>
       </div>
 
-      <div className="flex gap-3 pt-2 border-t border-gray-100">
-        <button
-          type="button"
-          onClick={onCancel}
-          disabled={isLoading}
-          className="flex-1 bg-gray-100 text-gray-700 py-2 px-4 rounded-md hover:bg-gray-200 font-medium transition-colors disabled:opacity-50"
-        >
-          Cancel
-        </button>
-        <button
-          type="submit"
-          disabled={isLoading}
-          className="flex-1 bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700 font-medium transition-colors disabled:opacity-50"
-        >
-          {isLoading ? 'Saving...' : issue ? 'Update Issue' : 'Create Issue'}
-        </button>
-      </div>
     </form>
   );
 }

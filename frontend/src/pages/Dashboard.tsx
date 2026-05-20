@@ -4,9 +4,9 @@ import { useIssueStore } from '../store/issueStore';
 import { useToastStore } from '../store/toastStore';
 import { useDebounce } from '../hooks/useDebounce';
 import { issueService, userService } from '../services/api';
-import IssueForm from '../components/IssueForm';
+import IssueForm, { IssueFormActions } from '../components/IssueForm';
 import IssueList from '../components/IssueList';
-import IssueDetail from '../components/IssueDetail';
+import IssueDetail, { IssueDetailActions } from '../components/IssueDetail';
 import ConfirmDialog from '../components/ConfirmDialog';
 import Modal from '../components/Modal';
 import Avatar from '../components/Avatar';
@@ -62,7 +62,10 @@ export default function Dashboard() {
   const [users, setUsers] = useState<UserSummary[]>([]);
   const [showForm, setShowForm] = useState(false);
   const [editingIssue, setEditingIssue] = useState<Issue | undefined>();
-  const [viewingIssue, setViewingIssue] = useState<Issue | undefined>();
+  const [viewingIssueId, setViewingIssueId] = useState<string | null>(null);
+  const viewingIssue = viewingIssueId
+    ? issues.find((i) => i._id === viewingIssueId)
+    : undefined;
   const [search, setSearch] = useState('');
   const debouncedSearch = useDebounce(search, 400);
   const [statusFilter, setStatusFilter] = useState('');
@@ -72,43 +75,19 @@ export default function Dashboard() {
   const [currentPage, setCurrentPage] = useState(1);
   const [confirm, setConfirm] = useState<ConfirmState>(initialConfirmState);
 
-  useEffect(() => {
-    if (!user) navigate('/login');
-  }, [user, navigate]);
-
-  useEffect(() => {
-    fetchUsers();
-  }, []);
-
-  useEffect(() => {
-    fetchIssues();
-  }, [
-    currentPage,
-    debouncedSearch,
-    statusFilter,
-    priorityFilter,
-    severityFilter,
-    assigneeFilter,
-  ]);
-
-  useEffect(() => {
-    setCurrentPage(1);
-  }, [debouncedSearch, statusFilter, priorityFilter, severityFilter, assigneeFilter]);
-
-  useEffect(() => {
-    if (!viewingIssue) return;
-    const fresh = issues.find((i) => i._id === viewingIssue._id);
-    if (fresh) setViewingIssue(fresh);
-  }, [issues]);
-
   const closeConfirm = () => setConfirm(initialConfirmState);
+
+  const errorMessage = (err: unknown, fallback: string): string => {
+    const e = err as { response?: { data?: { message?: string } } };
+    return e?.response?.data?.message || fallback;
+  };
 
   const fetchUsers = async () => {
     try {
       const result = await userService.getUsers();
       if (result.success && result.data) setUsers(result.data);
-    } catch (err: any) {
-      showToast(err.response?.data?.message || 'Error fetching users', 'error');
+    } catch (err: unknown) {
+      showToast(errorMessage(err, 'Error fetching users'), 'error');
     }
   };
 
@@ -129,11 +108,51 @@ export default function Dashboard() {
         setStatusCounts(result.data.statusCounts);
         setPagination(result.data.pagination);
       }
-    } catch (err: any) {
-      showToast(err.response?.data?.message || 'Error fetching issues', 'error');
+    } catch (err: unknown) {
+      showToast(errorMessage(err, 'Error fetching issues'), 'error');
     } finally {
       setLoading(false);
     }
+  };
+
+  useEffect(() => {
+    if (!user) navigate('/login');
+  }, [user, navigate]);
+
+  useEffect(() => {
+    void fetchUsers();
+  }, []);
+
+  useEffect(() => {
+    void fetchIssues();
+  }, [
+    currentPage,
+    debouncedSearch,
+    statusFilter,
+    priorityFilter,
+    severityFilter,
+    assigneeFilter,
+  ]);
+
+  const onSearchChange = (v: string) => {
+    setSearch(v);
+    setCurrentPage(1);
+  };
+  const onStatusChange = (v: string) => {
+    setStatusFilter(v);
+    setCurrentPage(1);
+  };
+  const onPriorityChange = (v: string) => {
+    setPriorityFilter(v);
+    setCurrentPage(1);
+  };
+  const onSeverityChange = (v: string) => {
+    setSeverityFilter(v);
+    setCurrentPage(1);
+  };
+  const onAssigneeChange = (v: string) => {
+    setAssigneeFilter(v);
+    setCurrentPage(1);
   };
 
   const handleCreateOrUpdate = async (data: {
@@ -154,15 +173,15 @@ export default function Dashboard() {
           setEditingIssue(undefined);
         }
       } else {
-        const result = await issueService.createIssue(data as any);
+        const result = await issueService.createIssue(data);
         if (result.success && result.data) {
           showToast('Issue created successfully', 'success');
         }
       }
       setShowForm(false);
       await fetchIssues();
-    } catch (err: any) {
-      showToast(err.response?.data?.message || 'Error saving issue', 'error');
+    } catch (err: unknown) {
+      showToast(errorMessage(err, 'Error saving issue'), 'error');
     } finally {
       setLoading(false);
     }
@@ -176,8 +195,8 @@ export default function Dashboard() {
         showToast('Issue deleted', 'success');
         await fetchIssues();
       }
-    } catch (err: any) {
-      showToast(err.response?.data?.message || 'Error deleting issue', 'error');
+    } catch (err: unknown) {
+      showToast(errorMessage(err, 'Error deleting issue'), 'error');
     }
   };
 
@@ -189,8 +208,8 @@ export default function Dashboard() {
         showToast(`Status changed to ${status}`, 'success');
         await fetchIssues();
       }
-    } catch (err: any) {
-      showToast(err.response?.data?.message || 'Error updating status', 'error');
+    } catch (err: unknown) {
+      showToast(errorMessage(err, 'Error updating status'), 'error');
     }
   };
 
@@ -202,8 +221,8 @@ export default function Dashboard() {
         showToast(assignedTo ? 'You took this issue' : 'You untook this issue', 'success');
         await fetchIssues();
       }
-    } catch (err: any) {
-      showToast(err.response?.data?.message || 'Error assigning issue', 'error');
+    } catch (err: unknown) {
+      showToast(errorMessage(err, 'Error assigning issue'), 'error');
     }
   };
 
@@ -262,8 +281,8 @@ export default function Dashboard() {
         assignedTo: assigneeFilter,
       });
       showToast(`Exported as ${format.toUpperCase()}`, 'success');
-    } catch (err: any) {
-      showToast(err.response?.data?.message || 'Export failed', 'error');
+    } catch (err: unknown) {
+      showToast(errorMessage(err, 'Export failed'), 'error');
     }
   };
 
@@ -278,7 +297,7 @@ export default function Dashboard() {
       count: statusCounts.open,
       icon: CircleOpenIcon,
       iconBg: 'bg-slate-100 text-slate-600',
-      onClick: () => setStatusFilter(statusFilter === 'Open' ? '' : 'Open'),
+      onClick: () => onStatusChange(statusFilter === 'Open' ? '' : 'Open'),
       active: statusFilter === 'Open',
       ringColor: 'ring-slate-400',
     },
@@ -287,7 +306,7 @@ export default function Dashboard() {
       count: statusCounts.inProgress,
       icon: ClockIcon,
       iconBg: 'bg-blue-100 text-blue-600',
-      onClick: () => setStatusFilter(statusFilter === 'In Progress' ? '' : 'In Progress'),
+      onClick: () => onStatusChange(statusFilter === 'In Progress' ? '' : 'In Progress'),
       active: statusFilter === 'In Progress',
       ringColor: 'ring-blue-400',
     },
@@ -296,7 +315,7 @@ export default function Dashboard() {
       count: statusCounts.resolved,
       icon: CheckCircleIcon,
       iconBg: 'bg-emerald-100 text-emerald-600',
-      onClick: () => setStatusFilter(statusFilter === 'Resolved' ? '' : 'Resolved'),
+      onClick: () => onStatusChange(statusFilter === 'Resolved' ? '' : 'Resolved'),
       active: statusFilter === 'Resolved',
       ringColor: 'ring-emerald-400',
     },
@@ -305,7 +324,7 @@ export default function Dashboard() {
       count: statusCounts.assignedToMe,
       icon: UserPlusIcon,
       iconBg: 'bg-purple-100 text-purple-600',
-      onClick: () => setAssigneeFilter(assigneeFilter === 'me' ? '' : 'me'),
+      onClick: () => onAssigneeChange(assigneeFilter === 'me' ? '' : 'me'),
       active: assigneeFilter === 'me',
       ringColor: 'ring-purple-400',
     },
@@ -397,13 +416,13 @@ export default function Dashboard() {
                 type="text"
                 placeholder="Search..."
                 value={search}
-                onChange={(e) => setSearch(e.target.value)}
+                onChange={(e) => onSearchChange(e.target.value)}
                 className="w-full pl-9 pr-3 py-2 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-shadow shadow-sm"
               />
             </div>
             <select
               value={statusFilter}
-              onChange={(e) => setStatusFilter(e.target.value)}
+              onChange={(e) => onStatusChange(e.target.value)}
               className={filterSelectClass}
             >
               <option value="">All Status</option>
@@ -413,7 +432,7 @@ export default function Dashboard() {
             </select>
             <select
               value={priorityFilter}
-              onChange={(e) => setPriorityFilter(e.target.value)}
+              onChange={(e) => onPriorityChange(e.target.value)}
               className={filterSelectClass}
             >
               <option value="">All Priority</option>
@@ -423,7 +442,7 @@ export default function Dashboard() {
             </select>
             <select
               value={severityFilter}
-              onChange={(e) => setSeverityFilter(e.target.value)}
+              onChange={(e) => onSeverityChange(e.target.value)}
               className={filterSelectClass}
             >
               <option value="">All Severity</option>
@@ -434,7 +453,7 @@ export default function Dashboard() {
             </select>
             <select
               value={assigneeFilter}
-              onChange={(e) => setAssigneeFilter(e.target.value)}
+              onChange={(e) => onAssigneeChange(e.target.value)}
               className={filterSelectClass}
             >
               <option value="">All Assignees</option>
@@ -453,7 +472,7 @@ export default function Dashboard() {
           <IssueList
             issues={issues}
             currentUserId={user?.id}
-            onSelect={(issue) => setViewingIssue(issue)}
+            onSelect={(issue) => setViewingIssueId(issue._id)}
             onEdit={(issue) => {
               setEditingIssue(issue);
               setShowForm(true);
@@ -499,43 +518,53 @@ export default function Dashboard() {
           setEditingIssue(undefined);
         }}
         size="lg"
+        footer={
+          <IssueFormActions
+            isEdit={!!editingIssue}
+            isLoading={isLoading}
+            onCancel={() => {
+              setShowForm(false);
+              setEditingIssue(undefined);
+            }}
+          />
+        }
       >
         <IssueForm
           issue={editingIssue}
           users={users}
           onSubmit={handleCreateOrUpdate}
-          isLoading={isLoading}
-          onCancel={() => {
-            setShowForm(false);
-            setEditingIssue(undefined);
-          }}
         />
       </Modal>
 
       <Modal
         isOpen={!!viewingIssue}
         title="Issue Details"
-        onClose={() => setViewingIssue(undefined)}
+        onClose={() => setViewingIssueId(null)}
         size="lg"
+        footer={
+          viewingIssue && (
+            <IssueDetailActions
+              issue={viewingIssue}
+              currentUserId={user?.id}
+              onEdit={(issue) => {
+                setViewingIssueId(null);
+                setEditingIssue(issue);
+                setShowForm(true);
+              }}
+              onDelete={(id) => {
+                setViewingIssueId(null);
+                handleDelete(id);
+              }}
+              onResolve={(id) => handleResolve(id)}
+              onAssignToMe={handleAssignToMe}
+              onUnassign={handleUnassign}
+              onClose={() => setViewingIssueId(null)}
+            />
+          )
+        }
       >
         {viewingIssue && (
-          <IssueDetail
-            issue={viewingIssue}
-            currentUserId={user?.id}
-            onEdit={(issue) => {
-              setViewingIssue(undefined);
-              setEditingIssue(issue);
-              setShowForm(true);
-            }}
-            onDelete={(id) => {
-              setViewingIssue(undefined);
-              handleDelete(id);
-            }}
-            onResolve={(id) => handleResolve(id)}
-            onAssignToMe={handleAssignToMe}
-            onUnassign={handleUnassign}
-            onClose={() => setViewingIssue(undefined)}
-          />
+          <IssueDetail issue={viewingIssue} currentUserId={user?.id} />
         )}
       </Modal>
 
