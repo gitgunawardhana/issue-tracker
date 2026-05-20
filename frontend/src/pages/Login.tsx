@@ -3,7 +3,6 @@ import { useNavigate } from 'react-router-dom';
 import { useAuthStore } from '../store/authStore';
 import { useToastStore } from '../store/toastStore';
 import { authService } from '../services/api';
-import { BugIcon } from '../components/Icons';
 
 export default function Login() {
   const [email, setEmail] = useState('');
@@ -42,11 +41,9 @@ export default function Login() {
       <div className="max-w-md w-full">
         <div className="bg-white rounded-lg border border-gray-200 p-8">
           <div className="flex flex-col items-center mb-6">
-            <div className="w-12 h-12 rounded-lg bg-blue-600 flex items-center justify-center mb-4">
-              <BugIcon className="w-6 h-6 text-white" />
-            </div>
+            <img src="/logo.png" alt="Issue Tracker" className="w-32 h-32 object-contain mb-2" />
             <h2 className="text-xl font-semibold text-gray-900">Welcome back</h2>
-            <p className="text-sm text-gray-500 mt-1">Sign in to your Issue Tracker account</p>
+            <p className="text-sm text-gray-500 mt-1">Sign in to your account</p>
           </div>
 
           <form className="space-y-5" onSubmit={handleSubmit}>

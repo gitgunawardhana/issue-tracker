@@ -2,7 +2,6 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { authService } from '../services/api';
 import { useToastStore } from '../store/toastStore';
-import { BugIcon } from '../components/Icons';
 
 export default function Register() {
   const [name, setName] = useState('');
@@ -50,9 +49,7 @@ export default function Register() {
       <div className="max-w-md w-full">
         <div className="bg-white rounded-lg border border-gray-200 p-8">
           <div className="flex flex-col items-center mb-6">
-            <div className="w-12 h-12 rounded-lg bg-blue-600 flex items-center justify-center mb-4">
-              <BugIcon className="w-6 h-6 text-white" />
-            </div>
+            <img src="/logo.png" alt="Issue Tracker" className="w-32 h-32 object-contain mb-2" />
             <h2 className="text-xl font-semibold text-gray-900">Create account</h2>
             <p className="text-sm text-gray-500 mt-1">Join the Issue Tracker</p>
           </div>

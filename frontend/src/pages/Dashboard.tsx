@@ -12,7 +12,6 @@ import Modal from '../components/Modal';
 import Avatar from '../components/Avatar';
 import ExportMenu from '../components/ExportMenu';
 import {
-  BugIcon,
   CircleOpenIcon,
   ClockIcon,
   CheckCircleIcon,
@@ -338,9 +337,7 @@ export default function Dashboard() {
       <nav className="bg-white border-b border-gray-200 sticky top-0 z-30">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3 flex justify-between items-center">
           <div className="flex items-center gap-3">
-            <div className="w-9 h-9 rounded-lg bg-blue-600 flex items-center justify-center">
-              <BugIcon className="w-5 h-5 text-white" />
-            </div>
+            <img src="/logo.png" alt="Issue Tracker" className="w-10 h-10 object-contain" />
             <div>
               <h1 className="text-lg font-semibold text-gray-900 leading-tight">Issue Tracker</h1>
               <p className="text-xs text-gray-500 leading-tight">Manage your team's work</p>
