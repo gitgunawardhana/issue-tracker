@@ -56,7 +56,7 @@ export default function ExportMenu({ onExport, disabled }: ExportMenuProps) {
       </button>
 
       {open && (
-        <div className="absolute right-0 mt-1 w-44 bg-white dark:bg-neutral-800 border border-gray-200 dark:border-neutral-700 rounded-lg shadow-md py-1 z-20">
+        <div className="absolute left-0 sm:left-auto sm:right-0 mt-1 w-44 bg-white dark:bg-neutral-800 border border-gray-200 dark:border-neutral-700 rounded-lg shadow-md py-1 z-20">
           <button
             type="button"
             onClick={() => {
