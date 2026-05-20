@@ -116,6 +116,31 @@ export const issueService = {
     });
     return response.data;
   },
+
+  exportIssues: async (format: 'pdf' | 'json', filters: IssueFilters = {}) => {
+    const params: Record<string, string> = { format };
+    if (filters.search) params.search = filters.search;
+    if (filters.status) params.status = filters.status;
+    if (filters.priority) params.priority = filters.priority;
+    if (filters.severity) params.severity = filters.severity;
+    if (filters.assignedTo) params.assignedTo = filters.assignedTo;
+
+    const response = await apiClient.get('/issues/export', {
+      params,
+      responseType: 'blob',
+    });
+
+    const blob = response.data as Blob;
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    const date = new Date().toISOString().slice(0, 10);
+    link.download = `issues-${date}.${format}`;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    URL.revokeObjectURL(url);
+  },
 };
 
 export default apiClient;

@@ -9,6 +9,7 @@ import {
   updateIssueStatus,
   assignIssue,
 } from '../controllers/issueController';
+import { exportIssues } from '../controllers/exportController';
 
 const router = Router();
 
@@ -16,6 +17,7 @@ router.use(authenticateToken);
 
 router.post('/', createIssue);
 router.get('/', getIssues);
+router.get('/export', exportIssues);
 router.get('/:id', getIssueById);
 router.put('/:id', updateIssue);
 router.delete('/:id', deleteIssue);

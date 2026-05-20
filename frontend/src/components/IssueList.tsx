@@ -1,4 +1,13 @@
 import type { Issue } from '../types';
+import Avatar from './Avatar';
+import {
+  EditIcon,
+  TrashIcon,
+  CheckCircleIcon,
+  UserPlusIcon,
+  UserMinusIcon,
+  InboxIcon,
+} from './Icons';
 
 interface IssueListProps {
   issues: Issue[];
@@ -9,26 +18,33 @@ interface IssueListProps {
   onResolve: (id: string) => void;
   onAssignToMe: (id: string) => void;
   onUnassign: (id: string) => void;
+  onSelect: (issue: Issue) => void;
   isLoading?: boolean;
 }
 
-const priorityColors = {
-  Low: 'bg-green-100 text-green-800',
-  Medium: 'bg-yellow-100 text-yellow-800',
-  High: 'bg-red-100 text-red-800',
+const priorityStyles = {
+  Low: 'bg-emerald-50 text-emerald-700 ring-1 ring-emerald-200',
+  Medium: 'bg-amber-50 text-amber-700 ring-1 ring-amber-200',
+  High: 'bg-rose-50 text-rose-700 ring-1 ring-rose-200',
 };
 
-const severityColors = {
-  Low: 'bg-blue-100 text-blue-800',
-  Medium: 'bg-orange-100 text-orange-800',
-  High: 'bg-red-100 text-red-800',
-  Critical: 'bg-red-200 text-red-900',
+const severityStyles = {
+  Low: 'bg-sky-50 text-sky-700 ring-1 ring-sky-200',
+  Medium: 'bg-orange-50 text-orange-700 ring-1 ring-orange-200',
+  High: 'bg-rose-50 text-rose-700 ring-1 ring-rose-200',
+  Critical: 'bg-red-100 text-red-800 ring-1 ring-red-300 font-semibold',
 };
 
-const statusColors = {
-  Open: 'bg-gray-100 text-gray-800',
-  'In Progress': 'bg-blue-100 text-blue-800',
-  Resolved: 'bg-green-100 text-green-800',
+const statusStyles = {
+  Open: 'bg-slate-100 text-slate-700 ring-1 ring-slate-300',
+  'In Progress': 'bg-blue-50 text-blue-700 ring-1 ring-blue-200',
+  Resolved: 'bg-emerald-50 text-emerald-700 ring-1 ring-emerald-200',
+};
+
+const statusDot = {
+  Open: 'bg-slate-400',
+  'In Progress': 'bg-blue-500',
+  Resolved: 'bg-emerald-500',
 };
 
 function getUserName(field: Issue['createdBy'] | Issue['assignedTo']): string | null {
@@ -42,6 +58,29 @@ function getUserId(field: Issue['createdBy'] | Issue['assignedTo']): string | nu
   return typeof field === 'string' ? field : field._id;
 }
 
+function IconButton({
+  onClick,
+  title,
+  className = '',
+  children,
+}: {
+  onClick: () => void;
+  title: string;
+  className?: string;
+  children: React.ReactNode;
+}) {
+  return (
+    <button
+      type="button"
+      onClick={onClick}
+      title={title}
+      className={`p-1.5 rounded-md transition-colors ${className}`}
+    >
+      {children}
+    </button>
+  );
+}
+
 export default function IssueList({
   issues,
   currentUserId,
@@ -51,137 +90,160 @@ export default function IssueList({
   onResolve,
   onAssignToMe,
   onUnassign,
+  onSelect,
   isLoading,
 }: IssueListProps) {
   if (isLoading) {
-    return <div className="text-center py-8 text-gray-500">Loading issues...</div>;
+    return (
+      <div className="space-y-3 py-4">
+        {[1, 2, 3].map((i) => (
+          <div key={i} className="flex items-center gap-4 animate-pulse">
+            <div className="h-4 bg-gray-200 rounded w-1/4" />
+            <div className="h-4 bg-gray-200 rounded w-1/6" />
+            <div className="h-4 bg-gray-200 rounded w-1/6" />
+            <div className="h-4 bg-gray-200 rounded flex-1" />
+          </div>
+        ))}
+      </div>
+    );
   }
 
   if (issues.length === 0) {
     return (
-      <div className="text-center py-12">
-        <p className="text-gray-500">No issues found. Create one to get started!</p>
+      <div className="text-center py-16">
+        <div className="inline-flex items-center justify-center w-16 h-16 bg-gray-100 rounded-full mb-4">
+          <InboxIcon className="w-8 h-8 text-gray-400" />
+        </div>
+        <p className="text-gray-700 font-medium">No issues yet</p>
+        <p className="text-sm text-gray-500 mt-1">Create a new issue to get started</p>
       </div>
     );
   }
 
   return (
     <div className="overflow-x-auto">
-      <table className="w-full border-collapse">
+      <table className="w-full">
         <thead>
-          <tr className="bg-gray-100 border-b border-gray-300">
-            <th className="px-4 py-3 text-left font-semibold text-gray-700 text-sm">Title</th>
-            <th className="px-4 py-3 text-left font-semibold text-gray-700 text-sm">Reporter</th>
-            <th className="px-4 py-3 text-left font-semibold text-gray-700 text-sm">Assigned To</th>
-            <th className="px-4 py-3 text-left font-semibold text-gray-700 text-sm">Priority</th>
-            <th className="px-4 py-3 text-left font-semibold text-gray-700 text-sm">Severity</th>
-            <th className="px-4 py-3 text-left font-semibold text-gray-700 text-sm">Status</th>
-            <th className="px-4 py-3 text-center font-semibold text-gray-700 text-sm">Actions</th>
+          <tr className="border-b border-gray-200">
+            <th className="px-4 py-3 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">Issue</th>
+            <th className="px-4 py-3 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">Reporter</th>
+            <th className="px-4 py-3 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">Assignee</th>
+            <th className="px-4 py-3 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">Priority</th>
+            <th className="px-4 py-3 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">Severity</th>
+            <th className="px-4 py-3 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">Status</th>
+            <th className="px-4 py-3 text-right text-xs font-semibold text-gray-500 uppercase tracking-wider">Actions</th>
           </tr>
         </thead>
-        <tbody>
+        <tbody className="divide-y divide-gray-100">
           {issues.map((issue) => {
             const assigneeId = getUserId(issue.assignedTo);
             const assigneeName = getUserName(issue.assignedTo);
-            const isAssignedToMe = currentUserId && assigneeId === currentUserId;
+            const reporterName = getUserName(issue.createdBy);
             const reporterId = getUserId(issue.createdBy);
+            const isAssignedToMe = currentUserId && assigneeId === currentUserId;
             const isReporter = currentUserId && reporterId === currentUserId;
 
             return (
               <tr
                 key={issue._id}
-                className="border-b border-gray-200 hover:bg-gray-50 transition-colors"
+                onClick={() => onSelect(issue)}
+                className="hover:bg-slate-50/70 transition-colors group cursor-pointer"
               >
                 <td className="px-4 py-3 max-w-xs">
                   <p className="font-medium text-gray-900 truncate">{issue.title}</p>
-                  <p className="text-sm text-gray-500 truncate">{issue.description}</p>
+                  <p className="text-sm text-gray-500 truncate mt-0.5">{issue.description}</p>
                 </td>
-                <td className="px-4 py-3 text-sm text-gray-700">
-                  {getUserName(issue.createdBy) || 'Unknown'}
-                </td>
-                <td className="px-4 py-3 text-sm">
-                  {assigneeName ? (
-                    <span
-                      className={`inline-flex items-center gap-1 ${
-                        isAssignedToMe ? 'text-blue-700 font-semibold' : 'text-gray-700'
-                      }`}
-                    >
-                      {assigneeName}
-                      {isAssignedToMe && <span className="text-xs">(you)</span>}
-                    </span>
-                  ) : (
-                    <span className="text-gray-400 italic">Unassigned</span>
+                <td className="px-4 py-3">
+                  {reporterName && (
+                    <div className="flex items-center gap-2">
+                      <Avatar name={reporterName} size="sm" />
+                      <span className="text-sm text-gray-700 truncate max-w-[120px]">{reporterName}</span>
+                    </div>
                   )}
                 </td>
                 <td className="px-4 py-3">
-                  <span
-                    className={`inline-block px-2 py-1 rounded text-xs font-medium ${priorityColors[issue.priority]}`}
-                  >
+                  {assigneeName ? (
+                    <div className="flex items-center gap-2">
+                      <Avatar name={assigneeName} size="sm" />
+                      <span className={`text-sm truncate max-w-[120px] ${isAssignedToMe ? 'text-blue-700 font-semibold' : 'text-gray-700'}`}>
+                        {assigneeName}
+                        {isAssignedToMe && <span className="text-xs text-blue-500 ml-1">(you)</span>}
+                      </span>
+                    </div>
+                  ) : (
+                    <span className="text-sm text-gray-400 italic">Unassigned</span>
+                  )}
+                </td>
+                <td className="px-4 py-3">
+                  <span className={`inline-block px-2.5 py-0.5 rounded-full text-xs font-medium ${priorityStyles[issue.priority]}`}>
                     {issue.priority}
                   </span>
                 </td>
                 <td className="px-4 py-3">
-                  <span
-                    className={`inline-block px-2 py-1 rounded text-xs font-medium ${severityColors[issue.severity]}`}
-                  >
+                  <span className={`inline-block px-2.5 py-0.5 rounded-full text-xs font-medium ${severityStyles[issue.severity]}`}>
                     {issue.severity}
                   </span>
                 </td>
-                <td className="px-4 py-3">
-                  <select
-                    value={issue.status}
-                    onChange={(e) => onStatusChange(issue._id, e.target.value)}
-                    className={`px-2 py-1 rounded text-xs font-medium border-0 cursor-pointer focus:outline-none focus:ring-2 focus:ring-blue-500 ${statusColors[issue.status]}`}
-                    aria-label="Change status"
-                  >
-                    <option>Open</option>
-                    <option>In Progress</option>
-                    <option>Resolved</option>
-                  </select>
+                <td className="px-4 py-3" onClick={(e) => e.stopPropagation()}>
+                  <div className="relative">
+                    <select
+                      value={issue.status}
+                      onChange={(e) => onStatusChange(issue._id, e.target.value)}
+                      className={`pl-6 pr-7 py-1 rounded-full text-xs font-medium border-0 cursor-pointer focus:outline-none focus:ring-2 focus:ring-blue-500 appearance-none ${statusStyles[issue.status]}`}
+                      aria-label="Change status"
+                    >
+                      <option>Open</option>
+                      <option>In Progress</option>
+                      <option>Resolved</option>
+                    </select>
+                    <span className={`absolute left-2 top-1/2 -translate-y-1/2 w-2 h-2 rounded-full ${statusDot[issue.status]}`} />
+                  </div>
                 </td>
-                <td className="px-4 py-3">
-                  <div className="flex items-center justify-center gap-2 flex-wrap">
+                <td className="px-4 py-3" onClick={(e) => e.stopPropagation()}>
+                  <div className="flex items-center justify-end gap-1">
                     {!assigneeId && (
-                      <button
+                      <IconButton
                         onClick={() => onAssignToMe(issue._id)}
-                        className="text-purple-600 hover:text-purple-800 text-sm font-medium"
-                        title="Assign to me"
+                        title="Take this issue"
+                        className="text-purple-600 hover:bg-purple-50"
                       >
-                        Take
-                      </button>
+                        <UserPlusIcon className="w-4 h-4" />
+                      </IconButton>
                     )}
                     {isAssignedToMe && (
-                      <button
+                      <IconButton
                         onClick={() => onUnassign(issue._id)}
-                        className="text-orange-600 hover:text-orange-800 text-sm font-medium"
-                        title="Remove yourself from this issue"
+                        title="Untake (remove yourself)"
+                        className="text-orange-600 hover:bg-orange-50"
                       >
-                        Untake
-                      </button>
+                        <UserMinusIcon className="w-4 h-4" />
+                      </IconButton>
                     )}
                     {issue.status !== 'Resolved' && (
-                      <button
+                      <IconButton
                         onClick={() => onResolve(issue._id)}
-                        className="text-green-600 hover:text-green-800 text-sm font-medium"
                         title="Mark as Resolved"
+                        className="text-emerald-600 hover:bg-emerald-50"
                       >
-                        Resolve
-                      </button>
+                        <CheckCircleIcon className="w-4 h-4" />
+                      </IconButton>
                     )}
                     {isReporter && (
                       <>
-                        <button
+                        <IconButton
                           onClick={() => onEdit(issue)}
-                          className="text-blue-600 hover:text-blue-800 text-sm font-medium"
+                          title="Edit"
+                          className="text-blue-600 hover:bg-blue-50"
                         >
-                          Edit
-                        </button>
-                        <button
+                          <EditIcon className="w-4 h-4" />
+                        </IconButton>
+                        <IconButton
                           onClick={() => onDelete(issue._id)}
-                          className="text-red-600 hover:text-red-800 text-sm font-medium"
+                          title="Delete"
+                          className="text-rose-600 hover:bg-rose-50"
                         >
-                          Delete
-                        </button>
+                          <TrashIcon className="w-4 h-4" />
+                        </IconButton>
                       </>
                     )}
                   </div>

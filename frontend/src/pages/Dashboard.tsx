@@ -6,8 +6,21 @@ import { useDebounce } from '../hooks/useDebounce';
 import { issueService, userService } from '../services/api';
 import IssueForm from '../components/IssueForm';
 import IssueList from '../components/IssueList';
+import IssueDetail from '../components/IssueDetail';
 import ConfirmDialog from '../components/ConfirmDialog';
 import Modal from '../components/Modal';
+import Avatar from '../components/Avatar';
+import ExportMenu from '../components/ExportMenu';
+import {
+  BugIcon,
+  CircleOpenIcon,
+  ClockIcon,
+  CheckCircleIcon,
+  UserPlusIcon,
+  SearchIcon,
+  PlusIcon,
+  LogoutIcon,
+} from '../components/Icons';
 import type { Issue, UserSummary } from '../types';
 import { useNavigate } from 'react-router-dom';
 
@@ -49,6 +62,7 @@ export default function Dashboard() {
   const [users, setUsers] = useState<UserSummary[]>([]);
   const [showForm, setShowForm] = useState(false);
   const [editingIssue, setEditingIssue] = useState<Issue | undefined>();
+  const [viewingIssue, setViewingIssue] = useState<Issue | undefined>();
   const [search, setSearch] = useState('');
   const debouncedSearch = useDebounce(search, 400);
   const [statusFilter, setStatusFilter] = useState('');
@@ -80,6 +94,12 @@ export default function Dashboard() {
   useEffect(() => {
     setCurrentPage(1);
   }, [debouncedSearch, statusFilter, priorityFilter, severityFilter, assigneeFilter]);
+
+  useEffect(() => {
+    if (!viewingIssue) return;
+    const fresh = issues.find((i) => i._id === viewingIssue._id);
+    if (fresh) setViewingIssue(fresh);
+  }, [issues]);
 
   const closeConfirm = () => setConfirm(initialConfirmState);
 
@@ -232,79 +252,159 @@ export default function Dashboard() {
 
   const handleUnassign = (id: string) => performAssign(id, null);
 
+  const handleExport = async (format: 'pdf' | 'json') => {
+    try {
+      await issueService.exportIssues(format, {
+        search: debouncedSearch,
+        status: statusFilter,
+        priority: priorityFilter,
+        severity: severityFilter,
+        assignedTo: assigneeFilter,
+      });
+      showToast(`Exported as ${format.toUpperCase()}`, 'success');
+    } catch (err: any) {
+      showToast(err.response?.data?.message || 'Export failed', 'error');
+    }
+  };
+
   const handleLogout = () => {
     logout();
     navigate('/login');
   };
 
+  const statCards = [
+    {
+      label: 'Open',
+      count: statusCounts.open,
+      icon: CircleOpenIcon,
+      iconBg: 'bg-slate-100 text-slate-600',
+      onClick: () => setStatusFilter(statusFilter === 'Open' ? '' : 'Open'),
+      active: statusFilter === 'Open',
+      ringColor: 'ring-slate-400',
+    },
+    {
+      label: 'In Progress',
+      count: statusCounts.inProgress,
+      icon: ClockIcon,
+      iconBg: 'bg-blue-100 text-blue-600',
+      onClick: () => setStatusFilter(statusFilter === 'In Progress' ? '' : 'In Progress'),
+      active: statusFilter === 'In Progress',
+      ringColor: 'ring-blue-400',
+    },
+    {
+      label: 'Resolved',
+      count: statusCounts.resolved,
+      icon: CheckCircleIcon,
+      iconBg: 'bg-emerald-100 text-emerald-600',
+      onClick: () => setStatusFilter(statusFilter === 'Resolved' ? '' : 'Resolved'),
+      active: statusFilter === 'Resolved',
+      ringColor: 'ring-emerald-400',
+    },
+    {
+      label: 'Assigned to Me',
+      count: statusCounts.assignedToMe,
+      icon: UserPlusIcon,
+      iconBg: 'bg-purple-100 text-purple-600',
+      onClick: () => setAssigneeFilter(assigneeFilter === 'me' ? '' : 'me'),
+      active: assigneeFilter === 'me',
+      ringColor: 'ring-purple-400',
+    },
+  ];
+
+  const filterSelectClass =
+    'px-3 py-2 border border-gray-200 rounded-lg bg-white text-sm text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-shadow shadow-sm';
+
   return (
     <div className="min-h-screen bg-gray-50">
-      <nav className="bg-white shadow">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex justify-between items-center">
-          <h1 className="text-2xl font-bold text-gray-900">Issue Tracker</h1>
-          <div className="flex items-center gap-4">
-            <span className="text-gray-600">{user?.name}</span>
+      <nav className="bg-white border-b border-gray-200 sticky top-0 z-30">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3 flex justify-between items-center">
+          <div className="flex items-center gap-3">
+            <div className="w-9 h-9 rounded-lg bg-blue-600 flex items-center justify-center">
+              <BugIcon className="w-5 h-5 text-white" />
+            </div>
+            <div>
+              <h1 className="text-lg font-semibold text-gray-900 leading-tight">Issue Tracker</h1>
+              <p className="text-xs text-gray-500 leading-tight">Manage your team's work</p>
+            </div>
+          </div>
+          <div className="flex items-center gap-3">
+            <div className="hidden sm:flex items-center gap-2 px-3 py-1.5 rounded-full bg-gray-50">
+              {user && <Avatar name={user.name} size="xs" />}
+              <span className="text-sm font-medium text-gray-700">{user?.name}</span>
+            </div>
             <button
               onClick={handleLogout}
-              className="bg-red-600 text-white px-4 py-2 rounded-md hover:bg-red-700 font-medium transition-colors"
+              className="inline-flex items-center gap-1.5 bg-white text-gray-700 border border-gray-200 px-3 py-1.5 rounded-lg hover:bg-gray-50 text-sm font-medium transition-colors"
             >
+              <LogoutIcon className="w-4 h-4" />
               Logout
             </button>
           </div>
         </div>
       </nav>
 
-      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <div className="mb-8 grid grid-cols-2 md:grid-cols-4 gap-4">
-          <div className="bg-white rounded-lg shadow p-6">
-            <p className="text-gray-600 text-sm">Open</p>
-            <p className="text-3xl font-bold text-blue-600">{statusCounts.open}</p>
-          </div>
-          <div className="bg-white rounded-lg shadow p-6">
-            <p className="text-gray-600 text-sm">In Progress</p>
-            <p className="text-3xl font-bold text-yellow-600">{statusCounts.inProgress}</p>
-          </div>
-          <div className="bg-white rounded-lg shadow p-6">
-            <p className="text-gray-600 text-sm">Resolved</p>
-            <p className="text-3xl font-bold text-green-600">{statusCounts.resolved}</p>
-          </div>
-          <button
-            onClick={() => setAssigneeFilter(assigneeFilter === 'me' ? '' : 'me')}
-            className={`text-left bg-white rounded-lg shadow p-6 transition-colors ${
-              assigneeFilter === 'me' ? 'ring-2 ring-purple-500' : 'hover:bg-gray-50'
-            }`}
-          >
-            <p className="text-gray-600 text-sm">Assigned to Me</p>
-            <p className="text-3xl font-bold text-purple-600">{statusCounts.assignedToMe}</p>
-          </button>
+      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8">
+        <div className="mb-6 grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
+          {statCards.map((card) => {
+            const Icon = card.icon;
+            return (
+              <button
+                key={card.label}
+                onClick={card.onClick}
+                className={`text-left bg-white rounded-lg border border-gray-200 p-4 sm:p-5 hover:border-gray-300 transition-colors ${
+                  card.active ? `ring-2 ${card.ringColor} border-transparent` : ''
+                }`}
+              >
+                <div className="flex items-start justify-between">
+                  <div>
+                    <p className="text-xs sm:text-sm text-gray-500 font-medium">{card.label}</p>
+                    <p className="text-2xl sm:text-3xl font-bold text-gray-900 mt-1">{card.count}</p>
+                  </div>
+                  <div className={`p-2 rounded-lg ${card.iconBg}`}>
+                    <Icon className="w-5 h-5" />
+                  </div>
+                </div>
+              </button>
+            );
+          })}
         </div>
 
-        <div className="bg-white rounded-lg shadow p-6">
-          <div className="flex justify-between items-center mb-6">
-            <h2 className="text-xl font-bold text-gray-900">Issues</h2>
-            <button
-              onClick={() => {
-                setEditingIssue(undefined);
-                setShowForm(true);
-              }}
-              className="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 font-medium transition-colors"
-            >
-              + New Issue
-            </button>
+        <div className="bg-white rounded-lg border border-gray-200 overflow-hidden">
+          <div className="px-4 sm:px-6 py-4 border-b border-gray-100 flex flex-col sm:flex-row sm:justify-between sm:items-center gap-3">
+            <div>
+              <h2 className="text-lg font-bold text-gray-900">Issues</h2>
+              <p className="text-sm text-gray-500">{pagination.total} total</p>
+            </div>
+            <div className="flex items-center gap-2">
+              <ExportMenu onExport={handleExport} disabled={issues.length === 0} />
+              <button
+                onClick={() => {
+                  setEditingIssue(undefined);
+                  setShowForm(true);
+                }}
+                className="inline-flex items-center gap-2 bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 font-medium transition-colors"
+              >
+                <PlusIcon className="w-4 h-4" />
+                New Issue
+              </button>
+            </div>
           </div>
 
-          <div className="mb-6 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-5 gap-4">
-            <input
-              type="text"
-              placeholder="Search issues..."
-              value={search}
-              onChange={(e) => setSearch(e.target.value)}
-              className="px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-            />
+          <div className="px-4 sm:px-6 py-4 border-b border-gray-100 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-3">
+            <div className="relative">
+              <SearchIcon className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
+              <input
+                type="text"
+                placeholder="Search..."
+                value={search}
+                onChange={(e) => setSearch(e.target.value)}
+                className="w-full pl-9 pr-3 py-2 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-shadow shadow-sm"
+              />
+            </div>
             <select
               value={statusFilter}
               onChange={(e) => setStatusFilter(e.target.value)}
-              className="px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className={filterSelectClass}
             >
               <option value="">All Status</option>
               <option value="Open">Open</option>
@@ -314,7 +414,7 @@ export default function Dashboard() {
             <select
               value={priorityFilter}
               onChange={(e) => setPriorityFilter(e.target.value)}
-              className="px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className={filterSelectClass}
             >
               <option value="">All Priority</option>
               <option value="Low">Low</option>
@@ -324,7 +424,7 @@ export default function Dashboard() {
             <select
               value={severityFilter}
               onChange={(e) => setSeverityFilter(e.target.value)}
-              className="px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className={filterSelectClass}
             >
               <option value="">All Severity</option>
               <option value="Low">Low</option>
@@ -335,7 +435,7 @@ export default function Dashboard() {
             <select
               value={assigneeFilter}
               onChange={(e) => setAssigneeFilter(e.target.value)}
-              className="px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className={filterSelectClass}
             >
               <option value="">All Assignees</option>
               <option value="me">My Issues</option>
@@ -353,6 +453,7 @@ export default function Dashboard() {
           <IssueList
             issues={issues}
             currentUserId={user?.id}
+            onSelect={(issue) => setViewingIssue(issue)}
             onEdit={(issue) => {
               setEditingIssue(issue);
               setShowForm(true);
@@ -366,20 +467,25 @@ export default function Dashboard() {
           />
 
           {pagination.pages > 1 && (
-            <div className="mt-6 flex justify-center gap-2">
-              {Array.from({ length: pagination.pages }, (_, i) => i + 1).map((page) => (
-                <button
-                  key={page}
-                  onClick={() => setCurrentPage(page)}
-                  className={`px-3 py-1 rounded transition-colors ${
-                    currentPage === page
-                      ? 'bg-blue-600 text-white'
-                      : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
-                  }`}
-                >
-                  {page}
-                </button>
-              ))}
+            <div className="px-4 sm:px-6 py-4 border-t border-gray-100 flex items-center justify-between">
+              <p className="text-sm text-gray-500">
+                Page {pagination.page} of {pagination.pages}
+              </p>
+              <div className="flex gap-1">
+                {Array.from({ length: pagination.pages }, (_, i) => i + 1).map((page) => (
+                  <button
+                    key={page}
+                    onClick={() => setCurrentPage(page)}
+                    className={`w-8 h-8 rounded-lg text-sm font-medium transition-colors ${
+                      currentPage === page
+                        ? 'bg-blue-600 text-white shadow-sm'
+                        : 'bg-white text-gray-700 border border-gray-200 hover:bg-gray-50'
+                    }`}
+                  >
+                    {page}
+                  </button>
+                ))}
+              </div>
             </div>
           )}
         </div>
@@ -404,6 +510,33 @@ export default function Dashboard() {
             setEditingIssue(undefined);
           }}
         />
+      </Modal>
+
+      <Modal
+        isOpen={!!viewingIssue}
+        title="Issue Details"
+        onClose={() => setViewingIssue(undefined)}
+        size="lg"
+      >
+        {viewingIssue && (
+          <IssueDetail
+            issue={viewingIssue}
+            currentUserId={user?.id}
+            onEdit={(issue) => {
+              setViewingIssue(undefined);
+              setEditingIssue(issue);
+              setShowForm(true);
+            }}
+            onDelete={(id) => {
+              setViewingIssue(undefined);
+              handleDelete(id);
+            }}
+            onResolve={(id) => handleResolve(id)}
+            onAssignToMe={handleAssignToMe}
+            onUnassign={handleUnassign}
+            onClose={() => setViewingIssue(undefined)}
+          />
+        )}
       </Modal>
 
       <ConfirmDialog

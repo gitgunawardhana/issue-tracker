@@ -3,13 +3,16 @@
 @tailwind utilities;
 
 * {
-  @apply box-border;
+  box-sizing: border-box;
 }
 
+html,
 body {
-  @apply m-0 bg-white dark:bg-gray-900 text-gray-700 dark:text-gray-300 font-sans;
-}
-
-html {
-  scroll-behavior: smooth;
+  margin: 0;
+  padding: 0;
+  background: #f9fafb;
+  color: #111827;
+  font-family: ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
