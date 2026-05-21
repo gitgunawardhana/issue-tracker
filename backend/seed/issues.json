@@ -1,0 +1,2413 @@
+[
+  {
+    "_id": {
+      "$oid": "6a0ebe253de5f64155550700"
+    },
+    "title": "Authentication failure on Login button click",
+    "description": "When clicking the \"Login\" button on the landing page, the application does not trigger the API request. The console shows an \"Uncaught TypeError: Cannot read properties of undefined (reading 'token')\" error. It completely blocks users from entering the system.",
+    "status": "Open",
+    "priority": "Medium",
+    "severity": "Low",
+    "createdBy": {
+      "$oid": "6a0ebde73de5f641555506ff"
+    },
+    "assignedTo": {
+      "$oid": "6a0ebde73de5f641555506ff"
+    },
+    "createdAt": {
+      "$date": "2026-05-21T08:11:17.399Z"
+    },
+    "updatedAt": {
+      "$date": "2026-05-21T16:19:10.793Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "6a0ea827a400308e5a2eb819"
+    },
+    "title": "Authentication failure on Login button click",
+    "description": "When clicking the \"Login\" button on the landing page, the application does not trigger the API request. The console shows an \"Uncaught TypeError: Cannot read properties of undefined (reading 'token')\" error.",
+    "status": "Open",
+    "priority": "Medium",
+    "severity": "Medium",
+    "createdBy": {
+      "$oid": "6a0d691ee5e3938bb1d91a02"
+    },
+    "assignedTo": null,
+    "createdAt": {
+      "$date": "2026-05-20T00:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2026-05-20T00:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "6a0ea827f99fb3150d2e1480"
+    },
+    "title": "Issue tracker dashboard grid alignment broken on mobile screens",
+    "description": "On mobile viewports (widths below 640px), the total issue counter cards overlap with the main issue list grid.",
+    "status": "In Progress",
+    "priority": "Low",
+    "severity": "Low",
+    "createdBy": {
+      "$oid": "6a0d7d68c2bc02df08713fb3"
+    },
+    "assignedTo": {
+      "$oid": "6a0d691ee5e3938bb1d91a02"
+    },
+    "createdAt": {
+      "$date": "2026-05-20T00:00:01.000Z"
+    },
+    "updatedAt": {
+      "$date": "2026-05-20T00:00:01.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "6a0ea827f4bd7333ff8e211b"
+    },
+    "title": "Main dashboard takes too long to load with over 1000 items",
+    "description": "The dashboard takes more than 5 seconds to render when the database has a large number of issues.",
+    "status": "In Progress",
+    "priority": "High",
+    "severity": "High",
+    "createdBy": {
+      "$oid": "6a0d4c247762c5e5b850b08e"
+    },
+    "assignedTo": {
+      "$oid": "6a0d7d68c2bc02df08713fb3"
+    },
+    "createdAt": {
+      "$date": "2026-05-20T00:00:02.000Z"
+    },
+    "updatedAt": {
+      "$date": "2026-05-20T00:00:02.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "6a0ea827f46bdd083675e006"
+    },
+    "title": "Update placeholder text in the search bar",
+    "description": "Change the generic placeholder text from \"Search...\" to \"Search issues by title, priority, or status...\"",
+    "status": "Open",
+    "priority": "Low",
+    "severity": "Low",
+    "createdBy": {
+      "$oid": "6a0d4c247762c5e5b850b08e"
+    },
+    "assignedTo": {
+      "$oid": "6a0d4c247762c5e5b850b08e"
+    },
+    "createdAt": {
+      "$date": "2026-05-20T00:00:03.000Z"
+    },
+    "updatedAt": {
+      "$date": "2026-05-20T00:00:03.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "6a0ea8276197d508ad425c80"
+    },
+    "title": "Incorrect color badge shown for \"Closed\" status",
+    "description": "The \"Closed\" status badge was incorrectly rendering with a yellow background instead of grey.",
+    "status": "Resolved",
+    "priority": "Low",
+    "severity": "Low",
+    "createdBy": {
+      "$oid": "6a0d7d68c2bc02df08713fb3"
+    },
+    "assignedTo": null,
+    "createdAt": {
+      "$date": "2026-05-20T00:00:04.000Z"
+    },
+    "updatedAt": {
+      "$date": "2026-05-20T00:00:04.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "6a0ea827f0ec4c82618da087"
+    },
+    "title": "JWT token expires too quickly during active sessions",
+    "description": "Users are being logged out automatically after 5 minutes of active usage.",
+    "status": "Open",
+    "priority": "Medium",
+    "severity": "Low",
+    "createdBy": {
+      "$oid": "6a0d7d68c2bc02df08713fb3"
+    },
+    "assignedTo": {
+      "$oid": "6a0d691ee5e3938bb1d91a02"
+    },
+    "createdAt": {
+      "$date": "2026-05-20T00:00:05.000Z"
+    },
+    "updatedAt": {
+      "$date": "2026-05-20T00:00:05.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "6a0ea8271d216555a0457a58"
+    },
+    "title": "Password hashing failing for passwords with special characters",
+    "description": "When a user registers with special characters like '@' or '#' in their password, bcrypt authentication fails.",
+    "status": "Open",
+    "priority": "Medium",
+    "severity": "High",
+    "createdBy": {
+      "$oid": "6a0d7d68c2bc02df08713fb3"
+    },
+    "assignedTo": {
+      "$oid": "6a0d7d68c2bc02df08713fb3"
+    },
+    "createdAt": {
+      "$date": "2026-05-20T00:00:06.000Z"
+    },
+    "updatedAt": {
+      "$date": "2026-05-20T00:00:06.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "6a0ea82773fd88f064f6bf0c"
+    },
+    "title": "Debounce function missing on search input field",
+    "description": "Every single keystroke in the search bar triggers a network request. Need to implement a 300ms debounce.",
+    "status": "Open",
+    "priority": "High",
+    "severity": "Medium",
+    "createdBy": {
+      "$oid": "6a0d4c247762c5e5b850b08e"
+    },
+    "assignedTo": {
+      "$oid": "6a0d4c247762c5e5b850b08e"
+    },
+    "createdAt": {
+      "$date": "2026-05-20T00:00:07.000Z"
+    },
+    "updatedAt": {
+      "$date": "2026-05-20T00:00:07.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "6a0ea82792178644621c4ec2"
+    },
+    "title": "Confirmation prompt does not appear when closing an issue",
+    "description": "Clicking 'Closed' or 'Resolved' should trigger a confirmation popup.",
+    "status": "Resolved",
+    "priority": "Medium",
+    "severity": "Low",
+    "createdBy": {
+      "$oid": "6a0d7d68c2bc02df08713fb3"
+    },
+    "assignedTo": null,
+    "createdAt": {
+      "$date": "2026-05-20T00:00:08.000Z"
+    },
+    "updatedAt": {
+      "$date": "2026-05-20T00:00:08.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "6a0ea827957b6b103d53705b"
+    },
+    "title": "Total issue counters showing wrong numbers on dashboard",
+    "description": "The counts for 'Open', 'In Progress', and 'Resolved' statuses are hardcoded. Need to fetch from backend.",
+    "status": "In Progress",
+    "priority": "High",
+    "severity": "Medium",
+    "createdBy": {
+      "$oid": "6a0d7d68c2bc02df08713fb3"
+    },
+    "assignedTo": {
+      "$oid": "6a0d691ee5e3938bb1d91a02"
+    },
+    "createdAt": {
+      "$date": "2026-05-20T00:00:09.000Z"
+    },
+    "updatedAt": {
+      "$date": "2026-05-20T00:00:09.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "6a0ea827d52ef32fb7296b3a"
+    },
+    "title": "Export to CSV button styling is broken",
+    "description": "The button icon is overlapping with the text on screen widths between 768px and 1024px.",
+    "status": "In Progress",
+    "priority": "Low",
+    "severity": "Low",
+    "createdBy": {
+      "$oid": "6a0d691ee5e3938bb1d91a02"
+    },
+    "assignedTo": {
+      "$oid": "6a0d7d68c2bc02df08713fb3"
+    },
+    "createdAt": {
+      "$date": "2026-05-20T00:00:10.000Z"
+    },
+    "updatedAt": {
+      "$date": "2026-05-20T00:00:10.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "6a0ea8276c988dfec701f2f6"
+    },
+    "title": "Authentication failure on Login button click",
+    "description": "When clicking the \"Login\" button on the landing page, the application does not trigger the API request. The console shows an \"Uncaught TypeError: Cannot read properties of undefined (reading 'token')\" error.",
+    "status": "Open",
+    "priority": "Medium",
+    "severity": "Medium",
+    "createdBy": {
+      "$oid": "6a0d7d68c2bc02df08713fb3"
+    },
+    "assignedTo": {
+      "$oid": "6a0d4c247762c5e5b850b08e"
+    },
+    "createdAt": {
+      "$date": "2026-05-20T00:00:11.000Z"
+    },
+    "updatedAt": {
+      "$date": "2026-05-20T00:00:11.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "6a0ea8273af17cbcaaeaf0ff"
+    },
+    "title": "Issue tracker dashboard grid alignment broken on mobile screens",
+    "description": "On mobile viewports (widths below 640px), the total issue counter cards overlap with the main issue list grid.",
+    "status": "In Progress",
+    "priority": "Low",
+    "severity": "Low",
+    "createdBy": {
+      "$oid": "6a0d4c247762c5e5b850b08e"
+    },
+    "assignedTo": null,
+    "createdAt": {
+      "$date": "2026-05-20T00:00:12.000Z"
+    },
+    "updatedAt": {
+      "$date": "2026-05-20T00:00:12.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "6a0ea827520badb7835c35e2"
+    },
+    "title": "Main dashboard takes too long to load with over 1000 items",
+    "description": "The dashboard takes more than 5 seconds to render when the database has a large number of issues.",
+    "status": "In Progress",
+    "priority": "High",
+    "severity": "High",
+    "createdBy": {
+      "$oid": "6a0d691ee5e3938bb1d91a02"
+    },
+    "assignedTo": {
+      "$oid": "6a0d691ee5e3938bb1d91a02"
+    },
+    "createdAt": {
+      "$date": "2026-05-20T00:00:13.000Z"
+    },
+    "updatedAt": {
+      "$date": "2026-05-20T00:00:13.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "6a0ea827d75f6d8b55c3995e"
+    },
+    "title": "Update placeholder text in the search bar",
+    "description": "Change the generic placeholder text from \"Search...\" to \"Search issues by title, priority, or status...\"",
+    "status": "Open",
+    "priority": "Low",
+    "severity": "Low",
+    "createdBy": {
+      "$oid": "6a0d4c247762c5e5b850b08e"
+    },
+    "assignedTo": {
+      "$oid": "6a0d7d68c2bc02df08713fb3"
+    },
+    "createdAt": {
+      "$date": "2026-05-20T00:00:14.000Z"
+    },
+    "updatedAt": {
+      "$date": "2026-05-20T00:00:14.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "6a0ea8276e11ec8870495fe6"
+    },
+    "title": "Incorrect color badge shown for \"Closed\" status",
+    "description": "The \"Closed\" status badge was incorrectly rendering with a yellow background instead of grey.",
+    "status": "Resolved",
+    "priority": "Low",
+    "severity": "Low",
+    "createdBy": {
+      "$oid": "6a0d7d68c2bc02df08713fb3"
+    },
+    "assignedTo": {
+      "$oid": "6a0d4c247762c5e5b850b08e"
+    },
+    "createdAt": {
+      "$date": "2026-05-20T00:00:15.000Z"
+    },
+    "updatedAt": {
+      "$date": "2026-05-20T00:00:15.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "6a0ea8278d68be1777f78119"
+    },
+    "title": "JWT token expires too quickly during active sessions",
+    "description": "Users are being logged out automatically after 5 minutes of active usage.",
+    "status": "Open",
+    "priority": "Medium",
+    "severity": "Low",
+    "createdBy": {
+      "$oid": "6a0d691ee5e3938bb1d91a02"
+    },
+    "assignedTo": null,
+    "createdAt": {
+      "$date": "2026-05-20T00:00:16.000Z"
+    },
+    "updatedAt": {
+      "$date": "2026-05-20T00:00:16.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "6a0ea827be7eab8018fb9a89"
+    },
+    "title": "Password hashing failing for passwords with special characters",
+    "description": "When a user registers with special characters like '@' or '#' in their password, bcrypt authentication fails.",
+    "status": "Open",
+    "priority": "Medium",
+    "severity": "High",
+    "createdBy": {
+      "$oid": "6a0d4c247762c5e5b850b08e"
+    },
+    "assignedTo": {
+      "$oid": "6a0d691ee5e3938bb1d91a02"
+    },
+    "createdAt": {
+      "$date": "2026-05-20T00:00:17.000Z"
+    },
+    "updatedAt": {
+      "$date": "2026-05-20T00:00:17.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "6a0ea827913ce420e1c36f1f"
+    },
+    "title": "Debounce function missing on search input field",
+    "description": "Every single keystroke in the search bar triggers a network request. Need to implement a 300ms debounce.",
+    "status": "Open",
+    "priority": "High",
+    "severity": "Medium",
+    "createdBy": {
+      "$oid": "6a0d4c247762c5e5b850b08e"
+    },
+    "assignedTo": {
+      "$oid": "6a0d7d68c2bc02df08713fb3"
+    },
+    "createdAt": {
+      "$date": "2026-05-20T00:00:18.000Z"
+    },
+    "updatedAt": {
+      "$date": "2026-05-20T00:00:18.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "6a0ea8274c576e7c57acb68f"
+    },
+    "title": "Confirmation prompt does not appear when closing an issue",
+    "description": "Clicking 'Closed' or 'Resolved' should trigger a confirmation popup.",
+    "status": "Resolved",
+    "priority": "Medium",
+    "severity": "Low",
+    "createdBy": {
+      "$oid": "6a0d4c247762c5e5b850b08e"
+    },
+    "assignedTo": {
+      "$oid": "6a0d4c247762c5e5b850b08e"
+    },
+    "createdAt": {
+      "$date": "2026-05-20T00:00:19.000Z"
+    },
+    "updatedAt": {
+      "$date": "2026-05-20T00:00:19.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "6a0ea82731c0903f290fc9e6"
+    },
+    "title": "Total issue counters showing wrong numbers on dashboard",
+    "description": "The counts for 'Open', 'In Progress', and 'Resolved' statuses are hardcoded. Need to fetch from backend.",
+    "status": "In Progress",
+    "priority": "High",
+    "severity": "Medium",
+    "createdBy": {
+      "$oid": "6a0d7d68c2bc02df08713fb3"
+    },
+    "assignedTo": null,
+    "createdAt": {
+      "$date": "2026-05-20T00:00:20.000Z"
+    },
+    "updatedAt": {
+      "$date": "2026-05-20T00:00:20.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "6a0ea827c5af805dc5db79ec"
+    },
+    "title": "Export to CSV button styling is broken",
+    "description": "The button icon is overlapping with the text on screen widths between 768px and 1024px.",
+    "status": "In Progress",
+    "priority": "Low",
+    "severity": "Low",
+    "createdBy": {
+      "$oid": "6a0d4c247762c5e5b850b08e"
+    },
+    "assignedTo": {
+      "$oid": "6a0d691ee5e3938bb1d91a02"
+    },
+    "createdAt": {
+      "$date": "2026-05-20T00:00:21.000Z"
+    },
+    "updatedAt": {
+      "$date": "2026-05-20T00:00:21.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "6a0ea827c8fbc8b209e06a7f"
+    },
+    "title": "Authentication failure on Login button click",
+    "description": "When clicking the \"Login\" button on the landing page, the application does not trigger the API request. The console shows an \"Uncaught TypeError: Cannot read properties of undefined (reading 'token')\" error.",
+    "status": "Open",
+    "priority": "Medium",
+    "severity": "Medium",
+    "createdBy": {
+      "$oid": "6a0d4c247762c5e5b850b08e"
+    },
+    "assignedTo": {
+      "$oid": "6a0d7d68c2bc02df08713fb3"
+    },
+    "createdAt": {
+      "$date": "2026-05-20T00:00:22.000Z"
+    },
+    "updatedAt": {
+      "$date": "2026-05-20T00:00:22.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "6a0ea827eeda12093d6df2d0"
+    },
+    "title": "Issue tracker dashboard grid alignment broken on mobile screens",
+    "description": "On mobile viewports (widths below 640px), the total issue counter cards overlap with the main issue list grid.",
+    "status": "In Progress",
+    "priority": "Low",
+    "severity": "Low",
+    "createdBy": {
+      "$oid": "6a0d4c247762c5e5b850b08e"
+    },
+    "assignedTo": {
+      "$oid": "6a0d4c247762c5e5b850b08e"
+    },
+    "createdAt": {
+      "$date": "2026-05-20T00:00:23.000Z"
+    },
+    "updatedAt": {
+      "$date": "2026-05-20T00:00:23.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "6a0ea827cb0be46a0237a451"
+    },
+    "title": "Main dashboard takes too long to load with over 1000 items",
+    "description": "The dashboard takes more than 5 seconds to render when the database has a large number of issues.",
+    "status": "In Progress",
+    "priority": "High",
+    "severity": "High",
+    "createdBy": {
+      "$oid": "6a0d7d68c2bc02df08713fb3"
+    },
+    "assignedTo": null,
+    "createdAt": {
+      "$date": "2026-05-20T00:00:24.000Z"
+    },
+    "updatedAt": {
+      "$date": "2026-05-20T00:00:24.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "6a0ea8279ab118ffa7e0acc1"
+    },
+    "title": "Update placeholder text in the search bar",
+    "description": "Change the generic placeholder text from \"Search...\" to \"Search issues by title, priority, or status...\"",
+    "status": "Open",
+    "priority": "Low",
+    "severity": "Low",
+    "createdBy": {
+      "$oid": "6a0d4c247762c5e5b850b08e"
+    },
+    "assignedTo": {
+      "$oid": "6a0d691ee5e3938bb1d91a02"
+    },
+    "createdAt": {
+      "$date": "2026-05-20T00:00:25.000Z"
+    },
+    "updatedAt": {
+      "$date": "2026-05-20T00:00:25.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "6a0ea8272388cdde16a5c5bd"
+    },
+    "title": "Incorrect color badge shown for \"Closed\" status",
+    "description": "The \"Closed\" status badge was incorrectly rendering with a yellow background instead of grey.",
+    "status": "Resolved",
+    "priority": "Low",
+    "severity": "Low",
+    "createdBy": {
+      "$oid": "6a0d4c247762c5e5b850b08e"
+    },
+    "assignedTo": {
+      "$oid": "6a0d7d68c2bc02df08713fb3"
+    },
+    "createdAt": {
+      "$date": "2026-05-20T00:00:26.000Z"
+    },
+    "updatedAt": {
+      "$date": "2026-05-20T00:00:26.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "6a0ea827d6b4f45ed0c82d2d"
+    },
+    "title": "JWT token expires too quickly during active sessions",
+    "description": "Users are being logged out automatically after 5 minutes of active usage.",
+    "status": "Open",
+    "priority": "Medium",
+    "severity": "Low",
+    "createdBy": {
+      "$oid": "6a0d4c247762c5e5b850b08e"
+    },
+    "assignedTo": {
+      "$oid": "6a0d4c247762c5e5b850b08e"
+    },
+    "createdAt": {
+      "$date": "2026-05-20T00:00:27.000Z"
+    },
+    "updatedAt": {
+      "$date": "2026-05-20T00:00:27.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "6a0ea82746596e5dd30b2669"
+    },
+    "title": "Password hashing failing for passwords with special characters",
+    "description": "When a user registers with special characters like '@' or '#' in their password, bcrypt authentication fails.",
+    "status": "Open",
+    "priority": "Medium",
+    "severity": "High",
+    "createdBy": {
+      "$oid": "6a0d691ee5e3938bb1d91a02"
+    },
+    "assignedTo": null,
+    "createdAt": {
+      "$date": "2026-05-20T00:00:28.000Z"
+    },
+    "updatedAt": {
+      "$date": "2026-05-20T00:00:28.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "6a0ea8270d3f28971d5799d8"
+    },
+    "title": "Debounce function missing on search input field",
+    "description": "Every single keystroke in the search bar triggers a network request. Need to implement a 300ms debounce.",
+    "status": "Open",
+    "priority": "High",
+    "severity": "Medium",
+    "createdBy": {
+      "$oid": "6a0d691ee5e3938bb1d91a02"
+    },
+    "assignedTo": {
+      "$oid": "6a0d691ee5e3938bb1d91a02"
+    },
+    "createdAt": {
+      "$date": "2026-05-20T00:00:29.000Z"
+    },
+    "updatedAt": {
+      "$date": "2026-05-20T00:00:29.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "6a0ea827c41e45e8ca8e688d"
+    },
+    "title": "Confirmation prompt does not appear when closing an issue",
+    "description": "Clicking 'Closed' or 'Resolved' should trigger a confirmation popup.",
+    "status": "Resolved",
+    "priority": "Medium",
+    "severity": "Low",
+    "createdBy": {
+      "$oid": "6a0d7d68c2bc02df08713fb3"
+    },
+    "assignedTo": {
+      "$oid": "6a0d7d68c2bc02df08713fb3"
+    },
+    "createdAt": {
+      "$date": "2026-05-20T00:00:30.000Z"
+    },
+    "updatedAt": {
+      "$date": "2026-05-20T00:00:30.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "6a0ea827bec601efd1f81d7a"
+    },
+    "title": "Total issue counters showing wrong numbers on dashboard",
+    "description": "The counts for 'Open', 'In Progress', and 'Resolved' statuses are hardcoded. Need to fetch from backend.",
+    "status": "In Progress",
+    "priority": "High",
+    "severity": "Medium",
+    "createdBy": {
+      "$oid": "6a0d691ee5e3938bb1d91a02"
+    },
+    "assignedTo": {
+      "$oid": "6a0d4c247762c5e5b850b08e"
+    },
+    "createdAt": {
+      "$date": "2026-05-20T00:00:31.000Z"
+    },
+    "updatedAt": {
+      "$date": "2026-05-20T00:00:31.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "6a0ea8279ff577336f87f834"
+    },
+    "title": "Export to CSV button styling is broken",
+    "description": "The button icon is overlapping with the text on screen widths between 768px and 1024px.",
+    "status": "In Progress",
+    "priority": "Low",
+    "severity": "Low",
+    "createdBy": {
+      "$oid": "6a0d4c247762c5e5b850b08e"
+    },
+    "assignedTo": null,
+    "createdAt": {
+      "$date": "2026-05-20T00:00:32.000Z"
+    },
+    "updatedAt": {
+      "$date": "2026-05-20T00:00:32.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "6a0ea827d4dec39dda502313"
+    },
+    "title": "Authentication failure on Login button click",
+    "description": "When clicking the \"Login\" button on the landing page, the application does not trigger the API request. The console shows an \"Uncaught TypeError: Cannot read properties of undefined (reading 'token')\" error.",
+    "status": "Open",
+    "priority": "Medium",
+    "severity": "Medium",
+    "createdBy": {
+      "$oid": "6a0d691ee5e3938bb1d91a02"
+    },
+    "assignedTo": {
+      "$oid": "6a0d691ee5e3938bb1d91a02"
+    },
+    "createdAt": {
+      "$date": "2026-05-20T00:00:33.000Z"
+    },
+    "updatedAt": {
+      "$date": "2026-05-20T00:00:33.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "6a0ea8272cbd89e6278b429a"
+    },
+    "title": "Issue tracker dashboard grid alignment broken on mobile screens",
+    "description": "On mobile viewports (widths below 640px), the total issue counter cards overlap with the main issue list grid.",
+    "status": "In Progress",
+    "priority": "Low",
+    "severity": "Low",
+    "createdBy": {
+      "$oid": "6a0d691ee5e3938bb1d91a02"
+    },
+    "assignedTo": {
+      "$oid": "6a0d7d68c2bc02df08713fb3"
+    },
+    "createdAt": {
+      "$date": "2026-05-20T00:00:34.000Z"
+    },
+    "updatedAt": {
+      "$date": "2026-05-20T00:00:34.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "6a0ea827a8bd9a6a8963aa11"
+    },
+    "title": "Main dashboard takes too long to load with over 1000 items",
+    "description": "The dashboard takes more than 5 seconds to render when the database has a large number of issues.",
+    "status": "In Progress",
+    "priority": "High",
+    "severity": "High",
+    "createdBy": {
+      "$oid": "6a0d691ee5e3938bb1d91a02"
+    },
+    "assignedTo": {
+      "$oid": "6a0d4c247762c5e5b850b08e"
+    },
+    "createdAt": {
+      "$date": "2026-05-20T00:00:35.000Z"
+    },
+    "updatedAt": {
+      "$date": "2026-05-20T00:00:35.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "6a0ea827b1912fb4938a52fa"
+    },
+    "title": "Update placeholder text in the search bar",
+    "description": "Change the generic placeholder text from \"Search...\" to \"Search issues by title, priority, or status...\"",
+    "status": "Open",
+    "priority": "Low",
+    "severity": "Low",
+    "createdBy": {
+      "$oid": "6a0d7d68c2bc02df08713fb3"
+    },
+    "assignedTo": null,
+    "createdAt": {
+      "$date": "2026-05-20T00:00:36.000Z"
+    },
+    "updatedAt": {
+      "$date": "2026-05-20T00:00:36.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "6a0ea827400ca3fe92b255d5"
+    },
+    "title": "Incorrect color badge shown for \"Closed\" status",
+    "description": "The \"Closed\" status badge was incorrectly rendering with a yellow background instead of grey.",
+    "status": "Resolved",
+    "priority": "Low",
+    "severity": "Low",
+    "createdBy": {
+      "$oid": "6a0d7d68c2bc02df08713fb3"
+    },
+    "assignedTo": {
+      "$oid": "6a0d691ee5e3938bb1d91a02"
+    },
+    "createdAt": {
+      "$date": "2026-05-20T00:00:37.000Z"
+    },
+    "updatedAt": {
+      "$date": "2026-05-20T00:00:37.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "6a0ea827f140b70d1c077b18"
+    },
+    "title": "JWT token expires too quickly during active sessions",
+    "description": "Users are being logged out automatically after 5 minutes of active usage.",
+    "status": "Open",
+    "priority": "Medium",
+    "severity": "Low",
+    "createdBy": {
+      "$oid": "6a0d691ee5e3938bb1d91a02"
+    },
+    "assignedTo": {
+      "$oid": "6a0d7d68c2bc02df08713fb3"
+    },
+    "createdAt": {
+      "$date": "2026-05-20T00:00:38.000Z"
+    },
+    "updatedAt": {
+      "$date": "2026-05-20T00:00:38.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "6a0ea827714c334f823cbebe"
+    },
+    "title": "Password hashing failing for passwords with special characters",
+    "description": "When a user registers with special characters like '@' or '#' in their password, bcrypt authentication fails.",
+    "status": "Open",
+    "priority": "Medium",
+    "severity": "High",
+    "createdBy": {
+      "$oid": "6a0d4c247762c5e5b850b08e"
+    },
+    "assignedTo": {
+      "$oid": "6a0d4c247762c5e5b850b08e"
+    },
+    "createdAt": {
+      "$date": "2026-05-20T00:00:39.000Z"
+    },
+    "updatedAt": {
+      "$date": "2026-05-20T00:00:39.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "6a0ea82735f4dbfa092f3f1a"
+    },
+    "title": "Debounce function missing on search input field",
+    "description": "Every single keystroke in the search bar triggers a network request. Need to implement a 300ms debounce.",
+    "status": "Open",
+    "priority": "High",
+    "severity": "Medium",
+    "createdBy": {
+      "$oid": "6a0d691ee5e3938bb1d91a02"
+    },
+    "assignedTo": null,
+    "createdAt": {
+      "$date": "2026-05-20T00:00:40.000Z"
+    },
+    "updatedAt": {
+      "$date": "2026-05-20T00:00:40.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "6a0ea8279c93e0ce39e98d6e"
+    },
+    "title": "Confirmation prompt does not appear when closing an issue",
+    "description": "Clicking 'Closed' or 'Resolved' should trigger a confirmation popup.",
+    "status": "Resolved",
+    "priority": "Medium",
+    "severity": "Low",
+    "createdBy": {
+      "$oid": "6a0d7d68c2bc02df08713fb3"
+    },
+    "assignedTo": {
+      "$oid": "6a0d691ee5e3938bb1d91a02"
+    },
+    "createdAt": {
+      "$date": "2026-05-20T00:00:41.000Z"
+    },
+    "updatedAt": {
+      "$date": "2026-05-20T00:00:41.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "6a0ea8272a6832081b460e5e"
+    },
+    "title": "Total issue counters showing wrong numbers on dashboard",
+    "description": "The counts for 'Open', 'In Progress', and 'Resolved' statuses are hardcoded. Need to fetch from backend.",
+    "status": "In Progress",
+    "priority": "High",
+    "severity": "Medium",
+    "createdBy": {
+      "$oid": "6a0d691ee5e3938bb1d91a02"
+    },
+    "assignedTo": {
+      "$oid": "6a0d7d68c2bc02df08713fb3"
+    },
+    "createdAt": {
+      "$date": "2026-05-20T00:00:42.000Z"
+    },
+    "updatedAt": {
+      "$date": "2026-05-20T00:00:42.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "6a0ea8277be5e98414a0245b"
+    },
+    "title": "Export to CSV button styling is broken",
+    "description": "The button icon is overlapping with the text on screen widths between 768px and 1024px.",
+    "status": "In Progress",
+    "priority": "Low",
+    "severity": "Low",
+    "createdBy": {
+      "$oid": "6a0d691ee5e3938bb1d91a02"
+    },
+    "assignedTo": {
+      "$oid": "6a0d4c247762c5e5b850b08e"
+    },
+    "createdAt": {
+      "$date": "2026-05-20T00:00:43.000Z"
+    },
+    "updatedAt": {
+      "$date": "2026-05-20T00:00:43.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "6a0ea827b2de89d6122ce447"
+    },
+    "title": "Authentication failure on Login button click",
+    "description": "When clicking the \"Login\" button on the landing page, the application does not trigger the API request. The console shows an \"Uncaught TypeError: Cannot read properties of undefined (reading 'token')\" error.",
+    "status": "Open",
+    "priority": "Medium",
+    "severity": "Medium",
+    "createdBy": {
+      "$oid": "6a0d7d68c2bc02df08713fb3"
+    },
+    "assignedTo": null,
+    "createdAt": {
+      "$date": "2026-05-20T00:00:44.000Z"
+    },
+    "updatedAt": {
+      "$date": "2026-05-20T00:00:44.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "6a0ea82723c3e7a6b82759ee"
+    },
+    "title": "Issue tracker dashboard grid alignment broken on mobile screens",
+    "description": "On mobile viewports (widths below 640px), the total issue counter cards overlap with the main issue list grid.",
+    "status": "In Progress",
+    "priority": "Low",
+    "severity": "Low",
+    "createdBy": {
+      "$oid": "6a0d691ee5e3938bb1d91a02"
+    },
+    "assignedTo": {
+      "$oid": "6a0d691ee5e3938bb1d91a02"
+    },
+    "createdAt": {
+      "$date": "2026-05-20T00:00:45.000Z"
+    },
+    "updatedAt": {
+      "$date": "2026-05-20T00:00:45.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "6a0ea82729225754b60a224d"
+    },
+    "title": "Main dashboard takes too long to load with over 1000 items",
+    "description": "The dashboard takes more than 5 seconds to render when the database has a large number of issues.",
+    "status": "In Progress",
+    "priority": "High",
+    "severity": "High",
+    "createdBy": {
+      "$oid": "6a0d7d68c2bc02df08713fb3"
+    },
+    "assignedTo": {
+      "$oid": "6a0d7d68c2bc02df08713fb3"
+    },
+    "createdAt": {
+      "$date": "2026-05-20T00:00:46.000Z"
+    },
+    "updatedAt": {
+      "$date": "2026-05-20T00:00:46.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "6a0ea827e2e4d7ac4f6e7a41"
+    },
+    "title": "Update placeholder text in the search bar",
+    "description": "Change the generic placeholder text from \"Search...\" to \"Search issues by title, priority, or status...\"",
+    "status": "Open",
+    "priority": "Low",
+    "severity": "Low",
+    "createdBy": {
+      "$oid": "6a0d691ee5e3938bb1d91a02"
+    },
+    "assignedTo": {
+      "$oid": "6a0d4c247762c5e5b850b08e"
+    },
+    "createdAt": {
+      "$date": "2026-05-20T00:00:47.000Z"
+    },
+    "updatedAt": {
+      "$date": "2026-05-20T00:00:47.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "6a0ea8271616bc2b1b348498"
+    },
+    "title": "Incorrect color badge shown for \"Closed\" status",
+    "description": "The \"Closed\" status badge was incorrectly rendering with a yellow background instead of grey.",
+    "status": "Resolved",
+    "priority": "Low",
+    "severity": "Low",
+    "createdBy": {
+      "$oid": "6a0d7d68c2bc02df08713fb3"
+    },
+    "assignedTo": null,
+    "createdAt": {
+      "$date": "2026-05-20T00:00:48.000Z"
+    },
+    "updatedAt": {
+      "$date": "2026-05-20T00:00:48.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "6a0ea82753d421331382fbd8"
+    },
+    "title": "JWT token expires too quickly during active sessions",
+    "description": "Users are being logged out automatically after 5 minutes of active usage.",
+    "status": "Open",
+    "priority": "Medium",
+    "severity": "Low",
+    "createdBy": {
+      "$oid": "6a0d4c247762c5e5b850b08e"
+    },
+    "assignedTo": {
+      "$oid": "6a0d691ee5e3938bb1d91a02"
+    },
+    "createdAt": {
+      "$date": "2026-05-20T00:00:49.000Z"
+    },
+    "updatedAt": {
+      "$date": "2026-05-20T00:00:49.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "6a0ea827309b7b8b45557f9c"
+    },
+    "title": "Password hashing failing for passwords with special characters",
+    "description": "When a user registers with special characters like '@' or '#' in their password, bcrypt authentication fails.",
+    "status": "Open",
+    "priority": "Medium",
+    "severity": "High",
+    "createdBy": {
+      "$oid": "6a0d691ee5e3938bb1d91a02"
+    },
+    "assignedTo": {
+      "$oid": "6a0d7d68c2bc02df08713fb3"
+    },
+    "createdAt": {
+      "$date": "2026-05-20T00:00:50.000Z"
+    },
+    "updatedAt": {
+      "$date": "2026-05-20T00:00:50.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "6a0ea827474c54bc7b03e100"
+    },
+    "title": "Debounce function missing on search input field",
+    "description": "Every single keystroke in the search bar triggers a network request. Need to implement a 300ms debounce.",
+    "status": "Open",
+    "priority": "High",
+    "severity": "Medium",
+    "createdBy": {
+      "$oid": "6a0d4c247762c5e5b850b08e"
+    },
+    "assignedTo": {
+      "$oid": "6a0d4c247762c5e5b850b08e"
+    },
+    "createdAt": {
+      "$date": "2026-05-20T00:00:51.000Z"
+    },
+    "updatedAt": {
+      "$date": "2026-05-20T00:00:51.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "6a0ea8277dd7b4dc2fd6ece0"
+    },
+    "title": "Confirmation prompt does not appear when closing an issue",
+    "description": "Clicking 'Closed' or 'Resolved' should trigger a confirmation popup.",
+    "status": "Resolved",
+    "priority": "Medium",
+    "severity": "Low",
+    "createdBy": {
+      "$oid": "6a0d691ee5e3938bb1d91a02"
+    },
+    "assignedTo": null,
+    "createdAt": {
+      "$date": "2026-05-20T00:00:52.000Z"
+    },
+    "updatedAt": {
+      "$date": "2026-05-20T00:00:52.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "6a0ea827c901893fc8765953"
+    },
+    "title": "Total issue counters showing wrong numbers on dashboard",
+    "description": "The counts for 'Open', 'In Progress', and 'Resolved' statuses are hardcoded. Need to fetch from backend.",
+    "status": "In Progress",
+    "priority": "High",
+    "severity": "Medium",
+    "createdBy": {
+      "$oid": "6a0d4c247762c5e5b850b08e"
+    },
+    "assignedTo": {
+      "$oid": "6a0d691ee5e3938bb1d91a02"
+    },
+    "createdAt": {
+      "$date": "2026-05-20T00:00:53.000Z"
+    },
+    "updatedAt": {
+      "$date": "2026-05-20T00:00:53.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "6a0ea82722dcc0721e6de568"
+    },
+    "title": "Export to CSV button styling is broken",
+    "description": "The button icon is overlapping with the text on screen widths between 768px and 1024px.",
+    "status": "In Progress",
+    "priority": "Low",
+    "severity": "Low",
+    "createdBy": {
+      "$oid": "6a0d7d68c2bc02df08713fb3"
+    },
+    "assignedTo": {
+      "$oid": "6a0d7d68c2bc02df08713fb3"
+    },
+    "createdAt": {
+      "$date": "2026-05-20T00:00:54.000Z"
+    },
+    "updatedAt": {
+      "$date": "2026-05-20T00:00:54.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "6a0ea827ebe80c1f3e4e92d5"
+    },
+    "title": "Authentication failure on Login button click",
+    "description": "When clicking the \"Login\" button on the landing page, the application does not trigger the API request. The console shows an \"Uncaught TypeError: Cannot read properties of undefined (reading 'token')\" error.",
+    "status": "Open",
+    "priority": "Medium",
+    "severity": "Medium",
+    "createdBy": {
+      "$oid": "6a0d4c247762c5e5b850b08e"
+    },
+    "assignedTo": {
+      "$oid": "6a0d4c247762c5e5b850b08e"
+    },
+    "createdAt": {
+      "$date": "2026-05-20T00:00:55.000Z"
+    },
+    "updatedAt": {
+      "$date": "2026-05-20T00:00:55.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "6a0ea827980e799f3caf1872"
+    },
+    "title": "Issue tracker dashboard grid alignment broken on mobile screens",
+    "description": "On mobile viewports (widths below 640px), the total issue counter cards overlap with the main issue list grid.",
+    "status": "In Progress",
+    "priority": "Low",
+    "severity": "Low",
+    "createdBy": {
+      "$oid": "6a0d7d68c2bc02df08713fb3"
+    },
+    "assignedTo": null,
+    "createdAt": {
+      "$date": "2026-05-20T00:00:56.000Z"
+    },
+    "updatedAt": {
+      "$date": "2026-05-20T00:00:56.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "6a0ea82719daa59bc0bdb52f"
+    },
+    "title": "Main dashboard takes too long to load with over 1000 items",
+    "description": "The dashboard takes more than 5 seconds to render when the database has a large number of issues.",
+    "status": "In Progress",
+    "priority": "High",
+    "severity": "High",
+    "createdBy": {
+      "$oid": "6a0d7d68c2bc02df08713fb3"
+    },
+    "assignedTo": {
+      "$oid": "6a0d691ee5e3938bb1d91a02"
+    },
+    "createdAt": {
+      "$date": "2026-05-20T00:00:57.000Z"
+    },
+    "updatedAt": {
+      "$date": "2026-05-20T00:00:57.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "6a0ea827441f559267465f23"
+    },
+    "title": "Update placeholder text in the search bar",
+    "description": "Change the generic placeholder text from \"Search...\" to \"Search issues by title, priority, or status...\"",
+    "status": "Open",
+    "priority": "Low",
+    "severity": "Low",
+    "createdBy": {
+      "$oid": "6a0d691ee5e3938bb1d91a02"
+    },
+    "assignedTo": {
+      "$oid": "6a0d7d68c2bc02df08713fb3"
+    },
+    "createdAt": {
+      "$date": "2026-05-20T00:00:58.000Z"
+    },
+    "updatedAt": {
+      "$date": "2026-05-20T00:00:58.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "6a0ea827e8e3b6ae967040e6"
+    },
+    "title": "Incorrect color badge shown for \"Closed\" status",
+    "description": "The \"Closed\" status badge was incorrectly rendering with a yellow background instead of grey.",
+    "status": "Resolved",
+    "priority": "Low",
+    "severity": "Low",
+    "createdBy": {
+      "$oid": "6a0d4c247762c5e5b850b08e"
+    },
+    "assignedTo": {
+      "$oid": "6a0d4c247762c5e5b850b08e"
+    },
+    "createdAt": {
+      "$date": "2026-05-20T00:00:59.000Z"
+    },
+    "updatedAt": {
+      "$date": "2026-05-20T00:00:59.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "6a0ea827bafade2539267c04"
+    },
+    "title": "JWT token expires too quickly during active sessions",
+    "description": "Users are being logged out automatically after 5 minutes of active usage.",
+    "status": "Open",
+    "priority": "Medium",
+    "severity": "Low",
+    "createdBy": {
+      "$oid": "6a0d7d68c2bc02df08713fb3"
+    },
+    "assignedTo": null,
+    "createdAt": {
+      "$date": "2026-05-20T00:01:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2026-05-20T00:01:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "6a0ea827a11e2948cb75b228"
+    },
+    "title": "Password hashing failing for passwords with special characters",
+    "description": "When a user registers with special characters like '@' or '#' in their password, bcrypt authentication fails.",
+    "status": "Open",
+    "priority": "Medium",
+    "severity": "High",
+    "createdBy": {
+      "$oid": "6a0d7d68c2bc02df08713fb3"
+    },
+    "assignedTo": {
+      "$oid": "6a0d691ee5e3938bb1d91a02"
+    },
+    "createdAt": {
+      "$date": "2026-05-20T00:01:01.000Z"
+    },
+    "updatedAt": {
+      "$date": "2026-05-20T00:01:01.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "6a0ea827c2eaf33300815453"
+    },
+    "title": "Debounce function missing on search input field",
+    "description": "Every single keystroke in the search bar triggers a network request. Need to implement a 300ms debounce.",
+    "status": "Open",
+    "priority": "High",
+    "severity": "Medium",
+    "createdBy": {
+      "$oid": "6a0d7d68c2bc02df08713fb3"
+    },
+    "assignedTo": {
+      "$oid": "6a0d7d68c2bc02df08713fb3"
+    },
+    "createdAt": {
+      "$date": "2026-05-20T00:01:02.000Z"
+    },
+    "updatedAt": {
+      "$date": "2026-05-20T00:01:02.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "6a0ea82738e4c87c2c2e84c5"
+    },
+    "title": "Confirmation prompt does not appear when closing an issue",
+    "description": "Clicking 'Closed' or 'Resolved' should trigger a confirmation popup.",
+    "status": "Resolved",
+    "priority": "Medium",
+    "severity": "Low",
+    "createdBy": {
+      "$oid": "6a0d7d68c2bc02df08713fb3"
+    },
+    "assignedTo": {
+      "$oid": "6a0d4c247762c5e5b850b08e"
+    },
+    "createdAt": {
+      "$date": "2026-05-20T00:01:03.000Z"
+    },
+    "updatedAt": {
+      "$date": "2026-05-20T00:01:03.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "6a0ea827e5aba0ab03ad6ec0"
+    },
+    "title": "Total issue counters showing wrong numbers on dashboard",
+    "description": "The counts for 'Open', 'In Progress', and 'Resolved' statuses are hardcoded. Need to fetch from backend.",
+    "status": "In Progress",
+    "priority": "High",
+    "severity": "Medium",
+    "createdBy": {
+      "$oid": "6a0d4c247762c5e5b850b08e"
+    },
+    "assignedTo": null,
+    "createdAt": {
+      "$date": "2026-05-20T00:01:04.000Z"
+    },
+    "updatedAt": {
+      "$date": "2026-05-20T00:01:04.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "6a0ea827a057a38be5c82813"
+    },
+    "title": "Export to CSV button styling is broken",
+    "description": "The button icon is overlapping with the text on screen widths between 768px and 1024px.",
+    "status": "In Progress",
+    "priority": "Low",
+    "severity": "Low",
+    "createdBy": {
+      "$oid": "6a0d4c247762c5e5b850b08e"
+    },
+    "assignedTo": {
+      "$oid": "6a0d691ee5e3938bb1d91a02"
+    },
+    "createdAt": {
+      "$date": "2026-05-20T00:01:05.000Z"
+    },
+    "updatedAt": {
+      "$date": "2026-05-20T00:01:05.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "6a0ea827ffec6537c7bfea4b"
+    },
+    "title": "Authentication failure on Login button click",
+    "description": "When clicking the \"Login\" button on the landing page, the application does not trigger the API request. The console shows an \"Uncaught TypeError: Cannot read properties of undefined (reading 'token')\" error.",
+    "status": "Open",
+    "priority": "Medium",
+    "severity": "Medium",
+    "createdBy": {
+      "$oid": "6a0d7d68c2bc02df08713fb3"
+    },
+    "assignedTo": {
+      "$oid": "6a0d7d68c2bc02df08713fb3"
+    },
+    "createdAt": {
+      "$date": "2026-05-20T00:01:06.000Z"
+    },
+    "updatedAt": {
+      "$date": "2026-05-20T00:01:06.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "6a0ea82702a76b6f61628049"
+    },
+    "title": "Issue tracker dashboard grid alignment broken on mobile screens",
+    "description": "On mobile viewports (widths below 640px), the total issue counter cards overlap with the main issue list grid.",
+    "status": "In Progress",
+    "priority": "Low",
+    "severity": "Low",
+    "createdBy": {
+      "$oid": "6a0d691ee5e3938bb1d91a02"
+    },
+    "assignedTo": {
+      "$oid": "6a0d4c247762c5e5b850b08e"
+    },
+    "createdAt": {
+      "$date": "2026-05-20T00:01:07.000Z"
+    },
+    "updatedAt": {
+      "$date": "2026-05-20T00:01:07.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "6a0ea827eea5e25ab662f969"
+    },
+    "title": "Main dashboard takes too long to load with over 1000 items",
+    "description": "The dashboard takes more than 5 seconds to render when the database has a large number of issues.",
+    "status": "In Progress",
+    "priority": "High",
+    "severity": "High",
+    "createdBy": {
+      "$oid": "6a0d4c247762c5e5b850b08e"
+    },
+    "assignedTo": null,
+    "createdAt": {
+      "$date": "2026-05-20T00:01:08.000Z"
+    },
+    "updatedAt": {
+      "$date": "2026-05-20T00:01:08.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "6a0ea8276d4064804170b25b"
+    },
+    "title": "Update placeholder text in the search bar",
+    "description": "Change the generic placeholder text from \"Search...\" to \"Search issues by title, priority, or status...\"",
+    "status": "Open",
+    "priority": "Low",
+    "severity": "Low",
+    "createdBy": {
+      "$oid": "6a0d691ee5e3938bb1d91a02"
+    },
+    "assignedTo": {
+      "$oid": "6a0d691ee5e3938bb1d91a02"
+    },
+    "createdAt": {
+      "$date": "2026-05-20T00:01:09.000Z"
+    },
+    "updatedAt": {
+      "$date": "2026-05-20T00:01:09.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "6a0ea827b5bd66604fb6c2ad"
+    },
+    "title": "Incorrect color badge shown for \"Closed\" status",
+    "description": "The \"Closed\" status badge was incorrectly rendering with a yellow background instead of grey.",
+    "status": "Resolved",
+    "priority": "Low",
+    "severity": "Low",
+    "createdBy": {
+      "$oid": "6a0d691ee5e3938bb1d91a02"
+    },
+    "assignedTo": {
+      "$oid": "6a0d7d68c2bc02df08713fb3"
+    },
+    "createdAt": {
+      "$date": "2026-05-20T00:01:10.000Z"
+    },
+    "updatedAt": {
+      "$date": "2026-05-20T00:01:10.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "6a0ea8273b0f345389a44231"
+    },
+    "title": "JWT token expires too quickly during active sessions",
+    "description": "Users are being logged out automatically after 5 minutes of active usage.",
+    "status": "Open",
+    "priority": "Medium",
+    "severity": "Low",
+    "createdBy": {
+      "$oid": "6a0d691ee5e3938bb1d91a02"
+    },
+    "assignedTo": {
+      "$oid": "6a0d4c247762c5e5b850b08e"
+    },
+    "createdAt": {
+      "$date": "2026-05-20T00:01:11.000Z"
+    },
+    "updatedAt": {
+      "$date": "2026-05-20T00:01:11.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "6a0ea8270944b3cfec40c3a7"
+    },
+    "title": "Password hashing failing for passwords with special characters",
+    "description": "When a user registers with special characters like '@' or '#' in their password, bcrypt authentication fails.",
+    "status": "Open",
+    "priority": "Medium",
+    "severity": "High",
+    "createdBy": {
+      "$oid": "6a0d4c247762c5e5b850b08e"
+    },
+    "assignedTo": null,
+    "createdAt": {
+      "$date": "2026-05-20T00:01:12.000Z"
+    },
+    "updatedAt": {
+      "$date": "2026-05-20T00:01:12.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "6a0ea8276b372d0f390f7b18"
+    },
+    "title": "Debounce function missing on search input field",
+    "description": "Every single keystroke in the search bar triggers a network request. Need to implement a 300ms debounce.",
+    "status": "Open",
+    "priority": "High",
+    "severity": "Medium",
+    "createdBy": {
+      "$oid": "6a0d691ee5e3938bb1d91a02"
+    },
+    "assignedTo": {
+      "$oid": "6a0d691ee5e3938bb1d91a02"
+    },
+    "createdAt": {
+      "$date": "2026-05-20T00:01:13.000Z"
+    },
+    "updatedAt": {
+      "$date": "2026-05-20T00:01:13.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "6a0ea8273741d458ee1a0338"
+    },
+    "title": "Confirmation prompt does not appear when closing an issue",
+    "description": "Clicking 'Closed' or 'Resolved' should trigger a confirmation popup.",
+    "status": "Resolved",
+    "priority": "Medium",
+    "severity": "Low",
+    "createdBy": {
+      "$oid": "6a0d7d68c2bc02df08713fb3"
+    },
+    "assignedTo": {
+      "$oid": "6a0d7d68c2bc02df08713fb3"
+    },
+    "createdAt": {
+      "$date": "2026-05-20T00:01:14.000Z"
+    },
+    "updatedAt": {
+      "$date": "2026-05-20T00:01:14.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "6a0ea827747ef66c62b39d82"
+    },
+    "title": "Total issue counters showing wrong numbers on dashboard",
+    "description": "The counts for 'Open', 'In Progress', and 'Resolved' statuses are hardcoded. Need to fetch from backend.",
+    "status": "In Progress",
+    "priority": "High",
+    "severity": "Medium",
+    "createdBy": {
+      "$oid": "6a0d691ee5e3938bb1d91a02"
+    },
+    "assignedTo": {
+      "$oid": "6a0d4c247762c5e5b850b08e"
+    },
+    "createdAt": {
+      "$date": "2026-05-20T00:01:15.000Z"
+    },
+    "updatedAt": {
+      "$date": "2026-05-20T00:01:15.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "6a0ea827fdb2575eb2f4ac99"
+    },
+    "title": "Export to CSV button styling is broken",
+    "description": "The button icon is overlapping with the text on screen widths between 768px and 1024px.",
+    "status": "In Progress",
+    "priority": "Low",
+    "severity": "Low",
+    "createdBy": {
+      "$oid": "6a0d691ee5e3938bb1d91a02"
+    },
+    "assignedTo": null,
+    "createdAt": {
+      "$date": "2026-05-20T00:01:16.000Z"
+    },
+    "updatedAt": {
+      "$date": "2026-05-20T00:01:16.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "6a0ea827e54a6635b273fe7d"
+    },
+    "title": "Authentication failure on Login button click",
+    "description": "When clicking the \"Login\" button on the landing page, the application does not trigger the API request. The console shows an \"Uncaught TypeError: Cannot read properties of undefined (reading 'token')\" error.",
+    "status": "Open",
+    "priority": "Medium",
+    "severity": "Medium",
+    "createdBy": {
+      "$oid": "6a0d7d68c2bc02df08713fb3"
+    },
+    "assignedTo": {
+      "$oid": "6a0d691ee5e3938bb1d91a02"
+    },
+    "createdAt": {
+      "$date": "2026-05-20T00:01:17.000Z"
+    },
+    "updatedAt": {
+      "$date": "2026-05-20T00:01:17.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "6a0ea827298f586a1376606f"
+    },
+    "title": "Issue tracker dashboard grid alignment broken on mobile screens",
+    "description": "On mobile viewports (widths below 640px), the total issue counter cards overlap with the main issue list grid.",
+    "status": "In Progress",
+    "priority": "Low",
+    "severity": "Low",
+    "createdBy": {
+      "$oid": "6a0d691ee5e3938bb1d91a02"
+    },
+    "assignedTo": {
+      "$oid": "6a0d7d68c2bc02df08713fb3"
+    },
+    "createdAt": {
+      "$date": "2026-05-20T00:01:18.000Z"
+    },
+    "updatedAt": {
+      "$date": "2026-05-20T00:01:18.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "6a0ea8273c72c1fe6738a577"
+    },
+    "title": "Main dashboard takes too long to load with over 1000 items",
+    "description": "The dashboard takes more than 5 seconds to render when the database has a large number of issues.",
+    "status": "In Progress",
+    "priority": "High",
+    "severity": "High",
+    "createdBy": {
+      "$oid": "6a0d4c247762c5e5b850b08e"
+    },
+    "assignedTo": {
+      "$oid": "6a0d4c247762c5e5b850b08e"
+    },
+    "createdAt": {
+      "$date": "2026-05-20T00:01:19.000Z"
+    },
+    "updatedAt": {
+      "$date": "2026-05-20T00:01:19.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "6a0ea827283158803fd4a5f6"
+    },
+    "title": "Update placeholder text in the search bar",
+    "description": "Change the generic placeholder text from \"Search...\" to \"Search issues by title, priority, or status...\"",
+    "status": "Open",
+    "priority": "Low",
+    "severity": "Low",
+    "createdBy": {
+      "$oid": "6a0d7d68c2bc02df08713fb3"
+    },
+    "assignedTo": null,
+    "createdAt": {
+      "$date": "2026-05-20T00:01:20.000Z"
+    },
+    "updatedAt": {
+      "$date": "2026-05-20T00:01:20.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "6a0ea827df39a19fc0902be6"
+    },
+    "title": "Incorrect color badge shown for \"Closed\" status",
+    "description": "The \"Closed\" status badge was incorrectly rendering with a yellow background instead of grey.",
+    "status": "Resolved",
+    "priority": "Low",
+    "severity": "Low",
+    "createdBy": {
+      "$oid": "6a0d691ee5e3938bb1d91a02"
+    },
+    "assignedTo": {
+      "$oid": "6a0d691ee5e3938bb1d91a02"
+    },
+    "createdAt": {
+      "$date": "2026-05-20T00:01:21.000Z"
+    },
+    "updatedAt": {
+      "$date": "2026-05-20T00:01:21.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "6a0ea827f117c6b6deae0e23"
+    },
+    "title": "JWT token expires too quickly during active sessions",
+    "description": "Users are being logged out automatically after 5 minutes of active usage.",
+    "status": "Open",
+    "priority": "Medium",
+    "severity": "Low",
+    "createdBy": {
+      "$oid": "6a0d691ee5e3938bb1d91a02"
+    },
+    "assignedTo": {
+      "$oid": "6a0d7d68c2bc02df08713fb3"
+    },
+    "createdAt": {
+      "$date": "2026-05-20T00:01:22.000Z"
+    },
+    "updatedAt": {
+      "$date": "2026-05-20T00:01:22.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "6a0ea827785dd26b42df9691"
+    },
+    "title": "Password hashing failing for passwords with special characters",
+    "description": "When a user registers with special characters like '@' or '#' in their password, bcrypt authentication fails.",
+    "status": "Open",
+    "priority": "Medium",
+    "severity": "High",
+    "createdBy": {
+      "$oid": "6a0d691ee5e3938bb1d91a02"
+    },
+    "assignedTo": {
+      "$oid": "6a0d4c247762c5e5b850b08e"
+    },
+    "createdAt": {
+      "$date": "2026-05-20T00:01:23.000Z"
+    },
+    "updatedAt": {
+      "$date": "2026-05-20T00:01:23.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "6a0ea8278e4cea91ca27a3d7"
+    },
+    "title": "Debounce function missing on search input field",
+    "description": "Every single keystroke in the search bar triggers a network request. Need to implement a 300ms debounce.",
+    "status": "Open",
+    "priority": "High",
+    "severity": "Medium",
+    "createdBy": {
+      "$oid": "6a0d7d68c2bc02df08713fb3"
+    },
+    "assignedTo": null,
+    "createdAt": {
+      "$date": "2026-05-20T00:01:24.000Z"
+    },
+    "updatedAt": {
+      "$date": "2026-05-20T00:01:24.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "6a0ea82751b6691bdf2354e7"
+    },
+    "title": "Confirmation prompt does not appear when closing an issue",
+    "description": "Clicking 'Closed' or 'Resolved' should trigger a confirmation popup.",
+    "status": "Resolved",
+    "priority": "Medium",
+    "severity": "Low",
+    "createdBy": {
+      "$oid": "6a0d7d68c2bc02df08713fb3"
+    },
+    "assignedTo": {
+      "$oid": "6a0d691ee5e3938bb1d91a02"
+    },
+    "createdAt": {
+      "$date": "2026-05-20T00:01:25.000Z"
+    },
+    "updatedAt": {
+      "$date": "2026-05-20T00:01:25.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "6a0ea827f33774bd60957e36"
+    },
+    "title": "Total issue counters showing wrong numbers on dashboard",
+    "description": "The counts for 'Open', 'In Progress', and 'Resolved' statuses are hardcoded. Need to fetch from backend.",
+    "status": "In Progress",
+    "priority": "High",
+    "severity": "Medium",
+    "createdBy": {
+      "$oid": "6a0d4c247762c5e5b850b08e"
+    },
+    "assignedTo": {
+      "$oid": "6a0d7d68c2bc02df08713fb3"
+    },
+    "createdAt": {
+      "$date": "2026-05-20T00:01:26.000Z"
+    },
+    "updatedAt": {
+      "$date": "2026-05-20T00:01:26.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "6a0ea8274765e444cec527ce"
+    },
+    "title": "Export to CSV button styling is broken",
+    "description": "The button icon is overlapping with the text on screen widths between 768px and 1024px.",
+    "status": "In Progress",
+    "priority": "Low",
+    "severity": "Low",
+    "createdBy": {
+      "$oid": "6a0d7d68c2bc02df08713fb3"
+    },
+    "assignedTo": {
+      "$oid": "6a0d4c247762c5e5b850b08e"
+    },
+    "createdAt": {
+      "$date": "2026-05-20T00:01:27.000Z"
+    },
+    "updatedAt": {
+      "$date": "2026-05-20T00:01:27.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "6a0ea82746c57c3da3b8c144"
+    },
+    "title": "Authentication failure on Login button click",
+    "description": "When clicking the \"Login\" button on the landing page, the application does not trigger the API request. The console shows an \"Uncaught TypeError: Cannot read properties of undefined (reading 'token')\" error.",
+    "status": "Open",
+    "priority": "Medium",
+    "severity": "Medium",
+    "createdBy": {
+      "$oid": "6a0d7d68c2bc02df08713fb3"
+    },
+    "assignedTo": null,
+    "createdAt": {
+      "$date": "2026-05-20T00:01:28.000Z"
+    },
+    "updatedAt": {
+      "$date": "2026-05-20T00:01:28.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "6a0ea827f4209a8bbf843ed8"
+    },
+    "title": "Issue tracker dashboard grid alignment broken on mobile screens",
+    "description": "On mobile viewports (widths below 640px), the total issue counter cards overlap with the main issue list grid.",
+    "status": "In Progress",
+    "priority": "Low",
+    "severity": "Low",
+    "createdBy": {
+      "$oid": "6a0d4c247762c5e5b850b08e"
+    },
+    "assignedTo": {
+      "$oid": "6a0d691ee5e3938bb1d91a02"
+    },
+    "createdAt": {
+      "$date": "2026-05-20T00:01:29.000Z"
+    },
+    "updatedAt": {
+      "$date": "2026-05-20T00:01:29.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "6a0ea8270266c6344aa875e3"
+    },
+    "title": "Main dashboard takes too long to load with over 1000 items",
+    "description": "The dashboard takes more than 5 seconds to render when the database has a large number of issues.",
+    "status": "In Progress",
+    "priority": "High",
+    "severity": "High",
+    "createdBy": {
+      "$oid": "6a0d4c247762c5e5b850b08e"
+    },
+    "assignedTo": {
+      "$oid": "6a0d7d68c2bc02df08713fb3"
+    },
+    "createdAt": {
+      "$date": "2026-05-20T00:01:30.000Z"
+    },
+    "updatedAt": {
+      "$date": "2026-05-20T00:01:30.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "6a0ea8277a00611a0b4e929e"
+    },
+    "title": "Update placeholder text in the search bar",
+    "description": "Change the generic placeholder text from \"Search...\" to \"Search issues by title, priority, or status...\"",
+    "status": "Open",
+    "priority": "Low",
+    "severity": "Low",
+    "createdBy": {
+      "$oid": "6a0d691ee5e3938bb1d91a02"
+    },
+    "assignedTo": {
+      "$oid": "6a0d4c247762c5e5b850b08e"
+    },
+    "createdAt": {
+      "$date": "2026-05-20T00:01:31.000Z"
+    },
+    "updatedAt": {
+      "$date": "2026-05-20T00:01:31.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "6a0ea827ab4e99b53f6cfeab"
+    },
+    "title": "Incorrect color badge shown for \"Closed\" status",
+    "description": "The \"Closed\" status badge was incorrectly rendering with a yellow background instead of grey.",
+    "status": "Resolved",
+    "priority": "Low",
+    "severity": "Low",
+    "createdBy": {
+      "$oid": "6a0d691ee5e3938bb1d91a02"
+    },
+    "assignedTo": null,
+    "createdAt": {
+      "$date": "2026-05-20T00:01:32.000Z"
+    },
+    "updatedAt": {
+      "$date": "2026-05-20T00:01:32.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "6a0ea82752d97aa407e411fa"
+    },
+    "title": "JWT token expires too quickly during active sessions",
+    "description": "Users are being logged out automatically after 5 minutes of active usage.",
+    "status": "Open",
+    "priority": "Medium",
+    "severity": "Low",
+    "createdBy": {
+      "$oid": "6a0d691ee5e3938bb1d91a02"
+    },
+    "assignedTo": {
+      "$oid": "6a0d691ee5e3938bb1d91a02"
+    },
+    "createdAt": {
+      "$date": "2026-05-20T00:01:33.000Z"
+    },
+    "updatedAt": {
+      "$date": "2026-05-20T00:01:33.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "6a0ea8270c84f1a0648fe1ce"
+    },
+    "title": "Password hashing failing for passwords with special characters",
+    "description": "When a user registers with special characters like '@' or '#' in their password, bcrypt authentication fails.",
+    "status": "Open",
+    "priority": "Medium",
+    "severity": "High",
+    "createdBy": {
+      "$oid": "6a0d691ee5e3938bb1d91a02"
+    },
+    "assignedTo": {
+      "$oid": "6a0d7d68c2bc02df08713fb3"
+    },
+    "createdAt": {
+      "$date": "2026-05-20T00:01:34.000Z"
+    },
+    "updatedAt": {
+      "$date": "2026-05-20T00:01:34.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "6a0ea8272eeb9752ea4e5601"
+    },
+    "title": "Debounce function missing on search input field",
+    "description": "Every single keystroke in the search bar triggers a network request. Need to implement a 300ms debounce.",
+    "status": "Open",
+    "priority": "High",
+    "severity": "Medium",
+    "createdBy": {
+      "$oid": "6a0d7d68c2bc02df08713fb3"
+    },
+    "assignedTo": {
+      "$oid": "6a0d4c247762c5e5b850b08e"
+    },
+    "createdAt": {
+      "$date": "2026-05-20T00:01:35.000Z"
+    },
+    "updatedAt": {
+      "$date": "2026-05-20T00:01:35.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "6a0ea827b3c77deaacaf9919"
+    },
+    "title": "Confirmation prompt does not appear when closing an issue",
+    "description": "Clicking 'Closed' or 'Resolved' should trigger a confirmation popup.",
+    "status": "Resolved",
+    "priority": "Medium",
+    "severity": "Low",
+    "createdBy": {
+      "$oid": "6a0d691ee5e3938bb1d91a02"
+    },
+    "assignedTo": null,
+    "createdAt": {
+      "$date": "2026-05-20T00:01:36.000Z"
+    },
+    "updatedAt": {
+      "$date": "2026-05-20T00:01:36.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "6a0ea8275b1fadf9a120a335"
+    },
+    "title": "Total issue counters showing wrong numbers on dashboard",
+    "description": "The counts for 'Open', 'In Progress', and 'Resolved' statuses are hardcoded. Need to fetch from backend.",
+    "status": "In Progress",
+    "priority": "High",
+    "severity": "Medium",
+    "createdBy": {
+      "$oid": "6a0d691ee5e3938bb1d91a02"
+    },
+    "assignedTo": {
+      "$oid": "6a0d691ee5e3938bb1d91a02"
+    },
+    "createdAt": {
+      "$date": "2026-05-20T00:01:37.000Z"
+    },
+    "updatedAt": {
+      "$date": "2026-05-20T00:01:37.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "6a0ea8273adc340b9a0eb65d"
+    },
+    "title": "Export to CSV button styling is broken",
+    "description": "The button icon is overlapping with the text on screen widths between 768px and 1024px.",
+    "status": "In Progress",
+    "priority": "Low",
+    "severity": "Low",
+    "createdBy": {
+      "$oid": "6a0d7d68c2bc02df08713fb3"
+    },
+    "assignedTo": {
+      "$oid": "6a0d7d68c2bc02df08713fb3"
+    },
+    "createdAt": {
+      "$date": "2026-05-20T00:01:38.000Z"
+    },
+    "updatedAt": {
+      "$date": "2026-05-20T00:01:38.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "6a0ea827417393c49b4cac75"
+    },
+    "title": "Authentication failure on Login button click",
+    "description": "When clicking the \"Login\" button on the landing page, the application does not trigger the API request. The console shows an \"Uncaught TypeError: Cannot read properties of undefined (reading 'token')\" error.",
+    "status": "Open",
+    "priority": "Medium",
+    "severity": "Medium",
+    "createdBy": {
+      "$oid": "6a0d691ee5e3938bb1d91a02"
+    },
+    "assignedTo": {
+      "$oid": "6a0d4c247762c5e5b850b08e"
+    },
+    "createdAt": {
+      "$date": "2026-05-20T00:01:39.000Z"
+    },
+    "updatedAt": {
+      "$date": "2026-05-20T00:01:39.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "6a0ea827a4b3b923c92e0a65"
+    },
+    "title": "Issue tracker dashboard grid alignment broken on mobile screens",
+    "description": "On mobile viewports (widths below 640px), the total issue counter cards overlap with the main issue list grid.",
+    "status": "In Progress",
+    "priority": "Low",
+    "severity": "Low",
+    "createdBy": {
+      "$oid": "6a0d7d68c2bc02df08713fb3"
+    },
+    "assignedTo": null,
+    "createdAt": {
+      "$date": "2026-05-20T00:01:40.000Z"
+    },
+    "updatedAt": {
+      "$date": "2026-05-21T10:43:42.633Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "6a0ea82798bf1adbcb2587ff"
+    },
+    "title": "Main dashboard takes too long to load with over 1000 items",
+    "description": "The dashboard takes more than 5 seconds to render when the database has a large number of issues.",
+    "status": "In Progress",
+    "priority": "High",
+    "severity": "High",
+    "createdBy": {
+      "$oid": "6a0d4c247762c5e5b850b08e"
+    },
+    "assignedTo": {
+      "$oid": "6a0d691ee5e3938bb1d91a02"
+    },
+    "createdAt": {
+      "$date": "2026-05-20T00:01:41.000Z"
+    },
+    "updatedAt": {
+      "$date": "2026-05-20T00:01:41.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "6a0ea827282012a5f02cc444"
+    },
+    "title": "Update placeholder text in the search bar",
+    "description": "Change the generic placeholder text from \"Search...\" to \"Search issues by title, priority, or status...\"",
+    "status": "Open",
+    "priority": "Low",
+    "severity": "Low",
+    "createdBy": {
+      "$oid": "6a0d691ee5e3938bb1d91a02"
+    },
+    "assignedTo": {
+      "$oid": "6a0d7d68c2bc02df08713fb3"
+    },
+    "createdAt": {
+      "$date": "2026-05-20T00:01:42.000Z"
+    },
+    "updatedAt": {
+      "$date": "2026-05-20T00:01:42.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "6a0ea8275c31db98a0705816"
+    },
+    "title": "Incorrect color badge shown for \"Closed\" status",
+    "description": "The \"Closed\" status badge was incorrectly rendering with a yellow background instead of grey.",
+    "status": "Open",
+    "priority": "Low",
+    "severity": "Low",
+    "createdBy": {
+      "$oid": "6a0d4c247762c5e5b850b08e"
+    },
+    "assignedTo": {
+      "$oid": "6a0d4c247762c5e5b850b08e"
+    },
+    "createdAt": {
+      "$date": "2026-05-20T00:01:43.000Z"
+    },
+    "updatedAt": {
+      "$date": "2026-05-21T16:19:03.087Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "6a0ea827fd0c50df8e1c964b"
+    },
+    "title": "JWT token expires too quickly during active sessions",
+    "description": "Users are being logged out automatically after 5 minutes of active usage.",
+    "status": "Resolved",
+    "priority": "Medium",
+    "severity": "Low",
+    "createdBy": {
+      "$oid": "6a0d691ee5e3938bb1d91a02"
+    },
+    "assignedTo": {
+      "$oid": "6a0d4c247762c5e5b850b08e"
+    },
+    "createdAt": {
+      "$date": "2026-05-20T00:01:44.000Z"
+    },
+    "updatedAt": {
+      "$date": "2026-05-21T16:06:55.241Z"
+    },
+    "__v": 0,
+    "resolutionNote": "I will look into this issue and check the JWT expiration configuration."
+  },
+  {
+    "_id": {
+      "$oid": "6a0ea827ef7a57d6f8a8327b"
+    },
+    "title": "Password hashing failing for passwords with special characters",
+    "description": "When a user registers with special characters like '@' or '#' in their password, bcrypt authentication fails.",
+    "status": "Resolved",
+    "priority": "Medium",
+    "severity": "High",
+    "createdBy": {
+      "$oid": "6a0d4c247762c5e5b850b08e"
+    },
+    "assignedTo": {
+      "$oid": "6a0d691ee5e3938bb1d91a02"
+    },
+    "createdAt": {
+      "$date": "2026-05-20T00:01:45.000Z"
+    },
+    "updatedAt": {
+      "$date": "2026-05-21T16:02:32.176Z"
+    },
+    "__v": 0,
+    "resolutionNote": "Successfully eliminated titles and descriptions duplication across system entities. Cleaned up redundant log entries and optimized metadata fields while maintaining strict identifier ($oid) integrity. The schema is now fully unique and normalized."
+  }
+]
