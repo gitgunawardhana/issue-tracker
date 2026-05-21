@@ -195,9 +195,10 @@ export const issueService = {
     return response.data;
   },
 
-  updateIssueStatus: async (id: string, status: string) => {
+  updateIssueStatus: async (id: string, status: string, note?: string) => {
     const response = await apiClient.patch<ApiResponse<Issue>>(`/issues/${id}/status`, {
       status,
+      ...(note !== undefined && { note }),
     });
     return response.data;
   },

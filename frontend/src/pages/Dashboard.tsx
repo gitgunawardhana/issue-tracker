@@ -8,6 +8,7 @@ import IssueForm, { IssueFormActions } from '../components/IssueForm';
 import IssueList from '../components/IssueList';
 import IssueDetail, { IssueDetailActions } from '../components/IssueDetail';
 import ConfirmDialog from '../components/ConfirmDialog';
+import ResolveDialog from '../components/ResolveDialog';
 import Modal from '../components/Modal';
 import Avatar from '../components/Avatar';
 import ExportMenu from '../components/ExportMenu';
@@ -88,6 +89,10 @@ export default function Dashboard() {
   );
 
   const [confirm, setConfirm] = useState<ConfirmState>(initialConfirmState);
+  const [resolveTargetId, setResolveTargetId] = useState<string | null>(null);
+  const resolveTargetIssue = resolveTargetId
+    ? issues.find((i) => i._id === resolveTargetId)
+    : undefined;
 
   const closeConfirm = () => setConfirm(initialConfirmState);
 
@@ -233,9 +238,9 @@ export default function Dashboard() {
     }
   };
 
-  const performStatusChange = async (id: string, status: string) => {
+  const performStatusChange = async (id: string, status: string, note?: string) => {
     try {
-      const result = await issueService.updateIssueStatus(id, status);
+      const result = await issueService.updateIssueStatus(id, status, note);
       if (result.success && result.data) {
         updateIssue(result.data);
         showToast(`Status changed to ${status}`, 'success');
@@ -275,18 +280,7 @@ export default function Dashboard() {
   };
 
   const handleResolve = (id: string) => {
-    const issue = issues.find((i) => i._id === id);
-    setConfirm({
-      isOpen: true,
-      title: 'Mark as Resolved',
-      message: `Are you sure you want to mark "${issue?.title}" as Resolved?`,
-      confirmText: 'Mark Resolved',
-      variant: 'info',
-      onConfirm: async () => {
-        closeConfirm();
-        await performStatusChange(id, 'Resolved');
-      },
-    });
+    setResolveTargetId(id);
   };
 
   const handleStatusChange = (id: string, status: string) => {
@@ -640,6 +634,17 @@ export default function Dashboard() {
         variant={confirm.variant}
         onConfirm={confirm.onConfirm}
         onCancel={closeConfirm}
+      />
+
+      <ResolveDialog
+        isOpen={!!resolveTargetIssue}
+        issueTitle={resolveTargetIssue?.title ?? ''}
+        onCancel={() => setResolveTargetId(null)}
+        onConfirm={async (note) => {
+          const id = resolveTargetId;
+          setResolveTargetId(null);
+          if (id) await performStatusChange(id, 'Resolved', note);
+        }}
       />
 
       <ScrollToTopButton />

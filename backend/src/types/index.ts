@@ -15,6 +15,7 @@ export interface Issue {
   severity: 'Low' | 'Medium' | 'High' | 'Critical';
   createdBy: string;
   assignedTo?: string | null;
+  resolutionNote?: string;
   createdAt?: Date;
   updatedAt?: Date;
 }
