@@ -174,6 +174,29 @@ yarn run build && yarn start    # production
 
 Server runs on `http://localhost:5000`.
 
+### Seed sample data (optional)
+
+Pre-populated users + issues live in `backend/seed/`:
+
+- `users.json` — 3 test accounts (Ishan, Nuwan, Athula)
+- `issues.json` — sample issues
+
+**npm script:**
+```bash
+cd backend
+yarn run seed       # wipes users + issues, then inserts seed data
+```
+
+Seed user credentials (use any to log in):
+
+| Email | Name | Password |
+|-------|------|----------|
+| `t.gunawardana864@gmail.com` | Ishan Tharindu | `Password123!` |
+| `t.gunawardana864+1@gmail.com` | Nuwan K | `Password123!` |
+| `t.gunawardana864+2@gmail.com` | Athula Chamath | `Password123!` |
+
+> Passwords are pre-hashed with bcrypt in the seed file. All three accounts share the same password: **`Password123!`**.
+
 ### 3. Frontend
 
 ```bash
