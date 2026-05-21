@@ -26,7 +26,7 @@ export default function ExportMenu({ onExport, disabled }: ExportMenuProps) {
         type="button"
         disabled={disabled}
         onClick={() => setOpen((o) => !o)}
-        className="inline-flex items-center gap-1.5 px-3 py-2 rounded-lg border border-gray-200 bg-white text-sm font-medium text-gray-700 hover:bg-gray-50 disabled:opacity-50 transition-colors"
+        className="inline-flex items-center gap-1.5 px-3 py-2 rounded-lg border border-gray-200 dark:border-neutral-700 bg-white dark:bg-neutral-800 text-sm font-medium text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-neutral-700 disabled:opacity-50 transition-colors"
       >
         <svg
           xmlns="http://www.w3.org/2000/svg"
@@ -56,14 +56,14 @@ export default function ExportMenu({ onExport, disabled }: ExportMenuProps) {
       </button>
 
       {open && (
-        <div className="absolute right-0 mt-1 w-44 bg-white border border-gray-200 rounded-lg shadow-md py-1 z-20">
+        <div className="absolute left-0 sm:left-auto sm:right-0 mt-1 w-44 bg-white dark:bg-neutral-800 border border-gray-200 dark:border-neutral-700 rounded-lg shadow-md py-1 z-20">
           <button
             type="button"
             onClick={() => {
               onExport('pdf');
               setOpen(false);
             }}
-            className="w-full text-left px-3 py-2 text-sm text-gray-700 hover:bg-gray-50 flex items-center gap-2"
+            className="w-full text-left px-3 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-neutral-700 flex items-center gap-2"
           >
             <span className="w-7 text-xs font-semibold text-rose-600">PDF</span>
             Download PDF
@@ -74,7 +74,7 @@ export default function ExportMenu({ onExport, disabled }: ExportMenuProps) {
               onExport('json');
               setOpen(false);
             }}
-            className="w-full text-left px-3 py-2 text-sm text-gray-700 hover:bg-gray-50 flex items-center gap-2"
+            className="w-full text-left px-3 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-neutral-700 flex items-center gap-2"
           >
             <span className="w-7 text-xs font-semibold text-indigo-600">JSON</span>
             Download JSON

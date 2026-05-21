@@ -3,11 +3,11 @@ import type { User } from '../types';
 
 interface AuthStore {
   user: User | null;
-  token: string | null;
+  accessToken: string | null;
   isLoading: boolean;
   error: string | null;
   setUser: (user: User | null) => void;
-  setToken: (token: string | null) => void;
+  setAccessToken: (token: string | null) => void;
   setLoading: (loading: boolean) => void;
   setError: (error: string | null) => void;
   logout: () => void;
@@ -17,7 +17,7 @@ const storedUser = localStorage.getItem('user');
 
 export const useAuthStore = create<AuthStore>((set) => ({
   user: storedUser ? (JSON.parse(storedUser) as User) : null,
-  token: localStorage.getItem('token'),
+  accessToken: localStorage.getItem('accessToken'),
   isLoading: false,
   error: null,
   setUser: (user) => {
@@ -28,19 +28,19 @@ export const useAuthStore = create<AuthStore>((set) => ({
     }
     set({ user });
   },
-  setToken: (token) => {
+  setAccessToken: (token) => {
     if (token) {
-      localStorage.setItem('token', token);
+      localStorage.setItem('accessToken', token);
     } else {
-      localStorage.removeItem('token');
+      localStorage.removeItem('accessToken');
     }
-    set({ token });
+    set({ accessToken: token });
   },
   setLoading: (loading) => set({ isLoading: loading }),
   setError: (error) => set({ error }),
   logout: () => {
-    localStorage.removeItem('token');
+    localStorage.removeItem('accessToken');
     localStorage.removeItem('user');
-    set({ user: null, token: null });
+    set({ user: null, accessToken: null });
   },
 }));

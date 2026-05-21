@@ -40,7 +40,7 @@ function getInitials(name: string): string {
 export default function Avatar({ name, size = 'sm', className = '' }: AvatarProps) {
   return (
     <span
-      className={`inline-flex items-center justify-center rounded-full text-white font-semibold ring-2 ring-white ${sizeClasses[size]} ${getColorFromName(name)} ${className}`}
+      className={`inline-flex items-center justify-center rounded-full text-white font-semibold ring-2 ring-white dark:ring-neutral-900 ${sizeClasses[size]} ${getColorFromName(name)} ${className}`}
       title={name}
     >
       {getInitials(name)}

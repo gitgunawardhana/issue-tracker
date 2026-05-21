@@ -50,6 +50,14 @@ export const createIssue = async (req: Request, res: Response) => {
   }
 };
 
+const splitCsv = (value: unknown): string[] => {
+  if (!value || typeof value !== 'string') return [];
+  return value
+    .split(',')
+    .map((s) => s.trim())
+    .filter(Boolean);
+};
+
 export const getIssues = async (req: Request, res: Response) => {
   try {
     const {
@@ -66,26 +74,42 @@ export const getIssues = async (req: Request, res: Response) => {
     const pageSize = parseInt(limit as string) || 10;
     const skip = (pageNum - 1) * pageSize;
 
-    const filter: any = {};
+    const conditions: Record<string, unknown>[] = [];
 
     if (search) {
-      filter.$or = [
-        { title: { $regex: search, $options: 'i' } },
-        { description: { $regex: search, $options: 'i' } },
-      ];
+      conditions.push({
+        $or: [
+          { title: { $regex: search, $options: 'i' } },
+          { description: { $regex: search, $options: 'i' } },
+        ],
+      });
     }
 
-    if (status) filter.status = status;
-    if (priority) filter.priority = priority;
-    if (severity) filter.severity = severity;
+    const statuses = splitCsv(status);
+    if (statuses.length > 0) conditions.push({ status: { $in: statuses } });
 
-    if (assignedTo === 'me') {
-      filter.assignedTo = req.user?.userId;
-    } else if (assignedTo === 'unassigned') {
-      filter.assignedTo = null;
-    } else if (assignedTo) {
-      filter.assignedTo = assignedTo;
+    const priorities = splitCsv(priority);
+    if (priorities.length > 0) conditions.push({ priority: { $in: priorities } });
+
+    const severities = splitCsv(severity);
+    if (severities.length > 0) conditions.push({ severity: { $in: severities } });
+
+    const assignees = splitCsv(assignedTo);
+    if (assignees.length > 0) {
+      const assigneeOr: Record<string, unknown>[] = [];
+      const ids: string[] = [];
+      for (const v of assignees) {
+        if (v === 'me' && req.user?.userId) ids.push(req.user.userId);
+        else if (v === 'unassigned') assigneeOr.push({ assignedTo: null });
+        else ids.push(v);
+      }
+      if (ids.length > 0) assigneeOr.push({ assignedTo: { $in: ids } });
+      if (assigneeOr.length === 1) conditions.push(assigneeOr[0]);
+      else if (assigneeOr.length > 1) conditions.push({ $or: assigneeOr });
     }
+
+    const filter: Record<string, unknown> =
+      conditions.length === 0 ? {} : conditions.length === 1 ? conditions[0] : { $and: conditions };
 
     const issues = await IssueModel.find(filter)
       .populate(POPULATE_FIELDS)
@@ -95,10 +119,17 @@ export const getIssues = async (req: Request, res: Response) => {
 
     const total = await IssueModel.countDocuments(filter);
 
+    const countByStatus = async (s: string) => {
+      const c = conditions.filter((co) => !('status' in co));
+      c.push({ status: s });
+      const f = c.length === 1 ? c[0] : { $and: c };
+      return IssueModel.countDocuments(f);
+    };
+
     const statusCounts = {
-      open: await IssueModel.countDocuments({ ...filter, status: 'Open' }),
-      inProgress: await IssueModel.countDocuments({ ...filter, status: 'In Progress' }),
-      resolved: await IssueModel.countDocuments({ ...filter, status: 'Resolved' }),
+      open: await countByStatus('Open'),
+      inProgress: await countByStatus('In Progress'),
+      resolved: await countByStatus('Resolved'),
       assignedToMe: await IssueModel.countDocuments({ assignedTo: req.user?.userId }),
     };
 

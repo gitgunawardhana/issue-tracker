@@ -3,7 +3,7 @@ import { useAuthStore } from '../store/authStore';
 import { useIssueStore } from '../store/issueStore';
 import { useToastStore } from '../store/toastStore';
 import { useDebounce } from '../hooks/useDebounce';
-import { issueService, userService } from '../services/api';
+import { issueService, userService, authService } from '../services/api';
 import IssueForm, { IssueFormActions } from '../components/IssueForm';
 import IssueList from '../components/IssueList';
 import IssueDetail, { IssueDetailActions } from '../components/IssueDetail';
@@ -11,6 +11,8 @@ import ConfirmDialog from '../components/ConfirmDialog';
 import Modal from '../components/Modal';
 import Avatar from '../components/Avatar';
 import ExportMenu from '../components/ExportMenu';
+import ScrollToTopButton from '../components/ScrollToTopButton';
+import { Select } from 'antd';
 import {
   CircleOpenIcon,
   ClockIcon,
@@ -19,7 +21,10 @@ import {
   SearchIcon,
   PlusIcon,
   LogoutIcon,
+  SunIcon,
+  MoonIcon,
 } from '../components/Icons';
+import { useThemeStore } from '../store/themeStore';
 import type { Issue, UserSummary } from '../types';
 import { useNavigate } from 'react-router-dom';
 
@@ -45,6 +50,7 @@ export default function Dashboard() {
   const navigate = useNavigate();
   const { user, logout } = useAuthStore();
   const { showToast } = useToastStore();
+  const { theme, toggleTheme } = useThemeStore();
   const {
     issues,
     statusCounts,
@@ -67,10 +73,10 @@ export default function Dashboard() {
     : undefined;
   const [search, setSearch] = useState('');
   const debouncedSearch = useDebounce(search, 400);
-  const [statusFilter, setStatusFilter] = useState('');
-  const [priorityFilter, setPriorityFilter] = useState('');
-  const [severityFilter, setSeverityFilter] = useState('');
-  const [assigneeFilter, setAssigneeFilter] = useState('');
+  const [statusFilter, setStatusFilter] = useState<string[]>([]);
+  const [priorityFilter, setPriorityFilter] = useState<string[]>([]);
+  const [severityFilter, setSeverityFilter] = useState<string[]>([]);
+  const [assigneeFilter, setAssigneeFilter] = useState<string[]>([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [confirm, setConfirm] = useState<ConfirmState>(initialConfirmState);
 
@@ -137,20 +143,39 @@ export default function Dashboard() {
     setSearch(v);
     setCurrentPage(1);
   };
-  const onStatusChange = (v: string) => {
+  const onStatusChange = (v: string[]) => {
     setStatusFilter(v);
     setCurrentPage(1);
   };
-  const onPriorityChange = (v: string) => {
+  const onPriorityChange = (v: string[]) => {
     setPriorityFilter(v);
     setCurrentPage(1);
   };
-  const onSeverityChange = (v: string) => {
+  const onSeverityChange = (v: string[]) => {
     setSeverityFilter(v);
     setCurrentPage(1);
   };
-  const onAssigneeChange = (v: string) => {
+  const onAssigneeChange = (v: string[]) => {
     setAssigneeFilter(v);
+    setCurrentPage(1);
+  };
+
+  const toggleArrayValue = (arr: string[], value: string): string[] =>
+    arr.includes(value) ? arr.filter((v) => v !== value) : [...arr, value];
+
+  const hasActiveFilters =
+    !!search ||
+    statusFilter.length > 0 ||
+    priorityFilter.length > 0 ||
+    severityFilter.length > 0 ||
+    assigneeFilter.length > 0;
+
+  const clearAllFilters = () => {
+    setSearch('');
+    setStatusFilter([]);
+    setPriorityFilter([]);
+    setSeverityFilter([]);
+    setAssigneeFilter([]);
     setCurrentPage(1);
   };
 
@@ -285,7 +310,8 @@ export default function Dashboard() {
     }
   };
 
-  const handleLogout = () => {
+  const handleLogout = async () => {
+    await authService.logout();
     logout();
     navigate('/login');
   };
@@ -295,62 +321,66 @@ export default function Dashboard() {
       label: 'Open',
       count: statusCounts.open,
       icon: CircleOpenIcon,
-      iconBg: 'bg-slate-100 text-slate-600',
-      onClick: () => onStatusChange(statusFilter === 'Open' ? '' : 'Open'),
-      active: statusFilter === 'Open',
+      iconBg: 'bg-slate-100 text-slate-600 dark:bg-neutral-800 dark:text-neutral-300',
+      onClick: () => onStatusChange(toggleArrayValue(statusFilter, 'Open')),
+      active: statusFilter.includes('Open'),
       ringColor: 'ring-slate-400',
     },
     {
       label: 'In Progress',
       count: statusCounts.inProgress,
       icon: ClockIcon,
-      iconBg: 'bg-blue-100 text-blue-600',
-      onClick: () => onStatusChange(statusFilter === 'In Progress' ? '' : 'In Progress'),
-      active: statusFilter === 'In Progress',
+      iconBg: 'bg-blue-100 text-blue-600 dark:bg-blue-900/40 dark:text-blue-300',
+      onClick: () => onStatusChange(toggleArrayValue(statusFilter, 'In Progress')),
+      active: statusFilter.includes('In Progress'),
       ringColor: 'ring-blue-400',
     },
     {
       label: 'Resolved',
       count: statusCounts.resolved,
       icon: CheckCircleIcon,
-      iconBg: 'bg-emerald-100 text-emerald-600',
-      onClick: () => onStatusChange(statusFilter === 'Resolved' ? '' : 'Resolved'),
-      active: statusFilter === 'Resolved',
+      iconBg: 'bg-emerald-100 text-emerald-600 dark:bg-emerald-900/40 dark:text-emerald-300',
+      onClick: () => onStatusChange(toggleArrayValue(statusFilter, 'Resolved')),
+      active: statusFilter.includes('Resolved'),
       ringColor: 'ring-emerald-400',
     },
     {
       label: 'Assigned to Me',
       count: statusCounts.assignedToMe,
       icon: UserPlusIcon,
-      iconBg: 'bg-purple-100 text-purple-600',
-      onClick: () => onAssigneeChange(assigneeFilter === 'me' ? '' : 'me'),
-      active: assigneeFilter === 'me',
+      iconBg: 'bg-purple-100 text-purple-600 dark:bg-purple-900/40 dark:text-purple-300',
+      onClick: () => onAssigneeChange(toggleArrayValue(assigneeFilter, 'me')),
+      active: assigneeFilter.includes('me'),
       ringColor: 'ring-purple-400',
     },
   ];
 
-  const filterSelectClass =
-    'px-3 py-2 border border-gray-200 rounded-lg bg-white text-sm text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-shadow shadow-sm';
-
   return (
-    <div className="min-h-screen bg-gray-50">
-      <nav className="bg-white border-b border-gray-200 sticky top-0 z-30">
+    <div className="min-h-screen bg-gray-50 dark:bg-neutral-950">
+      <nav className="bg-white dark:bg-neutral-900 border-b border-gray-200 dark:border-neutral-800 sticky top-0 z-30">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3 flex justify-between items-center">
           <div className="flex items-center gap-3">
-            <img src="/logo.png" alt="Issue Tracker" className="w-10 h-10 object-contain" />
+            <img src="/logo.png" alt="Issue Tracker" className="w-10 h-10 object-contain dark:invert dark:hue-rotate-180" />
             <div>
-              <h1 className="text-lg font-semibold text-gray-900 leading-tight">Issue Tracker</h1>
-              <p className="text-xs text-gray-500 leading-tight">Manage your team's work</p>
+              <h1 className="text-lg font-semibold text-gray-900 dark:text-gray-50 leading-tight">Issue Tracker</h1>
+              <p className="text-xs text-gray-500 dark:text-gray-400 leading-tight">Manage your team's work</p>
             </div>
           </div>
-          <div className="flex items-center gap-3">
-            <div className="hidden sm:flex items-center gap-2 px-3 py-1.5 rounded-full bg-gray-50">
+          <div className="flex items-center gap-2 sm:gap-3">
+            <button
+              onClick={toggleTheme}
+              title={theme === 'dark' ? 'Switch to light mode' : 'Switch to dark mode'}
+              className="inline-flex items-center justify-center w-9 h-9 bg-white dark:bg-neutral-800 text-gray-700 dark:text-gray-200 border border-gray-200 dark:border-neutral-700 rounded-lg hover:bg-gray-50 dark:hover:bg-neutral-700 transition-colors"
+            >
+              {theme === 'dark' ? <SunIcon className="w-4 h-4" /> : <MoonIcon className="w-4 h-4" />}
+            </button>
+            <div className="hidden sm:flex items-center gap-2 px-3 py-1.5 rounded-full bg-gray-50 dark:bg-neutral-800">
               {user && <Avatar name={user.name} size="xs" />}
-              <span className="text-sm font-medium text-gray-700">{user?.name}</span>
+              <span className="text-sm font-medium text-gray-700 dark:text-gray-200">{user?.name}</span>
             </div>
             <button
               onClick={handleLogout}
-              className="inline-flex items-center gap-1.5 bg-white text-gray-700 border border-gray-200 px-3 py-1.5 rounded-lg hover:bg-gray-50 text-sm font-medium transition-colors"
+              className="inline-flex items-center gap-1.5 bg-white dark:bg-neutral-800 text-gray-700 dark:text-gray-200 border border-gray-200 dark:border-neutral-700 px-3 py-1.5 rounded-lg hover:bg-gray-50 dark:hover:bg-neutral-700 text-sm font-medium transition-colors"
             >
               <LogoutIcon className="w-4 h-4" />
               Logout
@@ -367,14 +397,14 @@ export default function Dashboard() {
               <button
                 key={card.label}
                 onClick={card.onClick}
-                className={`text-left bg-white rounded-lg border border-gray-200 p-4 sm:p-5 hover:border-gray-300 transition-colors ${
+                className={`text-left bg-white dark:bg-neutral-900 rounded-lg border border-gray-200 dark:border-neutral-800 p-4 sm:p-5 hover:border-gray-300 dark:hover:border-neutral-700 transition-colors ${
                   card.active ? `ring-2 ${card.ringColor} border-transparent` : ''
                 }`}
               >
                 <div className="flex items-start justify-between">
                   <div>
-                    <p className="text-xs sm:text-sm text-gray-500 font-medium">{card.label}</p>
-                    <p className="text-2xl sm:text-3xl font-bold text-gray-900 mt-1">{card.count}</p>
+                    <p className="text-xs sm:text-sm text-gray-500 dark:text-gray-400 font-medium">{card.label}</p>
+                    <p className="text-2xl sm:text-3xl font-bold text-gray-900 dark:text-gray-50 mt-1">{card.count}</p>
                   </div>
                   <div className={`p-2 rounded-lg ${card.iconBg}`}>
                     <Icon className="w-5 h-5" />
@@ -385,11 +415,11 @@ export default function Dashboard() {
           })}
         </div>
 
-        <div className="bg-white rounded-lg border border-gray-200 overflow-hidden">
-          <div className="px-4 sm:px-6 py-4 border-b border-gray-100 flex flex-col sm:flex-row sm:justify-between sm:items-center gap-3">
+        <div className="bg-white dark:bg-neutral-900 rounded-lg border border-gray-200 dark:border-neutral-800 overflow-hidden">
+          <div className="px-4 sm:px-6 py-4 border-b border-gray-100 dark:border-neutral-800 flex flex-col sm:flex-row sm:justify-between sm:items-center gap-3">
             <div>
-              <h2 className="text-lg font-bold text-gray-900">Issues</h2>
-              <p className="text-sm text-gray-500">{pagination.total} total</p>
+              <h2 className="text-lg font-bold text-gray-900 dark:text-gray-50">Issues</h2>
+              <p className="text-sm text-gray-500 dark:text-gray-400">{pagination.total} total</p>
             </div>
             <div className="flex items-center gap-2">
               <ExportMenu onExport={handleExport} disabled={issues.length === 0} />
@@ -406,7 +436,30 @@ export default function Dashboard() {
             </div>
           </div>
 
-          <div className="px-4 sm:px-6 py-4 border-b border-gray-100 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-3">
+          <div className="px-4 sm:px-6 py-4 border-b border-gray-100 dark:border-neutral-800 space-y-3">
+            <div className="flex items-center justify-between gap-3">
+              <p className="text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">Filters</p>
+              {hasActiveFilters && (
+                <button
+                  type="button"
+                  onClick={clearAllFilters}
+                  className="inline-flex items-center gap-1 text-xs font-medium text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300"
+                >
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    strokeWidth={2}
+                    stroke="currentColor"
+                    className="w-3.5 h-3.5"
+                  >
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M6 18 18 6M6 6l12 12" />
+                  </svg>
+                  Clear all filters
+                </button>
+              )}
+            </div>
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-3">
             <div className="relative">
               <SearchIcon className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
               <input
@@ -414,56 +467,85 @@ export default function Dashboard() {
                 placeholder="Search..."
                 value={search}
                 onChange={(e) => onSearchChange(e.target.value)}
-                className="w-full pl-9 pr-3 py-2 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-shadow shadow-sm"
+                className="w-full pl-9 pr-3 py-2 border border-gray-200 dark:border-neutral-700 bg-white dark:bg-neutral-800 text-gray-900 dark:text-gray-100 placeholder-gray-400 dark:placeholder-gray-500 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
               />
             </div>
-            <select
+            <Select
+              mode="multiple"
+              allowClear
+              size="large"
+              placeholder="Status"
               value={statusFilter}
-              onChange={(e) => onStatusChange(e.target.value)}
-              className={filterSelectClass}
-            >
-              <option value="">All Status</option>
-              <option value="Open">Open</option>
-              <option value="In Progress">In Progress</option>
-              <option value="Resolved">Resolved</option>
-            </select>
-            <select
+              onChange={onStatusChange}
+              maxTagCount="responsive"
+              filterOption={(input, option) =>
+                String(option?.label ?? '').toLowerCase().includes(input.toLowerCase())
+              }
+              options={[
+                { value: 'Open', label: 'Open' },
+                { value: 'In Progress', label: 'In Progress' },
+                { value: 'Resolved', label: 'Resolved' },
+              ]}
+              className="w-full"
+            />
+            <Select
+              mode="multiple"
+              allowClear
+              size="large"
+              placeholder="Priority"
               value={priorityFilter}
-              onChange={(e) => onPriorityChange(e.target.value)}
-              className={filterSelectClass}
-            >
-              <option value="">All Priority</option>
-              <option value="Low">Low</option>
-              <option value="Medium">Medium</option>
-              <option value="High">High</option>
-            </select>
-            <select
+              onChange={onPriorityChange}
+              maxTagCount="responsive"
+              filterOption={(input, option) =>
+                String(option?.label ?? '').toLowerCase().includes(input.toLowerCase())
+              }
+              options={[
+                { value: 'Low', label: 'Low' },
+                { value: 'Medium', label: 'Medium' },
+                { value: 'High', label: 'High' },
+              ]}
+              className="w-full"
+            />
+            <Select
+              mode="multiple"
+              allowClear
+              size="large"
+              placeholder="Severity"
               value={severityFilter}
-              onChange={(e) => onSeverityChange(e.target.value)}
-              className={filterSelectClass}
-            >
-              <option value="">All Severity</option>
-              <option value="Low">Low</option>
-              <option value="Medium">Medium</option>
-              <option value="High">High</option>
-              <option value="Critical">Critical</option>
-            </select>
-            <select
+              onChange={onSeverityChange}
+              maxTagCount="responsive"
+              filterOption={(input, option) =>
+                String(option?.label ?? '').toLowerCase().includes(input.toLowerCase())
+              }
+              options={[
+                { value: 'Low', label: 'Low' },
+                { value: 'Medium', label: 'Medium' },
+                { value: 'High', label: 'High' },
+                { value: 'Critical', label: 'Critical' },
+              ]}
+              className="w-full"
+            />
+            <Select
+              mode="multiple"
+              allowClear
+              size="large"
+              placeholder="Assignees"
               value={assigneeFilter}
-              onChange={(e) => onAssigneeChange(e.target.value)}
-              className={filterSelectClass}
-            >
-              <option value="">All Assignees</option>
-              <option value="me">My Issues</option>
-              <option value="unassigned">Unassigned</option>
-              {users
-                .filter((u) => u._id !== user?.id)
-                .map((u) => (
-                  <option key={u._id} value={u._id}>
-                    {u.name}
-                  </option>
-                ))}
-            </select>
+              onChange={onAssigneeChange}
+              maxTagCount="responsive"
+              filterOption={(input, option) =>
+                String(option?.label ?? '').toLowerCase().includes(input.toLowerCase())
+              }
+              options={[
+                { value: 'me', label: 'My Issues' },
+                { value: 'unassigned', label: 'Unassigned' },
+                ...users
+                  .filter((u) => u._id !== user?.id)
+                  .map((u) => ({ value: u._id, label: u.name })),
+              ]}
+              className="w-full"
+            />
+            </div>
           </div>
 
           <IssueList
@@ -483,8 +565,8 @@ export default function Dashboard() {
           />
 
           {pagination.pages > 1 && (
-            <div className="px-4 sm:px-6 py-4 border-t border-gray-100 flex items-center justify-between">
-              <p className="text-sm text-gray-500">
+            <div className="px-4 sm:px-6 py-4 border-t border-gray-100 dark:border-neutral-800 flex items-center justify-between">
+              <p className="text-sm text-gray-500 dark:text-gray-400">
                 Page {pagination.page} of {pagination.pages}
               </p>
               <div className="flex gap-1">
@@ -494,8 +576,8 @@ export default function Dashboard() {
                     onClick={() => setCurrentPage(page)}
                     className={`w-8 h-8 rounded-lg text-sm font-medium transition-colors ${
                       currentPage === page
-                        ? 'bg-blue-600 text-white shadow-sm'
-                        : 'bg-white text-gray-700 border border-gray-200 hover:bg-gray-50'
+                        ? 'bg-blue-600 text-white'
+                        : 'bg-white dark:bg-neutral-800 text-gray-700 dark:text-gray-200 border border-gray-200 dark:border-neutral-700 hover:bg-gray-50 dark:hover:bg-neutral-700'
                     }`}
                   >
                     {page}
@@ -574,6 +656,8 @@ export default function Dashboard() {
         onConfirm={confirm.onConfirm}
         onCancel={closeConfirm}
       />
+
+      <ScrollToTopButton />
     </div>
   );
 }

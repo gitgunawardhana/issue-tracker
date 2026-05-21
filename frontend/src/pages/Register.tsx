@@ -42,27 +42,27 @@ export default function Register() {
   };
 
   const inputClass =
-    'w-full px-3 py-2.5 border border-gray-200 rounded-lg text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-shadow shadow-sm';
+    'w-full px-3 py-2.5 border border-gray-200 dark:border-neutral-700 bg-white dark:bg-neutral-800 text-gray-900 dark:text-gray-100 placeholder-gray-400 dark:placeholder-gray-500 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500';
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4">
+    <div className="min-h-screen flex items-center justify-center bg-gray-50 dark:bg-neutral-950 py-12 px-4">
       <div className="max-w-md w-full">
-        <div className="bg-white rounded-lg border border-gray-200 p-8">
+        <div className="bg-white dark:bg-neutral-900 rounded-lg border border-gray-200 dark:border-neutral-800 p-8">
           <div className="flex flex-col items-center mb-6">
-            <img src="/logo.png" alt="Issue Tracker" className="w-32 h-32 object-contain mb-2" />
-            <h2 className="text-xl font-semibold text-gray-900">Create account</h2>
-            <p className="text-sm text-gray-500 mt-1">Join the Issue Tracker</p>
+            <img src="/logo.png" alt="Issue Tracker" className="w-32 h-32 object-contain mb-2 dark:invert dark:hue-rotate-180" />
+            <h2 className="text-xl font-semibold text-gray-900 dark:text-gray-50">Create account</h2>
+            <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">Join the Issue Tracker</p>
           </div>
 
           <form className="space-y-4" onSubmit={handleSubmit}>
             {error && (
-              <div className="rounded-lg bg-red-50 border border-red-200 p-3">
-                <p className="text-sm text-red-700">{error}</p>
+              <div className="rounded-lg bg-red-50 dark:bg-red-900/30 border border-red-200 dark:border-red-800 p-3">
+                <p className="text-sm text-red-700 dark:text-red-200">{error}</p>
               </div>
             )}
 
             <div>
-              <label htmlFor="name" className="block text-sm font-medium text-gray-700 mb-1.5">
+              <label htmlFor="name" className="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-1.5">
                 Full name
               </label>
               <input
@@ -77,7 +77,7 @@ export default function Register() {
             </div>
 
             <div>
-              <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-1.5">
+              <label htmlFor="email" className="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-1.5">
                 Email
               </label>
               <input
@@ -92,7 +92,7 @@ export default function Register() {
             </div>
 
             <div>
-              <label htmlFor="password" className="block text-sm font-medium text-gray-700 mb-1.5">
+              <label htmlFor="password" className="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-1.5">
                 Password
               </label>
               <input
@@ -107,7 +107,7 @@ export default function Register() {
             </div>
 
             <div>
-              <label htmlFor="confirmPassword" className="block text-sm font-medium text-gray-700 mb-1.5">
+              <label htmlFor="confirmPassword" className="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-1.5">
                 Confirm password
               </label>
               <input
@@ -129,12 +129,12 @@ export default function Register() {
               {isLoading ? 'Creating account...' : 'Create account'}
             </button>
 
-            <p className="text-center text-sm text-gray-500">
+            <p className="text-center text-sm text-gray-500 dark:text-gray-400">
               Already have an account?{' '}
               <button
                 type="button"
                 onClick={() => navigate('/login')}
-                className="font-medium text-blue-600 hover:text-blue-700"
+                className="font-medium text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300"
               >
                 Sign in
               </button>
