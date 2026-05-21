@@ -12,6 +12,7 @@ import Modal from '../components/Modal';
 import Avatar from '../components/Avatar';
 import ExportMenu from '../components/ExportMenu';
 import ScrollToTopButton from '../components/ScrollToTopButton';
+import Pagination from '../components/Pagination';
 import { Select } from 'antd';
 import {
   CircleOpenIcon,
@@ -27,6 +28,7 @@ import {
 import { useThemeStore } from '../store/themeStore';
 import type { Issue, UserSummary } from '../types';
 import { useNavigate } from 'react-router-dom';
+import { useQueryState, parseAsString, parseAsInteger, parseAsArrayOf } from 'nuqs';
 
 interface ConfirmState {
   isOpen: boolean;
@@ -45,6 +47,8 @@ const initialConfirmState: ConfirmState = {
   variant: 'danger',
   onConfirm: () => {},
 };
+
+const stringArray = parseAsArrayOf(parseAsString).withDefault([]);
 
 export default function Dashboard() {
   const navigate = useNavigate();
@@ -71,13 +75,18 @@ export default function Dashboard() {
   const viewingIssue = viewingIssueId
     ? issues.find((i) => i._id === viewingIssueId)
     : undefined;
-  const [search, setSearch] = useState('');
+
+  const [search, setSearch] = useQueryState('search', parseAsString.withDefault(''));
   const debouncedSearch = useDebounce(search, 400);
-  const [statusFilter, setStatusFilter] = useState<string[]>([]);
-  const [priorityFilter, setPriorityFilter] = useState<string[]>([]);
-  const [severityFilter, setSeverityFilter] = useState<string[]>([]);
-  const [assigneeFilter, setAssigneeFilter] = useState<string[]>([]);
-  const [currentPage, setCurrentPage] = useState(1);
+  const [statusFilter, setStatusFilter] = useQueryState('status', stringArray);
+  const [priorityFilter, setPriorityFilter] = useQueryState('priority', stringArray);
+  const [severityFilter, setSeverityFilter] = useQueryState('severity', stringArray);
+  const [assigneeFilter, setAssigneeFilter] = useQueryState('assignedTo', stringArray);
+  const [currentPage, setCurrentPage] = useQueryState(
+    'page',
+    parseAsInteger.withDefault(1)
+  );
+
   const [confirm, setConfirm] = useState<ConfirmState>(initialConfirmState);
 
   const closeConfirm = () => setConfirm(initialConfirmState);
@@ -125,11 +134,11 @@ export default function Dashboard() {
   }, [user, navigate]);
 
   useEffect(() => {
-    void fetchUsers();
+    fetchUsers();
   }, []);
 
   useEffect(() => {
-    void fetchIssues();
+    fetchIssues();
   }, [
     currentPage,
     debouncedSearch,
@@ -140,23 +149,23 @@ export default function Dashboard() {
   ]);
 
   const onSearchChange = (v: string) => {
-    setSearch(v);
+    setSearch(v || null);
     setCurrentPage(1);
   };
   const onStatusChange = (v: string[]) => {
-    setStatusFilter(v);
+    setStatusFilter(v.length ? v : null);
     setCurrentPage(1);
   };
   const onPriorityChange = (v: string[]) => {
-    setPriorityFilter(v);
+    setPriorityFilter(v.length ? v : null);
     setCurrentPage(1);
   };
   const onSeverityChange = (v: string[]) => {
-    setSeverityFilter(v);
+    setSeverityFilter(v.length ? v : null);
     setCurrentPage(1);
   };
   const onAssigneeChange = (v: string[]) => {
-    setAssigneeFilter(v);
+    setAssigneeFilter(v.length ? v : null);
     setCurrentPage(1);
   };
 
@@ -171,11 +180,11 @@ export default function Dashboard() {
     assigneeFilter.length > 0;
 
   const clearAllFilters = () => {
-    setSearch('');
-    setStatusFilter([]);
-    setPriorityFilter([]);
-    setSeverityFilter([]);
-    setAssigneeFilter([]);
+    setSearch(null);
+    setStatusFilter(null);
+    setPriorityFilter(null);
+    setSeverityFilter(null);
+    setAssigneeFilter(null);
     setCurrentPage(1);
   };
 
@@ -565,25 +574,15 @@ export default function Dashboard() {
           />
 
           {pagination.pages > 1 && (
-            <div className="px-4 sm:px-6 py-4 border-t border-gray-100 dark:border-neutral-800 flex items-center justify-between">
+            <div className="px-4 sm:px-6 py-4 border-t border-gray-100 dark:border-neutral-800 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
               <p className="text-sm text-gray-500 dark:text-gray-400">
                 Page {pagination.page} of {pagination.pages}
               </p>
-              <div className="flex gap-1">
-                {Array.from({ length: pagination.pages }, (_, i) => i + 1).map((page) => (
-                  <button
-                    key={page}
-                    onClick={() => setCurrentPage(page)}
-                    className={`w-8 h-8 rounded-lg text-sm font-medium transition-colors ${
-                      currentPage === page
-                        ? 'bg-blue-600 text-white'
-                        : 'bg-white dark:bg-neutral-800 text-gray-700 dark:text-gray-200 border border-gray-200 dark:border-neutral-700 hover:bg-gray-50 dark:hover:bg-neutral-700'
-                    }`}
-                  >
-                    {page}
-                  </button>
-                ))}
-              </div>
+              <Pagination
+                currentPage={currentPage}
+                totalPages={pagination.pages}
+                onPageChange={setCurrentPage}
+              />
             </div>
           )}
         </div>

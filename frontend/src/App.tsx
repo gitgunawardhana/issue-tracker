@@ -1,4 +1,5 @@
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
+import { NuqsAdapter } from 'nuqs/adapters/react-router/v7';
 import { ConfigProvider, theme as antdTheme } from 'antd';
 import { useAuthStore } from './store/authStore';
 import { useThemeStore } from './store/themeStore';
@@ -25,8 +26,9 @@ export default function App() {
       }}
     >
       <Router>
-        <ToastContainer />
-        <Routes>
+        <NuqsAdapter>
+          <ToastContainer />
+          <Routes>
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
           <Route
@@ -38,7 +40,8 @@ export default function App() {
             }
           />
           <Route path="*" element={<Navigate to={accessToken ? '/' : '/login'} />} />
-        </Routes>
+          </Routes>
+        </NuqsAdapter>
       </Router>
     </ConfigProvider>
   );
