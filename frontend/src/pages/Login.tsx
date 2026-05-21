@@ -3,6 +3,8 @@ import { useNavigate } from 'react-router-dom';
 import { useAuthStore } from '../store/authStore';
 import { useToastStore } from '../store/toastStore';
 import { authService } from '../services/api';
+import PasswordInput from '../components/PasswordInput';
+import AuthLayout from '../components/AuthLayout';
 
 export default function Login() {
   const [email, setEmail] = useState('');
@@ -37,73 +39,56 @@ export default function Login() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-50 dark:bg-neutral-950 py-12 px-4">
-      <div className="max-w-md w-full">
-        <div className="bg-white dark:bg-neutral-900 rounded-lg border border-gray-200 dark:border-neutral-800 p-8">
-          <div className="flex flex-col items-center mb-6">
-            <img src="/logo.png" alt="Issue Tracker" className="w-32 h-32 object-contain mb-2 dark:invert dark:hue-rotate-180" />
-            <h2 className="text-xl font-semibold text-gray-900 dark:text-gray-50">Welcome back</h2>
-            <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">Sign in to your account</p>
+    <AuthLayout>
+      <h1 className="text-2xl sm:text-3xl font-semibold text-center tracking-tight mb-8">
+        Welcome back
+      </h1>
+
+      <form className="space-y-3" onSubmit={handleSubmit}>
+        {error && (
+          <div className="rounded-2xl bg-red-50 dark:bg-red-900/30 border border-red-200 dark:border-red-800 px-4 py-2.5">
+            <p className="text-sm text-red-700 dark:text-red-200 text-center">{error}</p>
           </div>
+        )}
 
-          <form className="space-y-5" onSubmit={handleSubmit}>
-            {error && (
-              <div className="rounded-lg bg-red-50 dark:bg-red-900/30 border border-red-200 dark:border-red-800 p-3">
-                <p className="text-sm text-red-700 dark:text-red-200">{error}</p>
-              </div>
-            )}
+        <input
+          id="email"
+          type="email"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+          placeholder="Email address"
+          required
+          autoComplete="email"
+          className="w-full px-5 py-3 border border-gray-300 dark:border-neutral-700 bg-transparent text-gray-900 dark:text-gray-100 placeholder-gray-400 dark:placeholder-gray-500 rounded-full focus:outline-none focus:border-gray-900 dark:focus:border-gray-100 transition-colors"
+        />
 
-            <div>
-              <label htmlFor="email" className="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-1.5">
-                Email
-              </label>
-              <input
-                id="email"
-                type="email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                placeholder="you@example.com"
-                required
-                className="w-full px-3 py-2.5 border border-gray-200 dark:border-neutral-700 bg-white dark:bg-neutral-800 text-gray-900 dark:text-gray-100 placeholder-gray-400 dark:placeholder-gray-500 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-              />
-            </div>
+        <PasswordInput
+          id="password"
+          value={password}
+          onChange={setPassword}
+          placeholder="Password"
+          required
+        />
 
-            <div>
-              <label htmlFor="password" className="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-1.5">
-                Password
-              </label>
-              <input
-                id="password"
-                type="password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                placeholder="••••••••"
-                required
-                className="w-full px-3 py-2.5 border border-gray-200 dark:border-neutral-700 bg-white dark:bg-neutral-800 text-gray-900 dark:text-gray-100 placeholder-gray-400 dark:placeholder-gray-500 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-              />
-            </div>
+        <button
+          type="submit"
+          disabled={isLoading}
+          className="w-full bg-gray-900 dark:bg-white text-white dark:text-gray-900 py-3 px-4 rounded-full hover:bg-gray-800 dark:hover:bg-gray-100 font-medium disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+        >
+          {isLoading ? 'Signing in...' : 'Continue'}
+        </button>
+      </form>
 
-            <button
-              type="submit"
-              disabled={isLoading}
-              className="w-full bg-blue-600 text-white py-2.5 px-4 rounded-lg hover:bg-blue-700 font-medium disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
-            >
-              {isLoading ? 'Signing in...' : 'Sign in'}
-            </button>
-
-            <p className="text-center text-sm text-gray-500 dark:text-gray-400">
-              Don't have an account?{' '}
-              <button
-                type="button"
-                onClick={() => navigate('/register')}
-                className="font-medium text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300"
-              >
-                Create one
-              </button>
-            </p>
-          </form>
-        </div>
-      </div>
-    </div>
+      <p className="text-center text-sm text-gray-500 dark:text-gray-400 mt-6">
+        Don't have an account?{' '}
+        <button
+          type="button"
+          onClick={() => navigate('/register')}
+          className="font-medium text-gray-900 dark:text-gray-100 underline underline-offset-2 hover:no-underline"
+        >
+          Sign up
+        </button>
+      </p>
+    </AuthLayout>
   );
 }

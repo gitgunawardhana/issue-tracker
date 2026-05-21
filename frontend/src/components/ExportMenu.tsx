@@ -26,7 +26,7 @@ export default function ExportMenu({ onExport, disabled }: ExportMenuProps) {
         type="button"
         disabled={disabled}
         onClick={() => setOpen((o) => !o)}
-        className="inline-flex items-center gap-1.5 px-3 py-2 rounded-lg border border-gray-200 dark:border-neutral-700 bg-white dark:bg-neutral-800 text-sm font-medium text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-neutral-700 disabled:opacity-50 transition-colors"
+        className="inline-flex items-center gap-1.5 px-4 py-2 rounded-full border border-gray-300 dark:border-neutral-700 text-sm font-medium text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-neutral-800 disabled:opacity-50 transition-colors"
       >
         <svg
           xmlns="http://www.w3.org/2000/svg"
@@ -56,7 +56,7 @@ export default function ExportMenu({ onExport, disabled }: ExportMenuProps) {
       </button>
 
       {open && (
-        <div className="absolute left-0 sm:left-auto sm:right-0 mt-1 w-44 bg-white dark:bg-neutral-800 border border-gray-200 dark:border-neutral-700 rounded-lg shadow-md py-1 z-20">
+        <div className="absolute left-0 sm:left-auto sm:right-0 mt-2 w-44 bg-white dark:bg-neutral-900 border border-gray-200 dark:border-neutral-800 rounded-2xl shadow-lg py-1 z-50">
           <button
             type="button"
             onClick={() => {

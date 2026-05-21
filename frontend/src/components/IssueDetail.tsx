@@ -39,47 +39,38 @@ export function IssueDetailActions({
   const isReporter = currentUserId && reporterId === currentUserId;
   const isAssignedToMe = currentUserId && assigneeId === currentUserId;
 
+  const ghostBtn =
+    'inline-flex items-center gap-1.5 px-4 py-2 rounded-full text-sm font-medium border border-gray-300 dark:border-neutral-700 text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-neutral-800 transition-colors';
+
   return (
     <div className="flex flex-wrap gap-2">
       {!assigneeId && (
-        <button
-          onClick={() => onAssignToMe(issue._id)}
-          className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-md text-sm font-medium text-purple-700 bg-purple-50 hover:bg-purple-100 transition-colors"
-        >
+        <button onClick={() => onAssignToMe(issue._id)} className={ghostBtn}>
           <UserPlusIcon className="w-4 h-4" />
           Take
         </button>
       )}
       {isAssignedToMe && (
-        <button
-          onClick={() => onUnassign(issue._id)}
-          className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-md text-sm font-medium text-orange-700 bg-orange-50 hover:bg-orange-100 transition-colors"
-        >
+        <button onClick={() => onUnassign(issue._id)} className={ghostBtn}>
           <UserMinusIcon className="w-4 h-4" />
           Untake
         </button>
       )}
       {issue.status !== 'Resolved' && (
-        <button
-          onClick={() => onResolve(issue._id)}
-          className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-md text-sm font-medium text-emerald-700 bg-emerald-50 hover:bg-emerald-100 transition-colors"
-        >
+        <button onClick={() => onResolve(issue._id)} className={ghostBtn}>
           <CheckCircleIcon className="w-4 h-4" />
           Resolve
         </button>
       )}
       {isReporter && (
         <>
-          <button
-            onClick={() => onEdit(issue)}
-            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-md text-sm font-medium text-blue-700 bg-blue-50 hover:bg-blue-100 transition-colors"
-          >
+          <button onClick={() => onEdit(issue)} className={ghostBtn}>
             <EditIcon className="w-4 h-4" />
             Edit
           </button>
           <button
             onClick={() => onDelete(issue._id)}
-            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-md text-sm font-medium text-rose-700 bg-rose-50 hover:bg-rose-100 transition-colors"
+            className="inline-flex items-center gap-1.5 px-4 py-2 rounded-full text-sm font-medium border border-rose-300 dark:border-rose-900 text-rose-600 dark:text-rose-400 hover:bg-rose-50 dark:hover:bg-rose-900/20 transition-colors"
           >
             <TrashIcon className="w-4 h-4" />
             Delete
@@ -88,7 +79,7 @@ export function IssueDetailActions({
       )}
       <button
         onClick={onClose}
-        className="ml-auto inline-flex items-center gap-1.5 px-3 py-1.5 rounded-md text-sm font-medium text-gray-700 bg-gray-100 hover:bg-gray-200 transition-colors"
+        className="ml-auto inline-flex items-center gap-1.5 px-5 py-2 rounded-full text-sm font-medium bg-gray-900 dark:bg-white text-white dark:text-gray-900 hover:bg-gray-800 dark:hover:bg-gray-100 transition-colors"
       >
         Close
       </button>

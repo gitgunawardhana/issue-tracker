@@ -120,7 +120,7 @@ export default function ScrollToTopButton() {
         touchAction: 'none',
         userSelect: 'none',
       }}
-      className={`fixed z-40 rounded-full bg-blue-600 hover:bg-blue-700 text-white shadow-lg flex items-center justify-center cursor-grab active:cursor-grabbing ${
+      className={`fixed z-40 rounded-full bg-gray-900 hover:bg-gray-800 text-white dark:bg-white dark:hover:bg-gray-100 dark:text-gray-900 shadow-lg flex items-center justify-center cursor-grab active:cursor-grabbing ${
         visible ? 'opacity-100' : 'opacity-0 pointer-events-none'
       }`}
     >

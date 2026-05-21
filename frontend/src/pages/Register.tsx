@@ -2,6 +2,54 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { authService } from '../services/api';
 import { useToastStore } from '../store/toastStore';
+import PasswordInput from '../components/PasswordInput';
+import AuthLayout from '../components/AuthLayout';
+
+const CheckIcon = () => (
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    fill="none"
+    viewBox="0 0 24 24"
+    strokeWidth={2.5}
+    stroke="currentColor"
+    className="w-3.5 h-3.5"
+  >
+    <path strokeLinecap="round" strokeLinejoin="round" d="m4.5 12.75 6 6 9-13.5" />
+  </svg>
+);
+
+const XMarkIcon = () => (
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    fill="none"
+    viewBox="0 0 24 24"
+    strokeWidth={2.5}
+    stroke="currentColor"
+    className="w-3.5 h-3.5"
+  >
+    <path strokeLinecap="round" strokeLinejoin="round" d="M6 18 18 6M6 6l12 12" />
+  </svg>
+);
+
+const DotIcon = () => (
+  <span className="w-1.5 h-1.5 rounded-full bg-current opacity-50" />
+);
+
+interface PasswordCriterion {
+  label: string;
+  test: (value: string) => boolean;
+}
+
+const passwordCriteria: PasswordCriterion[] = [
+  { label: 'At least 6 characters', test: (v) => v.length >= 6 },
+  { label: 'Contains a lowercase letter', test: (v) => /[a-z]/.test(v) },
+  { label: 'Contains an uppercase letter', test: (v) => /[A-Z]/.test(v) },
+  { label: 'Contains a number', test: (v) => /\d/.test(v) },
+  { label: 'Contains a symbol (!@#$...)', test: (v) => /[^A-Za-z0-9]/.test(v) },
+];
+
+const inputClass =
+  'w-full px-5 py-3 border border-gray-300 dark:border-neutral-700 bg-transparent text-gray-900 dark:text-gray-100 placeholder-gray-400 dark:placeholder-gray-500 rounded-full focus:outline-none focus:border-gray-900 dark:focus:border-gray-100 transition-colors';
 
 export default function Register() {
   const [name, setName] = useState('');
@@ -41,107 +89,116 @@ export default function Register() {
     }
   };
 
-  const inputClass =
-    'w-full px-3 py-2.5 border border-gray-200 dark:border-neutral-700 bg-white dark:bg-neutral-800 text-gray-900 dark:text-gray-100 placeholder-gray-400 dark:placeholder-gray-500 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500';
-
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-50 dark:bg-neutral-950 py-12 px-4">
-      <div className="max-w-md w-full">
-        <div className="bg-white dark:bg-neutral-900 rounded-lg border border-gray-200 dark:border-neutral-800 p-8">
-          <div className="flex flex-col items-center mb-6">
-            <img src="/logo.png" alt="Issue Tracker" className="w-32 h-32 object-contain mb-2 dark:invert dark:hue-rotate-180" />
-            <h2 className="text-xl font-semibold text-gray-900 dark:text-gray-50">Create account</h2>
-            <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">Join the Issue Tracker</p>
+    <AuthLayout>
+      <h1 className="text-2xl sm:text-3xl font-semibold text-center tracking-tight mb-8">
+        Create your account
+      </h1>
+
+      <form className="space-y-3" onSubmit={handleSubmit}>
+        {error && (
+          <div className="rounded-2xl bg-red-50 dark:bg-red-900/30 border border-red-200 dark:border-red-800 px-4 py-2.5">
+            <p className="text-sm text-red-700 dark:text-red-200 text-center">{error}</p>
           </div>
+        )}
 
-          <form className="space-y-4" onSubmit={handleSubmit}>
-            {error && (
-              <div className="rounded-lg bg-red-50 dark:bg-red-900/30 border border-red-200 dark:border-red-800 p-3">
-                <p className="text-sm text-red-700 dark:text-red-200">{error}</p>
-              </div>
-            )}
+        <input
+          id="name"
+          type="text"
+          value={name}
+          onChange={(e) => setName(e.target.value)}
+          placeholder="Full name"
+          required
+          autoComplete="name"
+          className={inputClass}
+        />
 
-            <div>
-              <label htmlFor="name" className="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-1.5">
-                Full name
-              </label>
-              <input
-                id="name"
-                type="text"
-                value={name}
-                onChange={(e) => setName(e.target.value)}
-                placeholder="John Doe"
-                required
-                className={inputClass}
-              />
-            </div>
+        <input
+          id="email"
+          type="email"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+          placeholder="Email address"
+          required
+          autoComplete="email"
+          className={inputClass}
+        />
 
-            <div>
-              <label htmlFor="email" className="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-1.5">
-                Email
-              </label>
-              <input
-                id="email"
-                type="email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                placeholder="you@example.com"
-                required
-                className={inputClass}
-              />
-            </div>
-
-            <div>
-              <label htmlFor="password" className="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-1.5">
-                Password
-              </label>
-              <input
-                id="password"
-                type="password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                placeholder="At least 6 characters"
-                required
-                className={inputClass}
-              />
-            </div>
-
-            <div>
-              <label htmlFor="confirmPassword" className="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-1.5">
-                Confirm password
-              </label>
-              <input
-                id="confirmPassword"
-                type="password"
-                value={confirmPassword}
-                onChange={(e) => setConfirmPassword(e.target.value)}
-                placeholder="Repeat password"
-                required
-                className={inputClass}
-              />
-            </div>
-
-            <button
-              type="submit"
-              disabled={isLoading}
-              className="w-full bg-blue-600 text-white py-2.5 px-4 rounded-lg hover:bg-blue-700 font-medium disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
-            >
-              {isLoading ? 'Creating account...' : 'Create account'}
-            </button>
-
-            <p className="text-center text-sm text-gray-500 dark:text-gray-400">
-              Already have an account?{' '}
-              <button
-                type="button"
-                onClick={() => navigate('/login')}
-                className="font-medium text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300"
-              >
-                Sign in
-              </button>
-            </p>
-          </form>
+        <div>
+          <PasswordInput
+            id="password"
+            value={password}
+            onChange={setPassword}
+            placeholder="Password"
+            required
+          />
+          {password.length > 0 && (
+            <ul className="mt-3 px-2 space-y-1">
+              {passwordCriteria.map((c) => {
+                const passed = c.test(password);
+                return (
+                  <li
+                    key={c.label}
+                    className={`flex items-center gap-1.5 text-xs transition-colors ${
+                      passed
+                        ? 'text-emerald-600 dark:text-emerald-400'
+                        : 'text-gray-500 dark:text-gray-500'
+                    }`}
+                  >
+                    <span className="inline-flex w-4 h-4 items-center justify-center">
+                      {passed ? <CheckIcon /> : <DotIcon />}
+                    </span>
+                    {c.label}
+                  </li>
+                );
+              })}
+            </ul>
+          )}
         </div>
-      </div>
-    </div>
+
+        <div>
+          <PasswordInput
+            id="confirmPassword"
+            value={confirmPassword}
+            onChange={setConfirmPassword}
+            placeholder="Confirm password"
+            required
+          />
+          {confirmPassword.length > 0 && (
+            <p
+              className={`mt-2 px-2 text-xs flex items-center gap-1.5 ${
+                password === confirmPassword
+                  ? 'text-emerald-600 dark:text-emerald-400'
+                  : 'text-rose-600 dark:text-rose-400'
+              }`}
+            >
+              <span className="inline-flex w-4 h-4 items-center justify-center">
+                {password === confirmPassword ? <CheckIcon /> : <XMarkIcon />}
+              </span>
+              {password === confirmPassword ? 'Passwords match' : 'Passwords do not match'}
+            </p>
+          )}
+        </div>
+
+        <button
+          type="submit"
+          disabled={isLoading}
+          className="w-full bg-gray-900 dark:bg-white text-white dark:text-gray-900 py-3 px-4 rounded-full hover:bg-gray-800 dark:hover:bg-gray-100 font-medium disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+        >
+          {isLoading ? 'Creating account...' : 'Continue'}
+        </button>
+      </form>
+
+      <p className="text-center text-sm text-gray-500 dark:text-gray-400 mt-6">
+        Already have an account?{' '}
+        <button
+          type="button"
+          onClick={() => navigate('/login')}
+          className="font-medium text-gray-900 dark:text-gray-100 underline underline-offset-2 hover:no-underline"
+        >
+          Sign in
+        </button>
+      </p>
+    </AuthLayout>
   );
 }
