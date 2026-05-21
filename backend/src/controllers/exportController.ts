@@ -174,7 +174,7 @@ export const exportIssues = async (req: Request, res: Response) => {
       doc
         .save()
         .rect(0, 0, doc.page.width, headerHeight)
-        .fillColor('#2563eb')
+        .fillColor('#0a0a0a')
         .fill()
         .restore();
 
@@ -189,7 +189,7 @@ export const exportIssues = async (req: Request, res: Response) => {
       doc
         .font('Helvetica')
         .fontSize(10)
-        .fillColor('#dbeafe')
+        .fillColor('#a3a3a3')
         .text(
           `Generated on ${new Date().toLocaleString()}  •  Total issues: ${issues.length}`,
           innerPaddingX,
