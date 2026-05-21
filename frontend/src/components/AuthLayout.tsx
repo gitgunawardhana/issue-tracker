@@ -4,7 +4,7 @@ interface AuthLayoutProps {
 
 export default function AuthLayout({ children }: AuthLayoutProps) {
   return (
-    <div className="min-h-screen flex flex-col bg-white dark:bg-neutral-950 text-gray-900 dark:text-gray-50">
+    <div className="min-h-dvh flex flex-col bg-white dark:bg-neutral-950 text-gray-900 dark:text-gray-50">
       <header className="px-6 sm:px-10 py-5">
         <div className="inline-flex items-center gap-2">
           <img
