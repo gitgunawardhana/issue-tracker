@@ -42,6 +42,10 @@ const issueSchema = new Schema<IssueDocument>(
       ref: 'User',
       default: null,
     },
+    resolutionNote: {
+      type: String,
+      default: '',
+    },
   },
   { timestamps: true }
 );

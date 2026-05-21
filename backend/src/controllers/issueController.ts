@@ -261,7 +261,7 @@ export const deleteIssue = async (req: Request, res: Response) => {
 
 export const updateIssueStatus = async (req: Request, res: Response) => {
   try {
-    const { status } = req.body;
+    const { status, note } = req.body;
 
     if (!['Open', 'In Progress', 'Resolved'].includes(status)) {
       return res.status(400).json({
@@ -270,9 +270,14 @@ export const updateIssueStatus = async (req: Request, res: Response) => {
       });
     }
 
+    const update: Record<string, unknown> = { status };
+    if (status === 'Resolved' && typeof note === 'string') {
+      update.resolutionNote = note.trim();
+    }
+
     const issue = await IssueModel.findByIdAndUpdate(
       req.params.id,
-      { status },
+      update,
       { new: true }
     ).populate(POPULATE_FIELDS);
 

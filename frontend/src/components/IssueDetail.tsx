@@ -159,6 +159,17 @@ export default function IssueDetail({ issue, currentUserId }: IssueDetailProps) 
         </p>
       </div>
 
+      {issue.status === 'Resolved' && issue.resolutionNote && (
+        <div>
+          <h4 className="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-2">
+            Resolution note
+          </h4>
+          <p className="text-sm text-gray-700 dark:text-gray-200 whitespace-pre-wrap break-words bg-emerald-50 dark:bg-emerald-900/20 border border-emerald-200 dark:border-emerald-800 rounded-lg p-4">
+            {issue.resolutionNote}
+          </p>
+        </div>
+      )}
+
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
         <div>
           <h4 className="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-2">

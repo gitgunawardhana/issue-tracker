@@ -19,6 +19,7 @@ export interface Issue {
   severity: 'Low' | 'Medium' | 'High' | 'Critical';
   createdBy: IssueCreator | string;
   assignedTo?: IssueCreator | string | null;
+  resolutionNote?: string;
   createdAt: string;
   updatedAt: string;
 }
