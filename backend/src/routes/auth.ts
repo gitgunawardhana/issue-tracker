@@ -1,4 +1,4 @@
-import { Router, Request, Response } from 'express';
+import { Router, Request, Response, CookieOptions } from 'express';
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 import { UserModel } from '../models/User';
@@ -8,11 +8,25 @@ const router = Router();
 
 const ACCESS_EXPIRES = '15m';
 const REFRESH_EXPIRES = '7d';
+const REFRESH_COOKIE_NAME = 'refreshToken';
 
 const getAccessSecret = () =>
   process.env.JWT_SECRET || 'access-secret-change-me';
 const getRefreshSecret = () =>
   process.env.REFRESH_TOKEN_SECRET || 'refresh-secret-change-me';
+
+const isProd = () => process.env.NODE_ENV === 'production';
+
+const refreshCookieOptions = (): CookieOptions => {
+  const crossSite = (process.env.CROSS_SITE_COOKIES || '').toLowerCase() === 'true';
+  return {
+    httpOnly: true,
+    secure: isProd(),
+    sameSite: crossSite ? 'none' : 'lax',
+    path: '/api/auth',
+    maxAge: 7 * 24 * 60 * 60 * 1000,
+  };
+};
 
 const generateTokens = (userId: unknown, email: string) => {
   const accessToken = jwt.sign({ userId, email, type: 'access' }, getAccessSecret(), {
@@ -33,10 +47,6 @@ const registerSchema = z.object({
 const loginSchema = z.object({
   email: z.string().email('Invalid email'),
   password: z.string().min(1, 'Password is required'),
-});
-
-const refreshSchema = z.object({
-  refreshToken: z.string().min(1, 'Refresh token is required'),
 });
 
 router.post('/register', async (req: Request, res: Response) => {
@@ -61,13 +71,7 @@ router.post('/register', async (req: Request, res: Response) => {
     }
 
     const hashedPassword = await bcrypt.hash(password, 10);
-
-    const user = new UserModel({
-      email,
-      password: hashedPassword,
-      name,
-    });
-
+    const user = new UserModel({ email, password: hashedPassword, name });
     await user.save();
 
     res.status(201).json({
@@ -115,12 +119,13 @@ router.post('/login', async (req: Request, res: Response) => {
 
     const { accessToken, refreshToken } = generateTokens(user._id, user.email);
 
+    res.cookie(REFRESH_COOKIE_NAME, refreshToken, refreshCookieOptions());
+
     res.json({
       success: true,
       message: 'Login successful',
       data: {
         accessToken,
-        refreshToken,
         user: { id: user._id, email: user.email, name: user.name },
       },
     });
@@ -135,20 +140,19 @@ router.post('/login', async (req: Request, res: Response) => {
 
 router.post('/refresh', async (req: Request, res: Response) => {
   try {
-    const validation = refreshSchema.safeParse(req.body);
-    if (!validation.success) {
-      return res.status(400).json({
+    const refreshToken = req.cookies?.[REFRESH_COOKIE_NAME];
+    if (!refreshToken) {
+      return res.status(401).json({
         success: false,
-        message: 'Refresh token required',
+        message: 'No refresh token',
       });
     }
-
-    const { refreshToken } = validation.data;
 
     let decoded: { userId: string; email: string; type: string };
     try {
       decoded = jwt.verify(refreshToken, getRefreshSecret()) as typeof decoded;
     } catch {
+      res.clearCookie(REFRESH_COOKIE_NAME, refreshCookieOptions());
       return res.status(401).json({
         success: false,
         message: 'Invalid or expired refresh token',
@@ -172,10 +176,12 @@ router.post('/refresh', async (req: Request, res: Response) => {
 
     const tokens = generateTokens(user._id, user.email);
 
+    res.cookie(REFRESH_COOKIE_NAME, tokens.refreshToken, refreshCookieOptions());
+
     res.json({
       success: true,
       message: 'Token refreshed',
-      data: tokens,
+      data: { accessToken: tokens.accessToken },
     });
   } catch (error) {
     res.status(500).json({
@@ -184,6 +190,11 @@ router.post('/refresh', async (req: Request, res: Response) => {
       error: (error as Error).message,
     });
   }
+});
+
+router.post('/logout', async (_req: Request, res: Response) => {
+  res.clearCookie(REFRESH_COOKIE_NAME, refreshCookieOptions());
+  res.json({ success: true, message: 'Logged out' });
 });
 
 export default router;

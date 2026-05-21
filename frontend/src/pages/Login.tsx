@@ -10,7 +10,7 @@ export default function Login() {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState('');
   const navigate = useNavigate();
-  const { setUser, setTokens } = useAuthStore();
+  const { setUser, setAccessToken } = useAuthStore();
   const { showToast } = useToastStore();
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -21,10 +21,7 @@ export default function Login() {
     try {
       const result = await authService.login(email, password);
       if (result.success && result.data) {
-        setTokens({
-          accessToken: result.data.accessToken,
-          refreshToken: result.data.refreshToken,
-        });
+        setAccessToken(result.data.accessToken);
         setUser(result.data.user);
         showToast(`Welcome back, ${result.data.user.name}!`, 'success');
         navigate('/');

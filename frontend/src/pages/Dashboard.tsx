@@ -3,7 +3,7 @@ import { useAuthStore } from '../store/authStore';
 import { useIssueStore } from '../store/issueStore';
 import { useToastStore } from '../store/toastStore';
 import { useDebounce } from '../hooks/useDebounce';
-import { issueService, userService } from '../services/api';
+import { issueService, userService, authService } from '../services/api';
 import IssueForm, { IssueFormActions } from '../components/IssueForm';
 import IssueList from '../components/IssueList';
 import IssueDetail, { IssueDetailActions } from '../components/IssueDetail';
@@ -310,7 +310,8 @@ export default function Dashboard() {
     }
   };
 
-  const handleLogout = () => {
+  const handleLogout = async () => {
+    await authService.logout();
     logout();
     navigate('/login');
   };

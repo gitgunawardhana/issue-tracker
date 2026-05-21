@@ -9,6 +9,7 @@ const apiClient: AxiosInstance = axios.create({
   headers: {
     'Content-Type': 'application/json',
   },
+  withCredentials: true,
 });
 
 apiClient.interceptors.request.use((config) => {
@@ -29,7 +30,6 @@ const onRefreshed = (token: string | null) => {
 
 const handleAuthFailure = () => {
   localStorage.removeItem('accessToken');
-  localStorage.removeItem('refreshToken');
   localStorage.removeItem('user');
   if (window.location.pathname !== '/login') {
     window.location.href = '/login';
@@ -45,12 +45,6 @@ apiClient.interceptors.response.use(
     const isAuthEndpoint = originalRequest.url?.includes('/auth/');
 
     if (!isUnauthorized || isAuthEndpoint || originalRequest._retry) {
-      return Promise.reject(error);
-    }
-
-    const refreshToken = localStorage.getItem('refreshToken');
-    if (!refreshToken) {
-      handleAuthFailure();
       return Promise.reject(error);
     }
 
@@ -73,16 +67,17 @@ apiClient.interceptors.response.use(
     isRefreshing = true;
 
     try {
-      const { data } = await axios.post<
-        ApiResponse<{ accessToken: string; refreshToken: string }>
-      >(`${API_BASE_URL}/auth/refresh`, { refreshToken });
+      const { data } = await axios.post<ApiResponse<{ accessToken: string }>>(
+        `${API_BASE_URL}/auth/refresh`,
+        {},
+        { withCredentials: true }
+      );
 
       if (!data.success || !data.data) {
         throw new Error('Refresh failed');
       }
 
       localStorage.setItem('accessToken', data.data.accessToken);
-      localStorage.setItem('refreshToken', data.data.refreshToken);
 
       onRefreshed(data.data.accessToken);
 
@@ -111,9 +106,17 @@ export const authService = {
 
   login: async (email: string, password: string) => {
     const response = await apiClient.post<
-      ApiResponse<{ accessToken: string; refreshToken: string; user: User }>
+      ApiResponse<{ accessToken: string; user: User }>
     >('/auth/login', { email, password });
     return response.data;
+  },
+
+  logout: async () => {
+    try {
+      await apiClient.post('/auth/logout');
+    } catch {
+      // ignore — we still want to clear local state
+    }
   },
 };
 
