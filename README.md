@@ -1,276 +1,336 @@
-# Issue Tracker Application
+# Issue Tracker
 
-A full-stack web application for managing issues with CRUD operations, user authentication, and advanced filtering capabilities.
+A full-stack issue tracker with CRUD operations, multi-user collaboration, JWT authentication with refresh tokens, and a polished minimal UI.
 
-**Tech Stack:**
-- Frontend: React 18 + Vite + TypeScript + Tailwind CSS + Zustand
-- Backend: Express.js + TypeScript + MongoDB + Mongoose
-- Authentication: JWT + bcrypt
+**Live demo:** _(set after deploy)_
+- Frontend: <https://issue-tracker-puce-nine.vercel.app/>
+- Backend: <https://issue-tracker-ofq7.onrender.com>
+
+---
+
+## Tech Stack
+
+### Frontend
+- **React 19** + **Vite** + **TypeScript**
+- **Tailwind CSS v4** (CSS-first config, class-based dark mode)
+- **Ant Design v6** (multi-select dropdowns, inputs)
+- **Zustand** — state management (auth, theme, toasts, issues)
+- **nuqs** — URL-synced filter state (search, page, filters in querystring)
+- **use-debounce** — debounced search input
+- **React Router v7** + **NuqsAdapter**
+- **Axios** with refresh-token interceptor
+
+### Backend
+- **Node.js** + **Express 5** + **TypeScript**
+- **MongoDB** + **Mongoose**
+- **JWT** access tokens (15 min) + **httpOnly refresh-token cookies** (7 days)
+- **bcryptjs** password hashing
+- **Zod** request validation
+- **PDFKit** for PDF exports
+- **cookie-parser** + CORS with credentials
+
+---
 
 ## Features
 
-### Core Features
-- ✅ User registration and login with secure password hashing
-- ✅ Create, read, update, and delete issues
-- ✅ View issues with status, priority, and severity indicators
-- ✅ Display issue counts by status (Open, In Progress, Resolved)
-- ✅ Search and filter issues by title, priority, severity, and status
-- ✅ Pagination support
-- ✅ Update issue status directly from the list
-- ✅ Responsive design with Tailwind CSS
+### Authentication & Authorization
+- Register / login with email + password
+- bcrypt password hashing (salt rounds = 10)
+- **Dual-token JWT**: short-lived access token in localStorage + long-lived refresh token in httpOnly cookie
+- Axios interceptor auto-refreshes access tokens on 401
+- Concurrent-request queue prevents race conditions during refresh
+- Auto-logout on refresh failure
+- Show / hide password toggle with real-time validation criteria (length, upper/lower case, number, symbol)
+- Confirm-password match indicator
 
-### Advanced Features
-- ✅ JWT-based authentication
-- ✅ Protected routes
-- ✅ Real-time status counts
-- ✅ Error handling and validation
-- ✅ TypeScript for type safety
-- ✅ Zustand for state management
-- ✅ Confirmation dialogs for destructive actions
+### Issue Management (CRUD)
+- Create / read / update / delete issues
+- Fields: title, description, priority (Low/Medium/High), severity (Low/Medium/High/Critical), status (Open/In Progress/Resolved), reporter, assignee
+- **Reporter-only edit/delete** — authorization checked client and server side
+- **Take / Untake assignment** — anyone can assign to themselves
+- **Mark as Resolved** with optional resolution note saved with the issue
+
+### Dashboard
+- Stat cards (Open, In Progress, Resolved, Assigned to Me) — clickable to filter
+- Color-coded badges for status, priority, severity (with dark-mode variants)
+- Responsive table (desktop) ↔ card list (mobile)
+- Avatar component with deterministic colors based on name
+- Empty / loading skeleton states
+
+### Search, Filter & Pagination
+- Debounced search (400 ms) by title + description
+- Multi-select filters: Status, Priority, Severity, Assignees (with search inside Assignees)
+- "My issues" / "Unassigned" pseudo-options for assignee filter
+- Clear-all-filters button shown when any filter active
+- **URL-synced state** — filters and pagination preserved on refresh and shareable via link
+- Smart pagination with ellipsis (`< 1 … 4 5 6 … 10 >`)
+
+### Export
+- Export filtered list as **PDF** (PDFKit, server-side) or **JSON**
+- Loading spinner on export button
+- Filters applied to export — only matching issues are exported
+
+### UX & Theming
+- **Dark mode** toggle (sun/moon) — persisted in localStorage
+- Class-based theming via Tailwind v4 `@custom-variant`
+- Ant Design dark algorithm synced with theme store
+- Toast notifications (success/error/info) with slide-in animation
+- Modal dialogs with backdrop blur, click-outside close, Esc key handling, sticky footer for action buttons
+- Sticky navbar and filter bar
+- Draggable scroll-to-top button (snaps to bottom-left or bottom-right corner)
+- Logo in monochrome (auto-inverts in dark mode)
+
+---
 
 ## Project Structure
 
 ```
 issue-tracker/
-├── frontend/              # React + Vite frontend
+├── backend/
 │   ├── src/
-│   │   ├── pages/        # Login, Register, Dashboard
-│   │   ├── components/   # IssueForm, IssueList
-│   │   ├── store/        # Zustand stores
-│   │   ├── services/     # API client
-│   │   ├── types/        # TypeScript types
-│   │   └── App.tsx
+│   │   ├── controllers/      # issueController, exportController
+│   │   ├── middleware/       # authenticateToken (JWT verify)
+│   │   ├── models/           # User, Issue (Mongoose schemas)
+│   │   ├── routes/           # auth, issues, users
+│   │   ├── types/            # shared TS types
+│   │   └── server.ts         # entry point
+│   ├── .env.example
+│   ├── tsconfig.json
 │   └── package.json
-├── backend/               # Express backend
+├── frontend/
+│   ├── public/
+│   │   └── logo.png
 │   ├── src/
-│   │   ├── models/       # User, Issue schemas
-│   │   ├── routes/       # Auth, Issues routes
-│   │   ├── controllers/  # Business logic
-│   │   ├── middleware/   # Auth middleware
-│   │   └── server.ts
+│   │   ├── components/       # Modal, ConfirmDialog, ResolveDialog,
+│   │   │                     # Avatar, PasswordInput, IssueForm,
+│   │   │                     # IssueList, IssueDetail, Pagination,
+│   │   │                     # ExportMenu, ScrollToTopButton,
+│   │   │                     # ToastContainer, AuthLayout, Icons
+│   │   ├── pages/            # Login, Register, Dashboard
+│   │   ├── services/         # api.ts (axios + interceptors)
+│   │   ├── store/            # authStore, themeStore, toastStore, issueStore
+│   │   ├── types/            # shared TS types
+│   │   ├── App.tsx
+│   │   └── main.tsx
+│   ├── .env.example
+│   ├── index.html
+│   ├── vercel.json           # SPA rewrites for /login, /register, etc.
+│   ├── tsconfig.app.json
 │   └── package.json
 ├── README.md
 └── .gitignore
 ```
 
+---
+
 ## Prerequisites
 
-- Node.js (v16 or higher)
-- MongoDB (local or Atlas)
-- npm or yarn
+- **Node.js** v18 or higher
+- **MongoDB** v6+ (local) or MongoDB Atlas connection string
+- **npm** v9+
 
-## Installation
+---
 
-### 1. Backend Setup
+## Setup
+
+### 1. Clone
+
+```bash
+git clone <repo-url>
+cd issue-tracker
+```
+
+### 2. Backend
 
 ```bash
 cd backend
+yarn install
 cp .env.example .env
-# Edit .env and add your MongoDB URI and JWT_SECRET
-npm install
 ```
 
-Update `.env` with your values:
+Edit `backend/.env`:
+
 ```
 PORT=5000
 MONGODB_URI=mongodb://localhost:27017/issue-tracker
-JWT_SECRET=your-super-secret-key-here
+JWT_SECRET=long-random-string-32-chars-or-more
+REFRESH_TOKEN_SECRET=different-long-random-string-32-chars-or-more
+NODE_ENV=development
+CORS_ORIGIN=http://localhost:5173
+CROSS_SITE_COOKIES=false
 ```
 
-### 2. Frontend Setup
-
+Start MongoDB (local):
 ```bash
-cd frontend
-npm install
-cp .env.example .env
-# .env should have:
-# VITE_API_URL=http://localhost:5000/api
-```
-
-## Running the Application
-
-### Start MongoDB
-```bash
-# If using local MongoDB
 mongod
 ```
 
-### Start Backend Server
+Run backend:
 ```bash
-cd backend
-npm run dev
-# Server runs on http://localhost:5000
+yarn run dev          # ts-node-dev with hot reload
+# OR
+yarn run build && yarn start    # production
 ```
 
-### Start Frontend Development Server
-```bash
-cd frontend
-npm run dev
-# Frontend runs on http://localhost:5173
-```
+Server runs on `http://localhost:5000`.
 
-## API Endpoints
+### 3. Frontend
 
-### Authentication
-- `POST /api/auth/register` - Register new user
-- `POST /api/auth/login` - Login user
-
-### Issues
-- `POST /api/issues` - Create issue (protected)
-- `GET /api/issues` - Get all issues with filters (protected)
-- `GET /api/issues/:id` - Get issue detail (protected)
-- `PUT /api/issues/:id` - Update issue (protected)
-- `DELETE /api/issues/:id` - Delete issue (protected)
-- `PATCH /api/issues/:id/status` - Update issue status (protected)
-
-### Query Parameters for GET /api/issues
-- `page` - Page number (default: 1)
-- `limit` - Items per page (default: 10)
-- `search` - Search in title and description
-- `status` - Filter by status (Open, In Progress, Resolved)
-- `priority` - Filter by priority (Low, Medium, High)
-- `severity` - Filter by severity (Low, Medium, High, Critical)
-
-## Usage Guide
-
-### 1. Register Account
-- Navigate to `/register`
-- Fill in name, email, and password (min 6 characters)
-- Click "Create account"
-
-### 2. Login
-- Navigate to `/login`
-- Enter your email and password
-- Click "Sign in"
-
-### 3. Create Issue
-- Click "New Issue" button
-- Fill in title, description
-- Select priority, severity, and status
-- Click "Create Issue"
-
-### 4. Manage Issues
-- **View:** Issues are listed in a table format
-- **Edit:** Click "Edit" button to modify an issue
-- **Delete:** Click "Delete" button (with confirmation)
-- **Change Status:** Use the status dropdown directly in the table
-
-### 5. Search & Filter
-- Use the search box to find issues by title or description
-- Use dropdowns to filter by status, priority, or severity
-- Navigate pages using pagination controls
-
-## Building for Production
-
-### Backend
-```bash
-cd backend
-npm run build
-npm start
-```
-
-### Frontend
 ```bash
 cd frontend
-npm run build
-# dist/ folder contains production-ready files
+yarn install
+cp .env.example .env
 ```
+
+Edit `frontend/.env`:
+```
+VITE_API_URL=http://localhost:5000/api
+```
+
+Run frontend:
+```bash
+yarn run dev          # vite dev server
+```
+
+App runs on `http://localhost:5173`.
+
+---
 
 ## Environment Variables
 
-### Backend (.env)
-```
-PORT=5000
-MONGODB_URI=mongodb://your-connection-string
-JWT_SECRET=your-secret-key
-```
+### Backend (`.env`)
 
-### Frontend (.env)
-```
-VITE_API_URL=http://your-api-url/api
-```
+| Variable | Description | Example |
+|----------|-------------|---------|
+| `PORT` | Server port | `5000` |
+| `MONGODB_URI` | MongoDB connection string | `mongodb://localhost:27017/issue-tracker` |
+| `JWT_SECRET` | Secret for access tokens | `random-32-char-string` |
+| `REFRESH_TOKEN_SECRET` | Secret for refresh tokens | `another-random-32-char-string` |
+| `NODE_ENV` | `development` or `production` | `development` |
+| `CORS_ORIGIN` | Allowed frontend origin(s) (comma-separated) | `http://localhost:5173` |
+| `CROSS_SITE_COOKIES` | `true` if frontend & backend are on different sites in production (HTTPS required) | `false` |
 
-## Database Schema
+### Frontend (`.env`)
 
-### User Collection
+| Variable | Description | Example |
+|----------|-------------|---------|
+| `VITE_API_URL` | Backend API base URL | `http://localhost:5000/api` |
+
+---
+
+## API Reference
+
+### Auth
+
+| Method | Endpoint | Body | Description |
+|--------|----------|------|-------------|
+| POST | `/api/auth/register` | `{ email, password, name }` | Register new user |
+| POST | `/api/auth/login` | `{ email, password }` | Returns `accessToken` + sets `refreshToken` httpOnly cookie |
+| POST | `/api/auth/refresh` | — (reads cookie) | Returns new `accessToken`; rotates refresh cookie |
+| POST | `/api/auth/logout` | — | Clears refresh cookie |
+
+### Issues (all require `Authorization: Bearer <accessToken>`)
+
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| GET | `/api/issues` | List with filters, pagination, status counts |
+| POST | `/api/issues` | Create issue |
+| GET | `/api/issues/:id` | Get single issue |
+| PUT | `/api/issues/:id` | Update issue (reporter only) |
+| DELETE | `/api/issues/:id` | Delete issue (reporter only) |
+| PATCH | `/api/issues/:id/status` | Change status (optional `note` for Resolved) |
+| PATCH | `/api/issues/:id/assign` | Assign issue (`assignedTo: userId` or `null`) |
+| GET | `/api/issues/export?format=pdf\|json` | Export filtered issues |
+
+### Users
+
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| GET | `/api/users` | List all users (for assignee dropdown) |
+
+### Filters for `GET /api/issues`
+
+| Param | Example | Notes |
+|-------|---------|-------|
+| `search` | `?search=login` | Searches title + description |
+| `status` | `?status=Open,In Progress` | Comma-separated multi-select |
+| `priority` | `?priority=High,Medium` | Comma-separated |
+| `severity` | `?severity=Critical` | Comma-separated |
+| `assignedTo` | `?assignedTo=me,unassigned,<userId>` | `me` resolves to current user |
+| `page` | `?page=2` | Defaults to 1 |
+| `limit` | `?limit=20` | Defaults to 10 |
+
+---
+
+## Data Models
+
+### User
 ```json
 {
-  "_id": ObjectId,
+  "_id": "ObjectId",
   "email": "user@example.com",
-  "password": "hashed_password",
-  "name": "User Name",
-  "createdAt": "2024-01-01T00:00:00Z"
+  "password": "<bcrypt-hash>",
+  "name": "Ishan Tharindu",
+  "createdAt": "2026-05-20T...",
+  "updatedAt": "2026-05-21T..."
 }
 ```
 
-### Issue Collection
+### Issue
 ```json
 {
-  "_id": ObjectId,
-  "title": "Issue Title",
-  "description": "Issue Description",
+  "_id": "ObjectId",
+  "title": "Login button broken",
+  "description": "Long description...",
   "status": "Open | In Progress | Resolved",
   "priority": "Low | Medium | High",
   "severity": "Low | Medium | High | Critical",
-  "createdBy": ObjectId (ref: User),
-  "createdAt": "2024-01-01T00:00:00Z",
-  "updatedAt": "2024-01-01T00:00:00Z"
+  "createdBy": "ObjectId (ref: User)",
+  "assignedTo": "ObjectId (ref: User) | null",
+  "resolutionNote": "Fixed by updating dependency",
+  "createdAt": "...",
+  "updatedAt": "..."
 }
 ```
 
-## Error Handling
+---
 
-The application includes comprehensive error handling:
-- Validation errors with detailed messages
-- Authentication errors with proper HTTP status codes
-- Database operation errors with user-friendly messages
-- Network error handling on the frontend
+## Usage Guide
 
-## Testing
+1. **Register** at `/register` — password must satisfy strength criteria
+2. **Login** at `/login` — JWT issued, refresh cookie set
+3. **Dashboard** opens after login
+4. **Create issue** via "+ New Issue" — fill form in modal
+5. **Filter** using Status / Priority / Severity / Assignees multi-selects + search bar
+6. **Click any row** to see full issue details in modal
+7. **Take** an unassigned issue, **Untake** to release
+8. **Mark as Resolved** — optionally add a resolution note
+9. **Export** filtered list as PDF or JSON
+10. **Toggle dark mode** via sun/moon icon in navbar
+11. **Drag scroll-to-top button** to your preferred corner (bottom-left or bottom-right)
 
-### Recommended Test Cases
-1. **Registration**: Valid data, duplicate email, weak password
-2. **Login**: Valid credentials, invalid credentials, missing fields
-3. **Create Issue**: Valid data, missing fields, long descriptions
-4. **Update Issue**: Valid updates, status changes
-5. **Delete Issue**: Successful deletion, confirmation dialog
-6. **Search/Filter**: Single filters, multiple filters combined
-7. **Pagination**: Navigate between pages
-8. **Authentication**: Token expiration, invalid tokens
+---
 
-## Troubleshooting
+## Build & Deploy
 
-### MongoDB Connection Error
-- Ensure MongoDB is running
-- Check connection string in `.env`
-- Verify network access if using MongoDB Atlas
+### Local Production Build
 
-### CORS Error
-- Ensure backend has CORS enabled
-- Check that API URL in frontend matches backend
+**Backend:**
+```bash
+cd backend
+yarn run build
+yarn start
+```
 
-### Port Already in Use
-- Change PORT in backend `.env`
-- Change Vite port: `npm run dev -- --port 3000`
+**Frontend:**
+```bash
+cd frontend
+yarn run build
+# Output: frontend/dist/
+```
 
-## Deployment
-
-### Vercel (Frontend)
-1. Push code to GitHub
-2. Connect repository to Vercel
-3. Set environment variable `VITE_API_URL`
-4. Deploy
-
-### Render/Heroku (Backend)
-1. Push code to GitHub
-2. Create new service on Render/Heroku
-3. Set environment variables
-4. Deploy
-
-## License
-
-MIT
+---
 
 ## Author
 
-Created for interview assignment - Issue Tracker with CRUD Operations
+Built as a take-home assignment showcasing full-stack TypeScript, secure authentication, server-side PDF generation, and modern React patterns (URL-synced state, debouncing, reusable component design).
