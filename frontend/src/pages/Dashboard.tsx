@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { useAuthStore } from '../store/authStore';
 import { useIssueStore } from '../store/issueStore';
 import { useToastStore } from '../store/toastStore';
-import { useDebounce } from '../hooks/useDebounce';
+import { useDebounce } from 'use-debounce';
 import { issueService, userService, authService } from '../services/api';
 import IssueForm, { IssueFormActions } from '../components/IssueForm';
 import IssueList from '../components/IssueList';
@@ -78,7 +78,7 @@ export default function Dashboard() {
     : undefined;
 
   const [search, setSearch] = useQueryState('search', parseAsString.withDefault(''));
-  const debouncedSearch = useDebounce(search, 400);
+  const [debouncedSearch] = useDebounce(search, 400);
   const [statusFilter, setStatusFilter] = useQueryState('status', stringArray);
   const [priorityFilter, setPriorityFilter] = useQueryState('priority', stringArray);
   const [severityFilter, setSeverityFilter] = useQueryState('severity', stringArray);
