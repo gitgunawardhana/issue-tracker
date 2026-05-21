@@ -1,5 +1,5 @@
 import axios from 'axios';
-import type { AxiosInstance } from 'axios';
+import type { AxiosInstance, AxiosRequestConfig, AxiosError } from 'axios';
 import type { User, Issue, ApiResponse, UserSummary } from '../types';
 
 const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
@@ -12,12 +12,93 @@ const apiClient: AxiosInstance = axios.create({
 });
 
 apiClient.interceptors.request.use((config) => {
-  const token = localStorage.getItem('token');
+  const token = localStorage.getItem('accessToken');
   if (token) {
     config.headers.Authorization = `Bearer ${token}`;
   }
   return config;
 });
+
+let isRefreshing = false;
+let waitingRequests: Array<(token: string | null) => void> = [];
+
+const onRefreshed = (token: string | null) => {
+  waitingRequests.forEach((cb) => cb(token));
+  waitingRequests = [];
+};
+
+const handleAuthFailure = () => {
+  localStorage.removeItem('accessToken');
+  localStorage.removeItem('refreshToken');
+  localStorage.removeItem('user');
+  if (window.location.pathname !== '/login') {
+    window.location.href = '/login';
+  }
+};
+
+apiClient.interceptors.response.use(
+  (response) => response,
+  async (error: AxiosError) => {
+    const originalRequest = error.config as AxiosRequestConfig & { _retry?: boolean };
+
+    const isUnauthorized = error.response?.status === 401;
+    const isAuthEndpoint = originalRequest.url?.includes('/auth/');
+
+    if (!isUnauthorized || isAuthEndpoint || originalRequest._retry) {
+      return Promise.reject(error);
+    }
+
+    const refreshToken = localStorage.getItem('refreshToken');
+    if (!refreshToken) {
+      handleAuthFailure();
+      return Promise.reject(error);
+    }
+
+    originalRequest._retry = true;
+
+    if (isRefreshing) {
+      return new Promise((resolve, reject) => {
+        waitingRequests.push((token) => {
+          if (!token) {
+            reject(error);
+            return;
+          }
+          originalRequest.headers = originalRequest.headers ?? {};
+          (originalRequest.headers as Record<string, string>).Authorization = `Bearer ${token}`;
+          resolve(apiClient(originalRequest));
+        });
+      });
+    }
+
+    isRefreshing = true;
+
+    try {
+      const { data } = await axios.post<
+        ApiResponse<{ accessToken: string; refreshToken: string }>
+      >(`${API_BASE_URL}/auth/refresh`, { refreshToken });
+
+      if (!data.success || !data.data) {
+        throw new Error('Refresh failed');
+      }
+
+      localStorage.setItem('accessToken', data.data.accessToken);
+      localStorage.setItem('refreshToken', data.data.refreshToken);
+
+      onRefreshed(data.data.accessToken);
+
+      originalRequest.headers = originalRequest.headers ?? {};
+      (originalRequest.headers as Record<string, string>).Authorization = `Bearer ${data.data.accessToken}`;
+
+      return apiClient(originalRequest);
+    } catch (refreshError) {
+      onRefreshed(null);
+      handleAuthFailure();
+      return Promise.reject(refreshError);
+    } finally {
+      isRefreshing = false;
+    }
+  }
+);
 
 export const authService = {
   register: async (email: string, password: string, name: string) => {
@@ -29,10 +110,9 @@ export const authService = {
   },
 
   login: async (email: string, password: string) => {
-    const response = await apiClient.post<ApiResponse<{ token: string; user: User }>>(
-      '/auth/login',
-      { email, password }
-    );
+    const response = await apiClient.post<
+      ApiResponse<{ accessToken: string; refreshToken: string; user: User }>
+    >('/auth/login', { email, password });
     return response.data;
   },
 };

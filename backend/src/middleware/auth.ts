@@ -29,15 +29,24 @@ export const authenticateToken = (
   try {
     const decoded = jwt.verify(
       token,
-      process.env.JWT_SECRET || 'your-secret-key'
-    ) as JWTPayload;
+      process.env.JWT_SECRET || 'access-secret-change-me'
+    ) as JWTPayload & { type?: string };
+
+    if (decoded.type && decoded.type !== 'access') {
+      return res.status(401).json({
+        success: false,
+        message: 'Invalid token type',
+        error: 'Unauthorized',
+      });
+    }
+
     req.user = decoded;
     next();
   } catch (error) {
-    return res.status(403).json({
+    return res.status(401).json({
       success: false,
       message: 'Invalid or expired token',
-      error: 'Forbidden',
+      error: 'Unauthorized',
     });
   }
 };

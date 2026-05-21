@@ -9,12 +9,12 @@ import ToastContainer from './components/ToastContainer';
 import './index.css';
 
 function ProtectedRoute({ children }: { children: React.ReactNode }) {
-  const { token } = useAuthStore();
-  return token ? <>{children}</> : <Navigate to="/login" />;
+  const { accessToken } = useAuthStore();
+  return accessToken ? <>{children}</> : <Navigate to="/login" />;
 }
 
 export default function App() {
-  const { token } = useAuthStore();
+  const { accessToken } = useAuthStore();
   const { theme } = useThemeStore();
 
   return (
@@ -37,7 +37,7 @@ export default function App() {
               </ProtectedRoute>
             }
           />
-          <Route path="*" element={<Navigate to={token ? '/' : '/login'} />} />
+          <Route path="*" element={<Navigate to={accessToken ? '/' : '/login'} />} />
         </Routes>
       </Router>
     </ConfigProvider>

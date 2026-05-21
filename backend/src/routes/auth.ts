@@ -6,6 +6,24 @@ import { z } from 'zod';
 
 const router = Router();
 
+const ACCESS_EXPIRES = '15m';
+const REFRESH_EXPIRES = '7d';
+
+const getAccessSecret = () =>
+  process.env.JWT_SECRET || 'access-secret-change-me';
+const getRefreshSecret = () =>
+  process.env.REFRESH_TOKEN_SECRET || 'refresh-secret-change-me';
+
+const generateTokens = (userId: unknown, email: string) => {
+  const accessToken = jwt.sign({ userId, email, type: 'access' }, getAccessSecret(), {
+    expiresIn: ACCESS_EXPIRES,
+  });
+  const refreshToken = jwt.sign({ userId, email, type: 'refresh' }, getRefreshSecret(), {
+    expiresIn: REFRESH_EXPIRES,
+  });
+  return { accessToken, refreshToken };
+};
+
 const registerSchema = z.object({
   email: z.string().email('Invalid email'),
   password: z.string().min(6, 'Password must be at least 6 characters'),
@@ -15,6 +33,10 @@ const registerSchema = z.object({
 const loginSchema = z.object({
   email: z.string().email('Invalid email'),
   password: z.string().min(1, 'Password is required'),
+});
+
+const refreshSchema = z.object({
+  refreshToken: z.string().min(1, 'Refresh token is required'),
 });
 
 router.post('/register', async (req: Request, res: Response) => {
@@ -91,17 +113,14 @@ router.post('/login', async (req: Request, res: Response) => {
       });
     }
 
-    const token = jwt.sign(
-      { userId: user._id, email: user.email },
-      process.env.JWT_SECRET || 'your-secret-key',
-      { expiresIn: '7d' }
-    );
+    const { accessToken, refreshToken } = generateTokens(user._id, user.email);
 
     res.json({
       success: true,
       message: 'Login successful',
       data: {
-        token,
+        accessToken,
+        refreshToken,
         user: { id: user._id, email: user.email, name: user.name },
       },
     });
@@ -109,6 +128,59 @@ router.post('/login', async (req: Request, res: Response) => {
     res.status(500).json({
       success: false,
       message: 'Error logging in',
+      error: (error as Error).message,
+    });
+  }
+});
+
+router.post('/refresh', async (req: Request, res: Response) => {
+  try {
+    const validation = refreshSchema.safeParse(req.body);
+    if (!validation.success) {
+      return res.status(400).json({
+        success: false,
+        message: 'Refresh token required',
+      });
+    }
+
+    const { refreshToken } = validation.data;
+
+    let decoded: { userId: string; email: string; type: string };
+    try {
+      decoded = jwt.verify(refreshToken, getRefreshSecret()) as typeof decoded;
+    } catch {
+      return res.status(401).json({
+        success: false,
+        message: 'Invalid or expired refresh token',
+      });
+    }
+
+    if (decoded.type !== 'refresh') {
+      return res.status(401).json({
+        success: false,
+        message: 'Invalid token type',
+      });
+    }
+
+    const user = await UserModel.findById(decoded.userId);
+    if (!user) {
+      return res.status(401).json({
+        success: false,
+        message: 'User not found',
+      });
+    }
+
+    const tokens = generateTokens(user._id, user.email);
+
+    res.json({
+      success: true,
+      message: 'Token refreshed',
+      data: tokens,
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: 'Error refreshing token',
       error: (error as Error).message,
     });
   }
