@@ -4,31 +4,33 @@ interface AuthLayoutProps {
 
 export default function AuthLayout({ children }: AuthLayoutProps) {
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-50 dark:bg-neutral-950 py-12 px-4 relative overflow-hidden">
-      <div
-        aria-hidden
-        className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(59,130,246,0.08),transparent_60%),radial-gradient(circle_at_bottom_left,rgba(168,85,247,0.06),transparent_60%)] dark:bg-[radial-gradient(circle_at_top_right,rgba(59,130,246,0.12),transparent_60%),radial-gradient(circle_at_bottom_left,rgba(168,85,247,0.1),transparent_60%)] pointer-events-none"
-      />
+    <div className="min-h-screen flex flex-col bg-white dark:bg-neutral-950 text-gray-900 dark:text-gray-50">
+      <header className="px-6 sm:px-10 py-5">
+        <div className="inline-flex items-center gap-2">
+          <img
+            src="/logo.png"
+            alt="Issue Tracker"
+            className="w-7 h-7 object-contain brightness-0 dark:invert"
+          />
+          <span className="text-base font-semibold tracking-tight">Issue Tracker</span>
+        </div>
+      </header>
 
-      <img
-        aria-hidden
-        src="/logo.png"
-        alt=""
-        className="absolute -left-32 -bottom-32 w-90 h-90 sm:w-140 sm:h-140 md:w-180 md:h-180 object-contain opacity-[0.06] dark:opacity-[0.08] dark:invert dark:hue-rotate-180 pointer-events-none select-none -rotate-15"
-      />
-      <img
-        aria-hidden
-        src="/logo.png"
-        alt=""
-        className="absolute -right-32 -top-32 w-70 h-70 sm:w-110 sm:h-110 md:w-140 md:h-140 object-contain opacity-[0.05] dark:opacity-[0.06] dark:invert dark:hue-rotate-180 pointer-events-none select-none rotate-20"
-      />
+      <main className="flex-1 flex items-start sm:items-center justify-center px-4 pt-8 sm:pt-0 pb-12">
+        <div className="w-full max-w-sm">{children}</div>
+      </main>
 
-      <div className="relative max-w-sm w-full">
-        {children}
-        <p className="text-center text-xs text-gray-400 dark:text-gray-600 mt-6">
+      <footer className="py-6 flex flex-col items-center gap-2">
+        <img
+          src="/logo.png"
+          alt=""
+          aria-hidden
+          className="w-7 h-7 object-contain opacity-80 brightness-0 dark:invert"
+        />
+        <p className="text-xs text-gray-500 dark:text-gray-500">
           Issue Tracker · Manage your team's work
         </p>
-      </div>
+      </footer>
     </div>
   );
 }

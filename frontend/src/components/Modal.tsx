@@ -47,11 +47,11 @@ export default function Modal({
       onClick={onClose}
     >
       <div
-        className={`bg-white dark:bg-neutral-900 w-full h-full sm:h-auto sm:rounded-lg sm:shadow-xl sm:max-h-[90vh] ${sizeClasses[size]} flex flex-col`}
+        className={`bg-white dark:bg-neutral-900 w-full h-full sm:h-auto sm:rounded-2xl sm:shadow-2xl sm:max-h-[90vh] ${sizeClasses[size]} flex flex-col`}
         onClick={(e) => e.stopPropagation()}
       >
-        <div className="flex items-center justify-between px-4 sm:px-6 py-4 border-b border-gray-200 dark:border-neutral-800 flex-shrink-0">
-          <h2 className="text-lg font-semibold text-gray-900 dark:text-gray-50">{title}</h2>
+        <div className="flex items-center justify-between px-4 sm:px-6 py-4 shrink-0">
+          <h2 className="text-lg font-semibold tracking-tight text-gray-900 dark:text-gray-50">{title}</h2>
           <button
             type="button"
             onClick={onClose}
@@ -72,7 +72,7 @@ export default function Modal({
         </div>
         <div className="px-4 sm:px-6 py-5 overflow-y-auto flex-1">{children}</div>
         {footer && (
-          <div className="px-4 sm:px-6 py-5 border-t border-gray-100 dark:border-neutral-800 bg-white dark:bg-neutral-900 flex-shrink-0">
+          <div className="px-4 sm:px-6 py-4 bg-white dark:bg-neutral-900 shrink-0 sm:rounded-2xl">
             {footer}
           </div>
         )}

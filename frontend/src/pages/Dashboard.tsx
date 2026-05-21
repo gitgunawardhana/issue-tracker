@@ -365,70 +365,67 @@ export default function Dashboard() {
   ];
 
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-neutral-950">
-      <nav className="bg-white dark:bg-neutral-900 border-b border-gray-200 dark:border-neutral-800 sticky top-0 z-30">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3 flex justify-between items-center">
-          <div className="flex items-center gap-3">
-            <img src="/logo.png" alt="Issue Tracker" className="w-10 h-10 object-contain dark:invert dark:hue-rotate-180" />
-            <div>
-              <h1 className="text-lg font-semibold text-gray-900 dark:text-gray-50 leading-tight">Issue Tracker</h1>
-              <p className="text-xs text-gray-500 dark:text-gray-400 leading-tight">Manage your team's work</p>
-            </div>
+    <div className="min-h-screen bg-white dark:bg-neutral-950">
+      <nav className="bg-white/80 dark:bg-neutral-950/80 backdrop-blur-md sticky top-0 z-30">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex justify-between items-center">
+          <div className="flex items-center gap-2">
+            <img src="/logo.png" alt="Issue Tracker" className="w-7 h-7 object-contain brightness-0 dark:invert" />
+            <span className="text-base font-semibold tracking-tight text-gray-900 dark:text-gray-50">Issue Tracker</span>
           </div>
-          <div className="flex items-center gap-2 sm:gap-3">
+          <div className="flex items-center gap-2">
             <button
               onClick={toggleTheme}
               title={theme === 'dark' ? 'Switch to light mode' : 'Switch to dark mode'}
-              className="inline-flex items-center justify-center w-9 h-9 bg-white dark:bg-neutral-800 text-gray-700 dark:text-gray-200 border border-gray-200 dark:border-neutral-700 rounded-lg hover:bg-gray-50 dark:hover:bg-neutral-700 transition-colors"
+              className="inline-flex items-center justify-center w-9 h-9 text-gray-700 dark:text-gray-200 rounded-full hover:bg-gray-100 dark:hover:bg-neutral-800 transition-colors"
             >
               {theme === 'dark' ? <SunIcon className="w-4 h-4" /> : <MoonIcon className="w-4 h-4" />}
             </button>
-            <div className="hidden sm:flex items-center gap-2 px-3 py-1.5 rounded-full bg-gray-50 dark:bg-neutral-800">
+            <div className="hidden sm:flex items-center gap-2 px-2.5 py-1 rounded-full">
               {user && <Avatar name={user.name} size="xs" />}
               <span className="text-sm font-medium text-gray-700 dark:text-gray-200">{user?.name}</span>
             </div>
             <button
               onClick={handleLogout}
-              className="inline-flex items-center gap-1.5 bg-white dark:bg-neutral-800 text-gray-700 dark:text-gray-200 border border-gray-200 dark:border-neutral-700 px-3 py-1.5 rounded-lg hover:bg-gray-50 dark:hover:bg-neutral-700 text-sm font-medium transition-colors"
+              className="inline-flex items-center gap-1.5 text-gray-700 dark:text-gray-200 px-3 py-1.5 rounded-full hover:bg-gray-100 dark:hover:bg-neutral-800 text-sm font-medium transition-colors"
             >
               <LogoutIcon className="w-4 h-4" />
-              Logout
+              <span className="hidden sm:inline">Logout</span>
             </button>
           </div>
         </div>
       </nav>
 
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8">
-        <div className="mb-6 grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
+        <div className="mb-8 grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
           {statCards.map((card) => {
             const Icon = card.icon;
             return (
               <button
                 key={card.label}
                 onClick={card.onClick}
-                className={`text-left bg-white dark:bg-neutral-900 rounded-lg border border-gray-200 dark:border-neutral-800 p-4 sm:p-5 hover:border-gray-300 dark:hover:border-neutral-700 transition-colors ${
-                  card.active ? `ring-2 ${card.ringColor} border-transparent` : ''
+                className={`text-left border rounded-2xl p-4 sm:p-5 transition-colors ${
+                  card.active
+                    ? 'border-gray-900 dark:border-gray-100 bg-gray-50 dark:bg-neutral-900'
+                    : 'border-gray-200 dark:border-neutral-800 hover:border-gray-400 dark:hover:border-neutral-600'
                 }`}
               >
                 <div className="flex items-start justify-between">
                   <div>
-                    <p className="text-xs sm:text-sm text-gray-500 dark:text-gray-400 font-medium">{card.label}</p>
-                    <p className="text-2xl sm:text-3xl font-bold text-gray-900 dark:text-gray-50 mt-1">{card.count}</p>
+                    <p className="text-xs sm:text-sm text-gray-500 dark:text-gray-400">{card.label}</p>
+                    <p className="text-2xl sm:text-3xl font-semibold text-gray-900 dark:text-gray-50 mt-1">{card.count}</p>
                   </div>
-                  <div className={`p-2 rounded-lg ${card.iconBg}`}>
-                    <Icon className="w-5 h-5" />
-                  </div>
+                  <Icon className="w-4 h-4 text-gray-400 dark:text-gray-500 mt-1" />
                 </div>
               </button>
             );
           })}
         </div>
 
-        <div className="bg-white dark:bg-neutral-900 rounded-lg border border-gray-200 dark:border-neutral-800 overflow-hidden">
-          <div className="px-4 sm:px-6 py-4 border-b border-gray-100 dark:border-neutral-800 flex flex-col sm:flex-row sm:justify-between sm:items-center gap-3">
+        <div>
+          <div className="flex flex-col sm:flex-row sm:justify-between sm:items-end gap-3 mb-6">
             <div>
-              <h2 className="text-lg font-bold text-gray-900 dark:text-gray-50">Issues</h2>
-              <p className="text-sm text-gray-500 dark:text-gray-400">{pagination.total} total</p>
+              <h2 className="text-xl font-semibold tracking-tight text-gray-900 dark:text-gray-50">Issues</h2>
+              <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">{pagination.total} total</p>
             </div>
             <div className="flex items-center gap-2">
               <ExportMenu onExport={handleExport} disabled={issues.length === 0} />
@@ -437,7 +434,7 @@ export default function Dashboard() {
                   setEditingIssue(undefined);
                   setShowForm(true);
                 }}
-                className="inline-flex items-center gap-2 bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 font-medium transition-colors"
+                className="inline-flex items-center gap-1.5 bg-gray-900 dark:bg-white text-white dark:text-gray-900 px-4 py-2 rounded-full hover:bg-gray-800 dark:hover:bg-gray-100 font-medium text-sm transition-colors"
               >
                 <PlusIcon className="w-4 h-4" />
                 New Issue
@@ -445,38 +442,27 @@ export default function Dashboard() {
             </div>
           </div>
 
-          <div className="px-4 sm:px-6 py-4 border-b border-gray-100 dark:border-neutral-800 space-y-3">
-            <div className="flex items-center justify-between gap-3">
-              <p className="text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">Filters</p>
-              {hasActiveFilters && (
+          <div className="space-y-3 mb-4">
+            {hasActiveFilters && (
+              <div className="flex items-center justify-end">
                 <button
                   type="button"
                   onClick={clearAllFilters}
-                  className="inline-flex items-center gap-1 text-xs font-medium text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300"
+                  className="inline-flex items-center gap-1 text-xs font-medium text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-gray-50 underline underline-offset-2"
                 >
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    strokeWidth={2}
-                    stroke="currentColor"
-                    className="w-3.5 h-3.5"
-                  >
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M6 18 18 6M6 6l12 12" />
-                  </svg>
                   Clear all filters
                 </button>
-              )}
-            </div>
+              </div>
+            )}
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-3">
             <div className="relative">
-              <SearchIcon className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
+              <SearchIcon className="w-4 h-4 absolute left-4 top-1/2 -translate-y-1/2 text-gray-400" />
               <input
                 type="text"
                 placeholder="Search..."
                 value={search}
                 onChange={(e) => onSearchChange(e.target.value)}
-                className="w-full pl-9 pr-3 py-2 border border-gray-200 dark:border-neutral-700 bg-white dark:bg-neutral-800 text-gray-900 dark:text-gray-100 placeholder-gray-400 dark:placeholder-gray-500 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                className="w-full pl-10 pr-4 py-2.5 border border-gray-300 dark:border-neutral-700 bg-transparent text-gray-900 dark:text-gray-100 placeholder-gray-400 dark:placeholder-gray-500 rounded-full text-sm focus:outline-none focus:border-gray-900 dark:focus:border-gray-100 transition-colors"
               />
             </div>
             <Select
@@ -574,7 +560,7 @@ export default function Dashboard() {
           />
 
           {pagination.pages > 1 && (
-            <div className="px-4 sm:px-6 py-4 border-t border-gray-100 dark:border-neutral-800 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+            <div className="mt-6 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
               <p className="text-sm text-gray-500 dark:text-gray-400">
                 Page {pagination.page} of {pagination.pages}
               </p>

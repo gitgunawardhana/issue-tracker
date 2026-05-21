@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Input, Select, Button } from 'antd';
+import { Input, Select } from 'antd';
 import type { Issue, UserSummary } from '../types';
 
 interface IssueFormData {
@@ -29,20 +29,23 @@ export function IssueFormActions({
   formId?: string;
 }) {
   return (
-    <div className="flex gap-3">
-      <Button onClick={onCancel} disabled={isLoading} size="large" className="flex-1">
-        Cancel
-      </Button>
-      <Button
-        type="primary"
-        htmlType="submit"
-        form={formId}
-        loading={isLoading}
-        size="large"
-        className="flex-1"
+    <div className="flex gap-2 justify-end">
+      <button
+        type="button"
+        onClick={onCancel}
+        disabled={isLoading}
+        className="px-5 py-2.5 rounded-full text-sm font-medium text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-neutral-800 disabled:opacity-50 transition-colors"
       >
-        {isEdit ? 'Update Issue' : 'Create Issue'}
-      </Button>
+        Cancel
+      </button>
+      <button
+        type="submit"
+        form={formId}
+        disabled={isLoading}
+        className="px-5 py-2.5 rounded-full text-sm font-medium bg-gray-900 dark:bg-white text-white dark:text-gray-900 hover:bg-gray-800 dark:hover:bg-gray-100 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+      >
+        {isLoading ? 'Saving...' : isEdit ? 'Update Issue' : 'Create Issue'}
+      </button>
     </div>
   );
 }

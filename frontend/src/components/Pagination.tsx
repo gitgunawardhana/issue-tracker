@@ -8,20 +8,13 @@ function buildPageList(current: number, total: number): (number | 'ellipsis')[] 
   if (total <= 7) {
     return Array.from({ length: total }, (_, i) => i + 1);
   }
-
   const pages: (number | 'ellipsis')[] = [1];
-
   if (current > 3) pages.push('ellipsis');
-
   const start = Math.max(2, current - 1);
   const end = Math.min(total - 1, current + 1);
-
   for (let i = start; i <= end; i++) pages.push(i);
-
   if (current < total - 2) pages.push('ellipsis');
-
   pages.push(total);
-
   return pages;
 }
 
@@ -59,15 +52,13 @@ export default function Pagination({ currentPage, totalPages, onPageChange }: Pa
   const canNext = currentPage < totalPages;
 
   const baseBtn =
-    'inline-flex items-center justify-center min-w-8 h-8 px-2 rounded-md text-sm font-medium transition-colors';
-  const idleBtn =
-    'bg-white dark:bg-neutral-800 text-gray-700 dark:text-gray-200 border border-gray-200 dark:border-neutral-700 hover:bg-gray-50 dark:hover:bg-neutral-700';
-  const activeBtn = 'bg-blue-600 text-white border border-blue-600';
-  const disabledBtn =
-    'bg-gray-50 dark:bg-neutral-900 text-gray-400 dark:text-gray-600 border border-gray-200 dark:border-neutral-800 cursor-not-allowed';
+    'inline-flex items-center justify-center min-w-8 h-8 px-2.5 rounded-full text-sm transition-colors';
+  const idleBtn = 'text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-neutral-800';
+  const activeBtn = 'bg-gray-900 dark:bg-white text-white dark:text-gray-900 font-medium';
+  const disabledBtn = 'text-gray-300 dark:text-gray-700 cursor-not-allowed';
 
   return (
-    <div className="flex items-center gap-1 flex-wrap">
+    <div className="flex items-center gap-0.5 flex-wrap">
       <button
         type="button"
         onClick={() => canPrev && onPageChange(currentPage - 1)}
